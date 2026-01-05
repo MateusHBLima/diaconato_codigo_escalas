@@ -1,33 +1,31 @@
 # Integração Frontend e Automação
 
 ## 1. Geração Automática Mensal
-O sistema agora possui um agendador interno (**Cron Job**) configurado para rodar todo **dia 01 de cada mês às 00:00**.
-
-### O que ele faz:
-1. Define o mês atual/próximo.
-2. Gera as datas dos cultos no banco (se não existirem).
-3. Gera as escalas automaticamente para todos os cultos do mês.
+O sistema possui agendamento automático configurado via **Vercel Cron**.
+Ele rodará todo dia **1º de cada mês às 00:00** automaticamente.
 
 ---
 
 ## 2. Integração com o Botão "Gerar Escala"
 
-Para substituir o n8n, o frontend deve apontar para um dos endpoints abaixo, dependendo de qual dado ele envia:
+Configure seu frontend para chamar a nova API na Vercel:
 
-### Opção A: Envio por Data (Compatível com formato anterior)
+### URL Base:
+`https://diaconatocodigoescalas.vercel.app`
+
+### Opção A: Envio por Data (Compatível com formato anterior/n8n)
 Use este se o frontend envia a data do culto.
-- **Endpoint:** `POST http://localhost:3000/webhook/escala_solicitada`
+- **Endpoint:** `POST https://diaconatocodigoescalas.vercel.app/webhook/escala_solicitada`
 - **Body:**
   ```json
   {
     "data_culto": "2026-01-08T19:30:00" 
   }
   ```
-  *(Aceita formatos de data ISO ou parciais, desde que encontre no banco)*
 
-### Opção B: Envio por ID (Recomendado)
+### Opção B: Envio por ID (Novo padrão)
 Use este se o frontend já tem o ID do culto.
-- **Endpoint:** `POST http://localhost:3000/api/gerar-escala`
+- **Endpoint:** `POST https://diaconatocodigoescalas.vercel.app/api/gerar-escala`
 - **Body:**
   ```json
   {
@@ -37,14 +35,20 @@ Use este se o frontend já tem o ID do culto.
 
 ---
 
-## 3. Comandos Manuais (Teste)
+## 3. Teste Manual (Forçar mês)
 
-Se precisar forçar a geração do mês manualmente sem esperar o dia 01:
-- **Endpoint:** `POST http://localhost:3000/api/trigger-rotina-mensal`
-- **Body:** (Opcional, se vazio gera para o próximo mês)
+Para forçar a geração de um mês inteiro manualmente:
+- **Endpoint:** `POST https://diaconatocodigoescalas.vercel.app/api/trigger-rotina-mensal`
+- **Body:**
   ```json
   {
-    "mes": 1,
+    "mes": 2,
     "ano": 2026
   }
   ```
+
+---
+
+## 4. Verificar Status (Health Check)
+Para saber se a API está no ar:
+- **GET** `https://diaconatocodigoescalas.vercel.app/health`
