@@ -216,62 +216,78 @@ function encontrarCandidato(
 
     const ehFuncaoRepetivel = funcao.regras === 'REPETIR_PESSOA';
 
-    // Filtrar candidatos válidos
-    const candidatos = membros.filter(membro => {
-        // REPETIR_PESSOA: permite usar membros já usados (que vieram de funções repetíveis)
-        if (ehFuncaoRepetivel) {
-            // Para função repetível, preferir membros que já estão no culto
-            // Mas ainda validar outros critérios
-        } else {
-            // Função normal: não permite repetição
-            if (membrosUsados.has(membro.id)) return false;
-        }
+    // Função auxiliar para filtrar candidatos
+    const filtrarCandidatos = (ignorarLimite: boolean) => {
+        return membros.filter(membro => {
+            // REPETIR_PESSOA
+            if (ehFuncaoRepetivel) {
+                // Para função repetível, preferir na ordenação, mas permitir na filtragem
+            } else {
+                if (membrosUsados.has(membro.id)) return false;
+            }
 
-        // Já atingiu o limite mensal?
-        if (membro.escalas_no_mes >= membro.limite_mes) return false;
+            // LIMITE MENSAL (Só checa se não estiver ignorando)
+            if (!ignorarLimite) {
+                if (membro.escalas_no_mes >= membro.limite_mes) return false;
+            }
 
-        // Gênero
-        if (!atendeGenero(membro.sexo, funcao.especificidade_sexo)) return false;
+            // Gênero
+            if (!atendeGenero(membro.sexo, funcao.especificidade_sexo)) return false;
 
-        // Permissão (REPETIR_PESSOA já é tratado como válido)
-        if (!atendePermissao(membro.aptidoes || [], funcao.regras)) return false;
+            // Permissão
+            if (!atendePermissao(membro.aptidoes || [], funcao.regras)) return false;
 
-        // Disponibilidade básica
-        const disp = culto.periodo === 'quinta'
-            ? membro.disponibilidade_quinta
-            : membro.disponibilidade_domingo;
+            // Disponibilidade básica
+            const disp = culto.periodo === 'quinta'
+                ? membro.disponibilidade_quinta
+                : membro.disponibilidade_domingo;
 
-        const { disponivel } = parseDisponibilidade(disp);
-        if (!disponivel) return false;
+            const { disponivel } = parseDisponibilidade(disp);
+            if (!disponivel) return false;
 
-        // Período (manhã/noite)
-        if (!atendePeriodo(membro.melhor_periodo_domingo, culto.periodo)) return false;
+            // Período (manhã/noite)
+            if (!atendePeriodo(membro.melhor_periodo_domingo, culto.periodo)) return false;
 
-        return true;
-    });
+            return true;
+        });
+    };
 
-    if (candidatos.length === 0) return null;
+    // Função de ordenação
+    const ordenarCandidatos = (lista: MembroComHistorico[]) => {
+        return lista.sort((a, b) => {
+            // 1. Quem serviu menos vezes no mês
+            if (a.escalas_no_mes !== b.escalas_no_mes) {
+                return a.escalas_no_mes - b.escalas_no_mes;
+            }
+            // 2. Quem serviu há mais tempo
+            if (!a.ultima_escala && b.ultima_escala) return -1;
+            if (a.ultima_escala && !b.ultima_escala) return 1;
+            if (a.ultima_escala && b.ultima_escala) {
+                return a.ultima_escala.localeCompare(b.ultima_escala);
+            }
+            return 0;
+        });
+    };
 
-    // ORDENAR POR PRIORIDADE:
-    // 1. Quem serviu menos vezes no mês
-    // 2. Em caso de empate, quem serviu há mais tempo
-    candidatos.sort((a, b) => {
-        // Primeiro: menos escalas no mês
-        if (a.escalas_no_mes !== b.escalas_no_mes) {
-            return a.escalas_no_mes - b.escalas_no_mes;
-        }
+    // 1. TENTATIVA PADRÃO (Respeitando limites)
+    let candidatos = filtrarCandidatos(false);
 
-        // Segundo: quem serviu há mais tempo (ou nunca)
-        if (!a.ultima_escala && b.ultima_escala) return -1; // a nunca serviu
-        if (a.ultima_escala && !b.ultima_escala) return 1;  // b nunca serviu
-        if (a.ultima_escala && b.ultima_escala) {
-            return a.ultima_escala.localeCompare(b.ultima_escala); // mais antigo primeiro
-        }
+    if (candidatos.length > 0) {
+        ordenarCandidatos(candidatos);
+        return candidatos[0];
+    }
 
-        return 0;
-    });
+    // 2. TENTATIVA FALLBACK (Ignorando limites para preencher a vaga)
+    // "Faça com que preencha, mesmo que pegue pessoas que ja foram escaladas"
+    candidatos = filtrarCandidatos(true);
 
-    return candidatos[0];
+    if (candidatos.length > 0) {
+        ordenarCandidatos(candidatos);
+        // Retorna o que serviu menos, mesmo tendo estourado o limite
+        return candidatos[0];
+    }
+
+    return null;
 }
 
 // ============================================
