@@ -1,0 +1,101 @@
+🔍 Conectando ao Supabase...
+
+============================================================
+
+📋 TABELA: MEMBROS
+------------------------------------------------------------
+
+📊 Colunas (34):
+   - id: string (ex: "1d540fdd-7654-4562-a26d-94b4265aa125")
+   - numero: number (ex: 1)
+   - nome_completo: string (ex: "Adilson Miranda Neto")
+   - telefone_celular: string (ex: "21964557409")
+   - sexo: string (ex: "HOMEM")
+   - aptidoes: array (ex: [])
+   - ativo: boolean (ex: true)
+   - created_at: string (ex: "2025-11-19T20:12:44.029052+00:00")
+   - updated_at: string (ex: "2025-11-19T20:12:44.029052+00:00")
+   - data_nascimento: string (ex: "30350")
+   - observacoes: object (ex: null)
+   - email: object (ex: null)
+   - estado_civil: string (ex: "CASADO (A)")
+   - conjuge_serve_junto: boolean (ex: false)
+   - nome_conjuge: string (ex: "")
+   - possui_certidao_casamento: boolean (ex: true)
+   - casamento_religioso: string (ex: "SIM (BENÇÃO DE ALGUM PASTOR OU PADRE)")
+   - endereco_completo: string (ex: "Rua 2500 n 579 apt 202")
+   - contato_emergencia: string (ex: "21964121824")
+   - nome_rede_social: string (ex: "adilson.crsp")
+   - batizado_aguas: boolean (ex: true)
+   - possui_certificado_batismo: boolean (ex: false)
+   - escolas_embaixada: string (ex: "SERVOS (EM ANDAMENTO)")
+   - participou_encontro_deus: boolean (ex: true)
+   - participou_legendarios: boolean (ex: true)
+   - numero_legendario: string (ex: "109855")
+   - serve_outra_area: boolean (ex: true)
+   - detalhe_outra_area_frequencia: string (ex: "Diaconato/Estacionamento/Recepção")
+   - tempo_conversao: string (ex: "27 anos")
+   - motivacao_servir: string (ex: "Chamado de Deus")
+   - disponibilidade_quinta: string (ex: "SIM, 2 VEZ POR MÊS")
+   - disponibilidade_domingo: string (ex: "SIM, 2 DOMINGOS POR MÊS")
+   - melhor_periodo_domingo: string (ex: "QUALQUER PERIODO")
+   - monitor: string (ex: "ANDREI")
+
+📈 Total de registros: 115
+
+📋 TABELA: FUNCOES
+------------------------------------------------------------
+
+📊 Colunas (12):
+   - id: string (ex: "66a29ea0-e200-4d91-8c29-2a24a2785b7d")
+   - nome: string (ex: "Decoração Mesa (Manhã)")
+   - descricao_instrucoes: string (ex: "B. A mesa do altar é decorada por escal)
+   - especificidade_sexo: string (ex: "Unissex")
+   - quantidade_pessoas: number (ex: 2)
+   - setor_pai: string (ex: "SANTA CEIA")
+   - is_santa_ceia: boolean (ex: true)
+   - ordem_exibicao: number (ex: 100)
+   - ativo: boolean (ex: false)
+   - created_at: string (ex: "2025-10-21T20:12:39.840912+00:00")
+   - updated_at: string (ex: "2025-12-10T18:18:57.72875+00:00")
+   - regras: object (ex: null)
+
+📈 Total de registros: 59
+
+📋 TABELA: DATAS_CULTOS
+------------------------------------------------------------
+
+📊 Colunas (13):
+   - id: string (ex: "c1b7bbc4-042e-49a2-83e5-79b6f86b1ec6")
+   - data_culto: string (ex: "2025-11-23T21:00:00+00:00")
+   - nome_culto: string (ex: "Culto da Família (Noite)")
+   - periodo: string (ex: "domingo_noite")
+   - is_santa_ceia: boolean (ex: false)
+   - aprovada: boolean (ex: false)
+   - data_aprovacao: object (ex: null)
+   - created_at: string (ex: "2025-11-20T20:15:23.782986+00:00")
+   - updated_at: string (ex: "2025-11-20T21:13:16.247432+00:00")
+   - mes: number (ex: 11)
+   - ano: number (ex: 2025)
+   - criado_manualmente: boolean (ex: false)
+   - timestamp_criacao_escala: string (ex: "2025-11-20T18:13:16.105-03:00")
+
+📈 Total de registros: 39
+
+📋 TABELA: ESCALAS_ALOCACOES
+------------------------------------------------------------
+
+📊 Colunas (6):
+   - id: string (ex: "9d4c2173-8c62-43a7-9c8c-a1d9af127bd8")
+   - culto_id: string (ex: "f8b7e571-7d47-4306-9dcf-7c72d1921d87")
+   - membro_id: string (ex: "ebd03d49-17b6-4437-bcf0-bd4a89e2057e")
+   - funcao_id: string (ex: "66a29ea0-e200-4d91-8c29-2a24a2785b7d")
+   - motivo_falha: string (ex: "null")
+   - status: string (ex: "ALOCADO")
+
+📈 Total de registros: 157
+
+============================================================
+✅ Análise concluída!
+
+📁 Resultado salvo em database-analysis.json

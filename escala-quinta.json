@@ -1,0 +1,241 @@
+{
+  "culto": {
+    "nome": "Culto da Vitória",
+    "data": "2025-11-27T22:30:00+00:00",
+    "periodo": "quinta"
+  },
+  "resumo": {
+    "preenchidas": 22,
+    "vazias": 16
+  },
+  "escala": [
+    {
+      "setor": "PORTA - A1 Parede",
+      "funcao": "Interno",
+      "membro": "Adilson Miranda Neto",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "PORTA - A1 Parede",
+      "funcao": "Hall",
+      "membro": "Anderson Rodrigues de Andrade (CASAL JB E MARISA)",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "PORTA - A2",
+      "funcao": "Interno",
+      "membro": "Andre chagas",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "PORTA - A2",
+      "funcao": "Hall",
+      "membro": "Anildo Valentim Rodrigues de Lima",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "PORTA Nova - A3",
+      "funcao": "Interno",
+      "membro": "antonio carlos melo vieira",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "PORTA Nova - A3",
+      "funcao": "Hall",
+      "membro": "Antonio osni Cardoso",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "PORTA Nova - A4",
+      "funcao": "Interno",
+      "membro": "Cícero Bezerra de Araújo",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "PORTA Nova - A4",
+      "funcao": "Hall",
+      "membro": "Claudio Spindler Junior",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "BANHEIROS",
+      "funcao": "Masculino",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "BANHEIROS",
+      "funcao": "Masculino",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "BANHEIROS",
+      "funcao": "Feminino",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "BANHEIROS",
+      "funcao": "Feminino",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "SETOR AZUL",
+      "funcao": "Responsável e apoio",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "SETOR AZUL",
+      "funcao": "Corrente 1",
+      "membro": "Amanda Carolina Mathias Macanhão",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR AZUL",
+      "funcao": "Corrente 2",
+      "membro": "Andreia de Cassia Juchem Bueno",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR AZUL",
+      "funcao": "Apoio",
+      "membro": "Carla Santos Caetano",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR AZUL",
+      "funcao": "Apoio",
+      "membro": "Cintia de Almeida Fernandes",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR VERDE",
+      "funcao": "Responsável e apoio",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "SETOR VERDE",
+      "funcao": "Corrente entre verde e azul/Púlpito",
+      "membro": "Dari Kruger",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR VERDE",
+      "funcao": "Corrente atrás do Pastor",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "SETOR VERDE",
+      "funcao": "Corrente corredor da mídia",
+      "membro": "Cristina Valerio",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR VERDE",
+      "funcao": "Corrente entre verde e laranja",
+      "membro": "Daise Dalzotto",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR VERDE",
+      "funcao": "Apoio",
+      "membro": "Dane de Matos",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR VERDE",
+      "funcao": "Apoio",
+      "membro": "Denilce grabowski",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR LARANJA",
+      "funcao": "Responsável e apoio",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "SETOR LARANJA",
+      "funcao": "Corrente 1",
+      "membro": "David Rosa",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR LARANJA",
+      "funcao": "Corrente 2",
+      "membro": "Dulcilene de Nazaré Costa da Silva",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR LARANJA",
+      "funcao": "Apoio",
+      "membro": "Dyeime Dayane Ferreira Abreu",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "SETOR LARANJA",
+      "funcao": "Apoio",
+      "membro": "Elizandra Gloria Martins Brandalise",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "ALTAR",
+      "funcao": "Mesa, água e microfone",
+      "membro": "Jose Duarte",
+      "status": "ALOCADO"
+    },
+    {
+      "setor": "ALTAR",
+      "funcao": "Púlpito",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "OFERTA",
+      "funcao": "Apoio",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "OFERTA",
+      "funcao": "Apoio",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "OFERTA",
+      "funcao": "Apoio",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "SALVAS",
+      "funcao": "Lado Bateria (09 salvas)",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "MÁQUINAS (16 ao total)",
+      "funcao": "Lado bateria (16 máquinas)",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "FINALIZAM AS MÁQUINAS",
+      "funcao": "Finalização",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    },
+    {
+      "setor": "FINALIZAM AS MÁQUINAS",
+      "funcao": "Finalização",
+      "membro": null,
+      "status": "SEM_CANDIDATO"
+    }
+  ]
+}
