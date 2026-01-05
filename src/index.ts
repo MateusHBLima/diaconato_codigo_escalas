@@ -272,7 +272,8 @@ app.post('/webhook/escala_solicitada', async (req, res) => {
 // ============================================
 
 // Se estiver rodando localmente ou em servidor tradicional (Railway/Render)
-if (process.env.NODE_ENV !== 'test') { // Pequena proteção para testes unitários
+// Na Vercel, a env var VERCEL é definida.
+if (!process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`
 ╔════════════════════════════════════════════════════════════╗
