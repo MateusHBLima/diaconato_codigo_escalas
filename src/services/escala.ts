@@ -381,14 +381,24 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
 
         const ocupantesDestaFuncao: string[] = [];
 
+        // LÓGICA ESPECIAL PARA CASAIS RESPONSÁVEIS
+        // Se a função é "Responsável e apoio" (requer múltiplas pessoas), escalar o casal junto
+        let conjuge_pendente_id: string | null = null;
+
         for (let i = 0; i < funcao.quantidade_pessoas; i++) {
 
             // LOGICA DE REPETIÇÃO (BANHEIROS)
             let membroObrigatorioId: string | null = null;
 
+            // Se tem cônjuge pendente da iteração anterior, usar ele primeiro
+            if (conjuge_pendente_id) {
+                membroObrigatorioId = conjuge_pendente_id;
+                conjuge_pendente_id = null; // Consumido
+            }
+
             // Só ativa repetição forçada se NÃO for um fallback normal
             // Verificando Banheiros
-            if (funcao.nome.toLowerCase().includes('banheiro')) {
+            if (!membroObrigatorioId && funcao.nome.toLowerCase().includes('banheiro')) {
                 let fonte: string | undefined;
 
                 // Masculino
@@ -414,6 +424,25 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
             }
 
             const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId);
+
+            // LÓGICA CASAL: Se escalamos um líder para "Responsável", buscar o cônjuge para a próxima vaga
+            if (candidato && funcao.nome.toLowerCase().includes('responsável') && !conjuge_pendente_id) {
+                const nomeConjuge = (candidato as any).nome_conjuge;
+                const conjugeServeJunto = (candidato as any).conjuge_serve_junto;
+
+                if (nomeConjuge && conjugeServeJunto) {
+                    // Buscar cônjuge pelo nome
+                    const conjuge = membros.find(m =>
+                        m.nome_completo.toLowerCase().includes(nomeConjuge.toLowerCase()) ||
+                        nomeConjuge.toLowerCase().includes(m.nome_completo.toLowerCase().split(' ')[0])
+                    );
+
+                    if (conjuge && !membrosUsados.has(conjuge.id) && conjuge.nivel_experiencia === 5) {
+                        conjuge_pendente_id = conjuge.id;
+                        console.log(`   💑 Casal: ${candidato.nome_completo} → ${conjuge.nome_completo}`);
+                    }
+                }
+            }
 
             if (candidato) {
 

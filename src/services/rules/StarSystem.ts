@@ -45,6 +45,7 @@ export const REPETICAO_BANHEIRO_FEMININO = [
  * Verifica se um membro tem nível de experiência suficiente para uma função.
  * A lógica é cumulativa para níveis 1-4: Quem tem 3 estrelas pode fazer funções de 1, 2 e 3.
  * EXCEÇÃO: Nível 5 (Líderes) SÓ fazem funções de nível 5 (Responsável Geral e Apoio Oferta).
+ * FALLBACK: Se função não está mapeada, permite qualquer membro (exceto Líderes que são restritos).
  */
 export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especificidadeSexoFuncao: string): boolean {
     const estrelas = membro.nivel_experiencia || 1; // Default para 1 estrela se não definido
@@ -53,10 +54,18 @@ export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especific
     if (membro.sexo === 'HOMEM' && especificidadeSexoFuncao === 'Mulher') return false;
     if (membro.sexo === 'MULHER' && especificidadeSexoFuncao === 'Homem') return false;
 
+    // Verificar se a função é de Nível 5 (Liderança)
+    const funcoesLider = STAR_REQUIREMENTS[5] || [];
+    const ehFuncaoLider = funcoesLider.some(f => nomeFuncao.includes(f));
+
     // REGRA ESPECIAL: Líderes (Nível 5) SÓ podem fazer funções de Nível 5
     if (estrelas === 5) {
-        const funcoesLider = STAR_REQUIREMENTS[5] || [];
-        return funcoesLider.some(f => nomeFuncao.includes(f));
+        return ehFuncaoLider;
+    }
+
+    // Se é função de Líder mas membro NÃO é líder, barrar
+    if (ehFuncaoLider) {
+        return false;
     }
 
     // Para níveis 1-4, lógica cumulativa normal
@@ -65,6 +74,16 @@ export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especific
         if (funcoesPermitidas.some(f => nomeFuncao.includes(f))) {
             return true;
         }
+    }
+
+    // FALLBACK: Se a função não está mapeada em nenhum nível, permitir qualquer membro com estrelas >= 1
+    // Isso garante que não fiquem vagas vazias por falta de mapeamento
+    const todasFuncoesConhecidas = Object.values(STAR_REQUIREMENTS).flat();
+    const funcaoConhecida = todasFuncoesConhecidas.some(f => nomeFuncao.includes(f));
+
+    if (!funcaoConhecida) {
+        // Função não mapeada - permite qualquer um exceto líderes (que são restritos)
+        return true;
     }
 
     return false;
