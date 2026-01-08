@@ -8,7 +8,7 @@ import {
 import { buscarCultoPorId, marcarEscalaCriada } from './cultos.js';
 import type { Membro, Funcao, Culto, Alocacao, ResultadoEscala } from '../types/index.js';
 import { podeExecutarFuncao } from './rules/StarSystem.js';
-import { temRegraRepeticao, ehFuncaoRepeticao } from './rules/RepetitionRules.js';
+import { temRegraRepeticao, vagaDeveRepetir, ehFuncaoRepeticao } from './rules/RepetitionRules.js';
 
 // ============================================
 // TIPOS INTERNOS
@@ -461,32 +461,41 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
             const regraRepeticao = temRegraRepeticao(funcao.nome);
 
             if (!membroObrigatorioId && regraRepeticao) {
-                // Buscar ocupantes das funções fonte
-                for (const fontePattern of regraRepeticao.fontes) {
-                    // Encontrar funções que matcham o padrão fonte
-                    const chavesFonte = Array.from(quemEstaOnde.keys()).filter(k =>
-                        k.toLowerCase().includes(fontePattern.toLowerCase())
-                    );
+                // Verificar se ESTA VAGA específica deve repetir ou buscar pessoa nova
+                const deveRepetir = vagaDeveRepetir(regraRepeticao, i);
 
-                    if (chavesFonte.length > 0) {
-                        // Coletar todos os ocupantes das fontes
-                        const todosOcupantes: string[] = [];
-                        chavesFonte.forEach(chave => {
-                            const ocupantes = quemEstaOnde.get(chave) || [];
-                            ocupantes.forEach(o => {
-                                if (o !== 'VAZIO' && !todosOcupantes.includes(o)) {
-                                    todosOcupantes.push(o);
-                                }
+                if (deveRepetir) {
+                    // Buscar ocupantes das funções fonte
+                    for (const fontePattern of regraRepeticao.fontes) {
+                        // Encontrar funções que matcham o padrão fonte
+                        const chavesFonte = Array.from(quemEstaOnde.keys()).filter(k =>
+                            k.toLowerCase().includes(fontePattern.toLowerCase())
+                        );
+
+                        if (chavesFonte.length > 0) {
+                            // Coletar todos os ocupantes das fontes
+                            const todosOcupantes: string[] = [];
+                            chavesFonte.forEach(chave => {
+                                const ocupantes = quemEstaOnde.get(chave) || [];
+                                ocupantes.forEach(o => {
+                                    if (o !== 'VAZIO' && !todosOcupantes.includes(o)) {
+                                        todosOcupantes.push(o);
+                                    }
+                                });
                             });
-                        });
 
-                        // Usar o índice da vaga atual para pegar o ocupante correspondente
-                        const indiceDesejado = regraRepeticao.indices[i] ?? i;
-                        if (todosOcupantes.length > indiceDesejado) {
-                            membroObrigatorioId = todosOcupantes[indiceDesejado];
-                            console.log(`   🔄 ${regraRepeticao.descricao} (índice ${indiceDesejado})`);
+                            // Usar o índice da vaga atual para pegar o ocupante correspondente
+                            const indiceDesejado = regraRepeticao.indices.indexOf(i);
+                            const indiceReal = indiceDesejado >= 0 ? indiceDesejado : i;
+                            if (todosOcupantes.length > indiceReal) {
+                                membroObrigatorioId = todosOcupantes[indiceReal];
+                                console.log(`   🔄 ${regraRepeticao.descricao} (vaga ${i} → fonte ${indiceReal})`);
+                            }
                         }
                     }
+                } else {
+                    // Esta vaga NÃO repete - será preenchida com pessoa nova
+                    console.log(`   ⭐ ${funcao.nome} vaga ${i}: Pessoa NOVA`);
                 }
             }
 
