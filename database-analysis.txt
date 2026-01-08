@@ -5,7 +5,7 @@
 📋 TABELA: MEMBROS
 ------------------------------------------------------------
 
-📊 Colunas (34):
+📊 Colunas (35):
    - id: string (ex: "1d540fdd-7654-4562-a26d-94b4265aa125")
    - numero: number (ex: 1)
    - nome_completo: string (ex: "Adilson Miranda Neto")
@@ -14,7 +14,7 @@
    - aptidoes: array (ex: [])
    - ativo: boolean (ex: true)
    - created_at: string (ex: "2025-11-19T20:12:44.029052+00:00")
-   - updated_at: string (ex: "2025-11-19T20:12:44.029052+00:00")
+   - updated_at: string (ex: "2026-01-08T16:31:25.15036+00:00")
    - data_nascimento: string (ex: "30350")
    - observacoes: object (ex: null)
    - email: object (ex: null)
@@ -40,8 +40,9 @@
    - disponibilidade_domingo: string (ex: "SIM, 2 DOMINGOS POR MÊS")
    - melhor_periodo_domingo: string (ex: "QUALQUER PERIODO")
    - monitor: string (ex: "ANDREI")
+   - nivel_experiencia: number (ex: 2)
 
-📈 Total de registros: 115
+📈 Total de registros: 116
 
 📋 TABELA: FUNCOES
 ------------------------------------------------------------
@@ -66,19 +67,19 @@
 ------------------------------------------------------------
 
 📊 Colunas (13):
-   - id: string (ex: "c1b7bbc4-042e-49a2-83e5-79b6f86b1ec6")
-   - data_culto: string (ex: "2025-11-23T21:00:00+00:00")
-   - nome_culto: string (ex: "Culto da Família (Noite)")
-   - periodo: string (ex: "domingo_noite")
+   - id: string (ex: "c8a2ce07-6652-42a7-bdf3-201debbb0709")
+   - data_culto: string (ex: "2025-11-13T22:30:00+00:00")
+   - nome_culto: string (ex: "Culto da Vitória")
+   - periodo: string (ex: "quinta")
    - is_santa_ceia: boolean (ex: false)
    - aprovada: boolean (ex: false)
    - data_aprovacao: object (ex: null)
    - created_at: string (ex: "2025-11-20T20:15:23.782986+00:00")
-   - updated_at: string (ex: "2025-11-20T21:13:16.247432+00:00")
+   - updated_at: string (ex: "2026-01-05T17:46:06.303324+00:00")
    - mes: number (ex: 11)
    - ano: number (ex: 2025)
    - criado_manualmente: boolean (ex: false)
-   - timestamp_criacao_escala: string (ex: "2025-11-20T18:13:16.105-03:00")
+   - timestamp_criacao_escala: string (ex: "2026-01-05T17:46:29.871Z")
 
 📈 Total de registros: 39
 
@@ -93,7 +94,7 @@
    - motivo_falha: string (ex: "null")
    - status: string (ex: "ALOCADO")
 
-📈 Total de registros: 157
+📈 Total de registros: 869
 
 ============================================================
 ✅ Análise concluída!

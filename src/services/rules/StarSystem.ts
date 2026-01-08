@@ -2,40 +2,43 @@
 import { Funcao, Membro } from '../../types';
 
 export const STAR_REQUIREMENTS: Record<number, string[]> = {
-    // 1 Estrela
+    // 1 Estrela (Básico)
     1: [
-        'Hall - Porta A1', 'Hall - Porta A2', 'Hall - Porta A3', 'Hall - Porta A4',
-        'Apoio', 'Apoio setor azul', 'Apoio setor verde', 'Apoio setor laranja'
+        'Hall', // Cobre Hall A1, A2...
+        'Apoio' // Cobre Apoio Geral, Setores
     ],
     // 2 Estrelas
     2: [
-        'Interno - Porta A1', 'Interno - Porta A2', 'Interno - Porta A3', 'Interno - Porta A4',
-        'Máquinas de Cartão'
+        'Interno', // Cobre Interno A1...
+        'Máquinas', 'Cartão'
     ],
     // 3 Estrelas
     3: [
-        'Salvas', 'Finaliza Máquina de cartão', 'Corrente atrás do Pastor',
-        'Responsável de setor', 'Corrente corredor da mídia', 'Corrente entre verde e laranja',
-        'Corrente 1', 'Corrente 2'
+        'Salvas',
+        'Corrente', // Cobre Corrente 1, 2, Mídia, Pastor
+        'Feminino entre', // Correntes específicas
+        'Masculino entre' // Correntes específicas
     ],
-    // 4 Estrelas
+    // 4 Estrelas (Especialista)
     4: [
-        'Púlpito', 'Mesa, água e microfone', 'Mesa Santa Ceia'
+        'Púlpito',
+        'Mesa', // Cobre Mesa água/mic e Mesa Santa Ceia
     ],
-    // 5 Estrelas
+    // 5 Estrelas (Liderança)
     5: [
-        'Apoio oferta', 'Responsável pelo culto'
+        'Responsável', // Cobre "Responsável e apoio"
+        'Oferta'
     ]
 };
 
 // Mapeamento de funções masculinas para repetição no Banheiro Masculino
 export const REPETICAO_BANHEIRO_MASCULINO = [
-    'Hall - Porta A2', 'Hall - Porta A4'
+    'Hall' // Simplificado para pegar qualquer Hall se necessário, mas o código usa includes
 ];
 
 // Mapeamento de funções femininas para repetição no Banheiro Feminino
 export const REPETICAO_BANHEIRO_FEMININO = [
-    'Apoio setor azul', 'Apoio setor laranja'
+    'Apoio'
 ];
 
 /**
