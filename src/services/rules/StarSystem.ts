@@ -17,16 +17,17 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
         'Salvas',
         'Corrente', // Cobre Corrente 1, 2, Mídia, Pastor
         'Feminino entre', // Correntes específicas
-        'Masculino entre' // Correntes específicas
+        'Masculino entre', // Correntes específicas
+        'Responsável' // Responsável de setor (Laranja, Verde, Azul) - NÃO "Responsável e apoio"
     ],
     // 4 Estrelas (Especialista)
     4: [
         'Púlpito',
         'Mesa', // Cobre Mesa água/mic e Mesa Santa Ceia
     ],
-    // 5 Estrelas (Liderança)
+    // 5 Estrelas (Liderança) - Padrões específicos para não capturar "Responsável de setor"
     5: [
-        'Responsável', // Cobre "Responsável e apoio"
+        'Responsável e apoio', // Específico para não pegar "Responsável de setor"
         'Oferta'
     ]
 };
