@@ -459,23 +459,26 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
             }
 
             // Só ativa repetição forçada se NÃO for um fallback normal
-            // Verificando Banheiros
-            if (!membroObrigatorioId && funcao.nome.toLowerCase().includes('banheiro')) {
+            // Verificando funções com REPETIR_PESSOA (Banheiros: Masculino/Feminino)
+            const ehRepeticao = funcao.regras?.includes('REPETIR_PESSOA');
+            const nomeLower = funcao.nome.toLowerCase();
+
+            if (!membroObrigatorioId && ehRepeticao && (nomeLower === 'masculino' || nomeLower === 'feminino')) {
                 let fonte: string | undefined;
 
-                // Masculino
-                if (funcao.nome.includes('Masculino') || funcao.especificidade_sexo === 'Homem') {
+                // Masculino -> repete do Hall
+                if (nomeLower === 'masculino') {
                     fonte = REPETICAO_BANHEIRO_MASCULINO[i];
                 }
-                // Feminino
-                else if (funcao.nome.includes('Feminino') || funcao.especificidade_sexo === 'Mulher') {
+                // Feminino -> repete do Apoio
+                else if (nomeLower === 'feminino') {
                     fonte = REPETICAO_BANHEIRO_FEMININO[i];
                 }
 
                 if (fonte) {
                     // Tenta achar a função fonte
-                    // Precisamos de match parcial pois o nome da função pode variar (ex: "Porta - A1 Parede" vs "Porta - A1")
-                    const chaveFonte = Array.from(quemEstaOnde.keys()).find(k => k.includes(fonte!));
+                    // Precisamos de match parcial pois o nome da função pode variar (ex: "Hall" em múltiplas instâncias)
+                    const chaveFonte = Array.from(quemEstaOnde.keys()).find(k => k.toLowerCase().includes(fonte!.toLowerCase()));
                     if (chaveFonte) {
                         const ocupantes = quemEstaOnde.get(chaveFonte);
                         if (ocupantes && ocupantes.length > 0) {

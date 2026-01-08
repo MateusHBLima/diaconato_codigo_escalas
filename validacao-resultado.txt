@@ -1,0 +1,27 @@
+🔍 VALIDANDO ESCALA
+
+📅 Culto: Culto da Família (Manhã) - 2026-01-04T13:00:00.189+00:00
+============================================================
+
+👑 RESPONSÁVEIS GERAIS:
+   1: Gustavo Nardi (Nível 5)
+   ✅ OK
+   2: Luciane mendes (Nível 5)
+   ✅ OK
+
+🚻 VALIDAÇÃO BANHEIROS:
+   Hall Masculino: Andre chagas, antonio carlos melo vieira, Marco Antônio braseiro brum, Valdecir Teixeira
+   Banheiro Masculino: Jonas Jesus Belmonte, Rogério Adalberto Ferreira
+   ❌ ERRO: Banheiro masculino deveria repetir pessoa do Hall!
+   Apoio Feminino: Daise Dalzotto, Roberta Querido, Tatiane Querido, Eroni Corrêa Rodrigues de Lima, Janaína Rezendes NUnes, Ana Maria de Andrade Fagundes, Ana Paula Leite
+   Banheiro Feminino: Dyeime Dayane Ferreira Abreu, Idalamar Chagas
+   ❌ ERRO: Banheiro feminino deveria repetir pessoa do Apoio!
+
+📊 RESUMO DE ALOCAÇÕES:
+   Total: 45
+   Preenchidas: 45
+   Vazias: 0
+   ✅ Nenhuma vaga vazia!
+
+============================================================
+✅ Validação concluída!
