@@ -374,6 +374,10 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     // Rastreador de quem está em quê: NomeFuncao -> Lista de IDs
     const quemEstaOnde = new Map<string, string[]>();
 
+    // Rastrear responsáveis gerais para salvar no banco
+    let responsavelGeral1Id: string | null = null;
+    let responsavelGeral2Id: string | null = null;
+
     let vagasPreenchidas = 0;
     let vagasVazias = 0;
 
@@ -390,8 +394,14 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
             // LOGICA DE REPETIÇÃO (BANHEIROS)
             let membroObrigatorioId: string | null = null;
 
-            // Se tem cônjuge pendente da iteração anterior, usar ele primeiro
+            // Se tem cônjuge pendente da iteração anterior (para casais responsáveis)
             if (conjuge_pendente_id) {
+                membroObrigatorioId = conjuge_pendente_id;
+                conjuge_pendente_id = null; // Consumido
+            }
+
+            // Se tem cônjuge pendente da iteração anterior (fallback se não tiver resp definido)
+            if (!membroObrigatorioId && conjuge_pendente_id) {
                 membroObrigatorioId = conjuge_pendente_id;
                 conjuge_pendente_id = null; // Consumido
             }
@@ -440,8 +450,21 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
 
             const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId);
 
+            // CAPTURAR RESPONSÁVEIS GERAIS para salvar no banco depois
+            const ehFuncaoResponsavelEApoio = funcao.nome.toLowerCase().includes('responsável') &&
+                funcao.nome.toLowerCase().includes('apoio');
+            if (candidato && ehFuncaoResponsavelEApoio) {
+                if (i === 0 && !responsavelGeral1Id) {
+                    responsavelGeral1Id = candidato.id;
+                    console.log(`   👑 Responsável Geral 1: ${candidato.nome_completo}`);
+                } else if (i === 1 && !responsavelGeral2Id) {
+                    responsavelGeral2Id = candidato.id;
+                    console.log(`   👑 Responsável Geral 2: ${candidato.nome_completo}`);
+                }
+            }
+
             // LÓGICA CASAL: Se escalamos um líder para "Responsável", buscar o cônjuge para a próxima vaga
-            if (candidato && funcao.nome.toLowerCase().includes('responsável') && !conjuge_pendente_id) {
+            if (candidato && ehFuncaoResponsavelEApoio && !conjuge_pendente_id) {
                 const nomeConjuge = (candidato as any).nome_conjuge;
                 const conjugeServeJunto = (candidato as any).conjuge_serve_junto;
 
@@ -497,6 +520,23 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     // Salvar no banco
     await salvarAlocacoes(alocacoes);
     await marcarEscalaCriada(cultoId);
+
+    // SALVAR RESPONSÁVEIS GERAIS no banco para o frontend exibir
+    if (responsavelGeral1Id || responsavelGeral2Id) {
+        const { error } = await supabase
+            .from('datas_cultos')
+            .update({
+                responsavel_geral_1_id: responsavelGeral1Id,
+                responsavel_geral_2_id: responsavelGeral2Id
+            })
+            .eq('id', cultoId);
+
+        if (error) {
+            console.error(`   ⚠️ Erro ao salvar responsáveis gerais: ${error.message}`);
+        } else {
+            console.log(`   👑 Responsáveis gerais salvos no banco`);
+        }
+    }
 
     console.log(`   ✅ Preenchidas: ${vagasPreenchidas}`);
     console.log(`   ❌ Vazias: ${vagasVazias}`);

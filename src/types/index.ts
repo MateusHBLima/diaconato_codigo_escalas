@@ -40,6 +40,8 @@ export interface Culto {
     mes: number;
     ano: number;
     timestamp_criacao_escala: string | null;
+    responsavel_geral_1_id: string | null;
+    responsavel_geral_2_id: string | null;
 }
 
 export interface Alocacao {

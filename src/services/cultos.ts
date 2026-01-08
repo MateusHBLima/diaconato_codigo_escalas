@@ -38,7 +38,9 @@ export async function gerarCultosDoMes(mes: number, ano: number): Promise<Culto[
                 aprovada: false,
                 mes,
                 ano,
-                timestamp_criacao_escala: null
+                timestamp_criacao_escala: null,
+                responsavel_geral_1_id: null,
+                responsavel_geral_2_id: null
             });
         }
 
@@ -54,7 +56,9 @@ export async function gerarCultosDoMes(mes: number, ano: number): Promise<Culto[
                 aprovada: false,
                 mes,
                 ano,
-                timestamp_criacao_escala: null
+                timestamp_criacao_escala: null,
+                responsavel_geral_1_id: null,
+                responsavel_geral_2_id: null
             });
 
             // Noite - 18:00
@@ -67,7 +71,9 @@ export async function gerarCultosDoMes(mes: number, ano: number): Promise<Culto[
                 aprovada: false,
                 mes,
                 ano,
-                timestamp_criacao_escala: null
+                timestamp_criacao_escala: null,
+                responsavel_geral_1_id: null,
+                responsavel_geral_2_id: null
             });
         }
     }
