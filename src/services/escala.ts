@@ -374,9 +374,61 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     // Rastreador de quem está em quê: NomeFuncao -> Lista de IDs
     const quemEstaOnde = new Map<string, string[]>();
 
-    // Rastrear responsáveis gerais para salvar no banco
+    // ============================================
+    // ENCONTRAR RESPONSÁVEIS GERAIS (NÍVEL 5)
+    // São salvos diretamente em datas_cultos, não alocados via função
+    // ============================================
     let responsavelGeral1Id: string | null = null;
     let responsavelGeral2Id: string | null = null;
+
+    // Buscar membros Nível 5 disponíveis para este período
+    const lideresDisponiveis = membros.filter(m => {
+        if (m.nivel_experiencia !== 5) return false;
+
+        // Verificar disponibilidade
+        const disp = culto.periodo === 'quinta'
+            ? m.disponibilidade_quinta
+            : m.disponibilidade_domingo;
+        const { disponivel } = parseDisponibilidade(disp);
+        if (!disponivel) return false;
+
+        // Verificar período
+        if (!atendePeriodo(m.melhor_periodo_domingo, culto.periodo)) return false;
+
+        return true;
+    });
+
+    console.log(`   👑 Líderes Nível 5 disponíveis: ${lideresDisponiveis.length}`);
+
+    if (lideresDisponiveis.length > 0) {
+        // Primeiro líder
+        const lider1 = lideresDisponiveis[0];
+        responsavelGeral1Id = lider1.id;
+        console.log(`   👑 Responsável Geral 1: ${lider1.nome_completo}`);
+
+        // Buscar cônjuge
+        const nomeConjuge = (lider1 as any).nome_conjuge;
+        const conjugeServeJunto = (lider1 as any).conjuge_serve_junto;
+
+        if (nomeConjuge && conjugeServeJunto) {
+            const conjuge = membros.find(m =>
+                m.nome_completo.toLowerCase().includes(nomeConjuge.toLowerCase()) ||
+                nomeConjuge.toLowerCase().includes(m.nome_completo.toLowerCase().split(' ')[0])
+            );
+
+            if (conjuge && conjuge.nivel_experiencia === 5) {
+                responsavelGeral2Id = conjuge.id;
+                console.log(`   👑 Responsável Geral 2 (cônjuge): ${conjuge.nome_completo}`);
+            }
+        }
+
+        // Se não achou cônjuge, pegar segundo líder disponível
+        if (!responsavelGeral2Id && lideresDisponiveis.length > 1) {
+            const lider2 = lideresDisponiveis[1];
+            responsavelGeral2Id = lider2.id;
+            console.log(`   👑 Responsável Geral 2: ${lider2.nome_completo}`);
+        }
+    }
 
     let vagasPreenchidas = 0;
     let vagasVazias = 0;
@@ -450,37 +502,8 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
 
             const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId);
 
-            // CAPTURAR RESPONSÁVEIS GERAIS para salvar no banco depois
-            const ehFuncaoResponsavelEApoio = funcao.nome.toLowerCase().includes('responsável') &&
-                funcao.nome.toLowerCase().includes('apoio');
-            if (candidato && ehFuncaoResponsavelEApoio) {
-                if (i === 0 && !responsavelGeral1Id) {
-                    responsavelGeral1Id = candidato.id;
-                    console.log(`   👑 Responsável Geral 1: ${candidato.nome_completo}`);
-                } else if (i === 1 && !responsavelGeral2Id) {
-                    responsavelGeral2Id = candidato.id;
-                    console.log(`   👑 Responsável Geral 2: ${candidato.nome_completo}`);
-                }
-            }
-
-            // LÓGICA CASAL: Se escalamos um líder para "Responsável", buscar o cônjuge para a próxima vaga
-            if (candidato && ehFuncaoResponsavelEApoio && !conjuge_pendente_id) {
-                const nomeConjuge = (candidato as any).nome_conjuge;
-                const conjugeServeJunto = (candidato as any).conjuge_serve_junto;
-
-                if (nomeConjuge && conjugeServeJunto) {
-                    // Buscar cônjuge pelo nome
-                    const conjuge = membros.find(m =>
-                        m.nome_completo.toLowerCase().includes(nomeConjuge.toLowerCase()) ||
-                        nomeConjuge.toLowerCase().includes(m.nome_completo.toLowerCase().split(' ')[0])
-                    );
-
-                    if (conjuge && !membrosUsados.has(conjuge.id) && conjuge.nivel_experiencia === 5) {
-                        conjuge_pendente_id = conjuge.id;
-                        console.log(`   💑 Casal: ${candidato.nome_completo} → ${conjuge.nome_completo}`);
-                    }
-                }
-            }
+            // NOTA: Responsáveis Gerais (Nível 5) são detectados no início da função,
+            // não através da alocação de funções. A captura abaixo foi removida.
 
             if (candidato) {
 
