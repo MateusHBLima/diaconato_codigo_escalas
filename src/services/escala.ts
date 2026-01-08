@@ -7,6 +7,11 @@ import {
 } from './parser.js';
 import { buscarCultoPorId, marcarEscalaCriada } from './cultos.js';
 import type { Membro, Funcao, Culto, Alocacao, ResultadoEscala } from '../types/index.js';
+import {
+    podeExecutarFuncao,
+    REPETICAO_BANHEIRO_MASCULINO,
+    REPETICAO_BANHEIRO_FEMININO
+} from './rules/StarSystem.js';
 
 // ============================================
 // TIPOS INTERNOS
@@ -211,14 +216,23 @@ function encontrarCandidato(
     funcao: Funcao,
     culto: Culto,
     membrosUsados: Set<string>,
-    membrosRepetiveisNoCulto: Set<string> = new Set()
+    membroObrigatorioId?: string | null
 ): MembroComHistorico | null {
+
+    if (membroObrigatorioId) {
+        return membros.find(m => m.id === membroObrigatorioId) || null;
+    }
 
     const ehFuncaoRepetivel = funcao.regras === 'REPETIR_PESSOA';
 
     // Função auxiliar para filtrar candidatos
     const filtrarCandidatos = (ignorarLimite: boolean) => {
         return membros.filter(membro => {
+            // VERIFICAR ESTRELAS
+            if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo)) {
+                return false;
+            }
+
             // REPETIR_PESSOA
             if (ehFuncaoRepetivel) {
                 // Para função repetível, preferir na ordenação, mas permitir na filtragem
@@ -234,8 +248,30 @@ function encontrarCandidato(
             // Gênero
             if (!atendeGenero(membro.sexo, funcao.especificidade_sexo)) return false;
 
-            // Permissão
-            if (!atendePermissao(membro.aptidoes || [], funcao.regras)) return false;
+            // APTIDÕES ESPECIAIS (Apenas estas são verificadas, restante usa Sistema de Estrelas)
+            // 1. NECESSIDADE SENTADO - Se membro precisa ficar sentado, só pode ir para funções compatíveis
+            if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
+                const nomeLower = funcao.nome.toLowerCase();
+
+                // Funções que SEMPRE exigem ficar em pé (barrar completamente)
+                const funcoesEmPe = ['porta', 'hall', 'interno', 'salvas'];
+                if (funcoesEmPe.some(f => nomeLower.includes(f))) {
+                    return false;
+                }
+
+                // Correntes: Só pode nas alas AZUL e LARANJA (não pode na VERDE)
+                if (nomeLower.includes('corrente')) {
+                    const ehAzulOuLaranja = nomeLower.includes('azul') || nomeLower.includes('laranja');
+                    const ehVerde = nomeLower.includes('verde');
+
+                    if (ehVerde || !ehAzulOuLaranja) {
+                        return false; // Barra corrente verde ou correntes sem setor definido
+                    }
+                    // Se for azul ou laranja, permite continuar
+                }
+            }
+
+            // 2. Prioridade Mesa - Será tratada na ordenação, não no filtro
 
             // Disponibilidade básica
             const disp = culto.periodo === 'quinta'
@@ -253,8 +289,17 @@ function encontrarCandidato(
     };
 
     // Função de ordenação
-    const ordenarCandidatos = (lista: MembroComHistorico[]) => {
+    const ordenarCandidatos = (lista: MembroComHistorico[], nomeFuncao: string) => {
         return lista.sort((a, b) => {
+            // 0. PRIORIDADE MESA: Se função é Mesa, quem tem aptidão vem primeiro
+            if (nomeFuncao.toLowerCase().includes('mesa')) {
+                const aPrioridadeMesa = a.aptidoes?.includes('Prioridade mesa') ? 1 : 0;
+                const bPrioridadeMesa = b.aptidoes?.includes('Prioridade mesa') ? 1 : 0;
+                if (aPrioridadeMesa !== bPrioridadeMesa) {
+                    return bPrioridadeMesa - aPrioridadeMesa; // Quem tem prioridade vem primeiro
+                }
+            }
+
             // 1. Quem serviu menos vezes no mês
             if (a.escalas_no_mes !== b.escalas_no_mes) {
                 return a.escalas_no_mes - b.escalas_no_mes;
@@ -273,16 +318,15 @@ function encontrarCandidato(
     let candidatos = filtrarCandidatos(false);
 
     if (candidatos.length > 0) {
-        ordenarCandidatos(candidatos);
+        ordenarCandidatos(candidatos, funcao.nome);
         return candidatos[0];
     }
 
     // 2. TENTATIVA FALLBACK (Ignorando limites para preencher a vaga)
-    // "Faça com que preencha, mesmo que pegue pessoas que ja foram escaladas"
     candidatos = filtrarCandidatos(true);
 
     if (candidatos.length > 0) {
-        ordenarCandidatos(candidatos);
+        ordenarCandidatos(candidatos, funcao.nome);
         // Retorna o que serviu menos, mesmo tendo estourado o limite
         return candidatos[0];
     }
@@ -326,20 +370,61 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     // Gerar alocações
     const alocacoes: Omit<Alocacao, 'id'>[] = [];
     const membrosUsados = new Set<string>();
+
+    // Rastreador de quem está em quê: NomeFuncao -> Lista de IDs
+    const quemEstaOnde = new Map<string, string[]>();
+
     let vagasPreenchidas = 0;
     let vagasVazias = 0;
 
     for (const funcao of funcoes) {
+
+        const ocupantesDestaFuncao: string[] = [];
+
         for (let i = 0; i < funcao.quantidade_pessoas; i++) {
-            const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados);
+
+            // LOGICA DE REPETIÇÃO (BANHEIROS)
+            let membroObrigatorioId: string | null = null;
+
+            // Só ativa repetição forçada se NÃO for um fallback normal
+            // Verificando Banheiros
+            if (funcao.nome.toLowerCase().includes('banheiro')) {
+                let fonte: string | undefined;
+
+                // Masculino
+                if (funcao.nome.includes('Masculino') || funcao.especificidade_sexo === 'Homem') {
+                    fonte = REPETICAO_BANHEIRO_MASCULINO[i];
+                }
+                // Feminino
+                else if (funcao.nome.includes('Feminino') || funcao.especificidade_sexo === 'Mulher') {
+                    fonte = REPETICAO_BANHEIRO_FEMININO[i];
+                }
+
+                if (fonte) {
+                    // Tenta achar a função fonte
+                    // Precisamos de match parcial pois o nome da função pode variar (ex: "Porta - A1 Parede" vs "Porta - A1")
+                    const chaveFonte = Array.from(quemEstaOnde.keys()).find(k => k.includes(fonte!));
+                    if (chaveFonte) {
+                        const ocupantes = quemEstaOnde.get(chaveFonte);
+                        if (ocupantes && ocupantes.length > 0) {
+                            membroObrigatorioId = ocupantes[0]; // Pega o primeiro da fonte
+                        }
+                    }
+                }
+            }
+
+            const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId);
 
             if (candidato) {
-                membrosUsados.add(candidato.id);
 
-                // Atualizar contador local para próximas iterações
-                candidato.escalas_no_mes++;
+                // Se NÃO for repetição forçada, marca como usado e conta escala
+                if (!membroObrigatorioId) {
+                    membrosUsados.add(candidato.id);
+                    candidato.escalas_no_mes++;
+                }
 
                 vagasPreenchidas++;
+                ocupantesDestaFuncao.push(candidato.id);
 
                 alocacoes.push({
                     culto_id: cultoId,
@@ -350,6 +435,7 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 });
             } else {
                 vagasVazias++;
+                ocupantesDestaFuncao.push('VAZIO');
 
                 alocacoes.push({
                     culto_id: cultoId,
@@ -360,6 +446,8 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 });
             }
         }
+
+        quemEstaOnde.set(funcao.nome, ocupantesDestaFuncao);
     }
 
     // Salvar no banco
