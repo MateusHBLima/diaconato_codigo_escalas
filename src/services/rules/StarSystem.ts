@@ -12,24 +12,24 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
         'Interno', // Cobre Interno A1...
         'Máquinas', 'Cartão'
     ],
-    // 3 Estrelas
+    // 3 Estrelas (Responsáveis de Ala e Correntes)
     3: [
         'Salvas',
         'Corrente', // Cobre Corrente 1, 2, Mídia, Pastor
         'Feminino entre', // Correntes específicas
         'Masculino entre', // Correntes específicas
-        'Responsável' // Responsável de setor (Laranja, Verde, Azul) - NÃO "Responsável e apoio"
+        'Responsável' // Responsável e apoio (Ala) - SÓ MULHERES pelo banco
     ],
     // 4 Estrelas (Especialista)
     4: [
         'Púlpito',
         'Mesa', // Cobre Mesa água/mic e Mesa Santa Ceia
     ],
-    // 5 Estrelas (Liderança) - Padrões específicos para não capturar "Responsável de setor"
-    5: [
-        'Responsável e apoio', // Específico para não pegar "Responsável de setor"
-        'Oferta'
-    ]
+    // 5 Estrelas (Liderança Geral)
+    // NOTA: Líderes Nível 5 NÃO são alocados via função normal.
+    // Eles são salvos diretamente em datas_cultos.responsavel_geral_1_id / _2_id
+    // O Nível 5 fica vazio para que líderes não sejam escalados em funções normais.
+    5: []
 };
 
 // Mapeamento de funções masculinas para repetição no Banheiro Masculino
@@ -55,17 +55,10 @@ export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especific
     if (membro.sexo === 'HOMEM' && especificidadeSexoFuncao === 'Mulher') return false;
     if (membro.sexo === 'MULHER' && especificidadeSexoFuncao === 'Homem') return false;
 
-    // Verificar se a função é de Nível 5 (Liderança)
-    const funcoesLider = STAR_REQUIREMENTS[5] || [];
-    const ehFuncaoLider = funcoesLider.some(f => nomeFuncao.includes(f));
-
-    // REGRA ESPECIAL: Líderes (Nível 5) SÓ podem fazer funções de Nível 5
+    // REGRA ESPECIAL: Líderes (Nível 5) NÃO são alocados via função.
+    // Eles são salvos diretamente em datas_cultos.responsavel_geral_1_id / _2_id
+    // Portanto, bloquear de TODAS as funções normais.
     if (estrelas === 5) {
-        return ehFuncaoLider;
-    }
-
-    // Se é função de Líder mas membro NÃO é líder, barrar
-    if (ehFuncaoLider) {
         return false;
     }
 

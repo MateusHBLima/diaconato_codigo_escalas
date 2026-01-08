@@ -1,0 +1,30 @@
+Apoio | Sexo: Mulher | Regras: null
+Apoio | Sexo: Mulher | Regras: null
+Apoio | Sexo: Unissex | Regras: Responsável Culto
+Apoio | Sexo: Mulher | Regras: null
+Corrente 1 | Sexo: Unissex | Regras: null
+Corrente 1 | Sexo: Unissex | Regras: null
+Corrente 2 | Sexo: Unissex | Regras: null
+Corrente 2 | Sexo: Unissex | Regras: null
+Corrente atrás do Pastor | Sexo: Unissex | Regras: Corrente atrás do Pastor
+Corrente corredor da mídia | Sexo: Unissex | Regras: null
+Corrente entre verde e azul/Púlpito | Sexo: Homem | Regras: null
+Corrente entre verde e laranja | Sexo: Unissex | Regras: null
+Feminino | Sexo: Mulher | Regras: REPETIR_PESSOA
+Finalização | Sexo: Homem | Regras: Maquinas de cartão,REPETIR_PESSOA
+Hall | Sexo: Homem | Regras: null
+Hall | Sexo: Homem | Regras: null
+Hall | Sexo: Homem | Regras: null
+Hall | Sexo: Homem | Regras: null
+Interno | Sexo: Homem | Regras: null
+Interno | Sexo: Homem | Regras: null
+Interno | Sexo: Homem | Regras: null
+Interno | Sexo: Homem | Regras: null
+Lado Bateria (09 salvas) | Sexo: Homem | Regras: REPETIR_PESSOA
+Lado bateria (16 máquinas) | Sexo: Unissex | Regras: null
+Masculino | Sexo: Homem | Regras: REPETIR_PESSOA
+Mesa, água e microfone | Sexo: Homem | Regras: Prioridade Mesa
+Púlpito | Sexo: Unissex | Regras: REPETIR_PESSOA
+Responsável e apoio | Sexo: Mulher | Regras: Responsável Ala
+Responsável e apoio | Sexo: Mulher | Regras: Responsável Ala
+Responsável e apoio | Sexo: Mulher | Regras: Responsável Ala
