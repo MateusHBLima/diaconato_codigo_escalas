@@ -1,0 +1,14 @@
+📊 CONTAGEM DE PESSOAS ESCALADAS
+
+📅 Culto: Culto da Família (Manhã)
+============================================================
+
+📈 TOTAIS:
+   Total de vagas preenchidas: 45
+   Total de pessoas ÚNICAS: 42
+   Pessoas com repetição: 3
+
+🔄 PESSOAS REPETIDAS:
+   - José de Arimateia da Silva Ribeiro Abreu: Interno + Lado Bateria (09 salvas)
+   - Valdecir Teixeira: Hall + Masculino
+   - Márcia Azevedo: Corrente 2 + Púlpito

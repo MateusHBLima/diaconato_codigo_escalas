@@ -7,11 +7,8 @@ import {
 } from './parser.js';
 import { buscarCultoPorId, marcarEscalaCriada } from './cultos.js';
 import type { Membro, Funcao, Culto, Alocacao, ResultadoEscala } from '../types/index.js';
-import {
-    podeExecutarFuncao,
-    REPETICAO_BANHEIRO_MASCULINO,
-    REPETICAO_BANHEIRO_FEMININO
-} from './rules/StarSystem.js';
+import { podeExecutarFuncao } from './rules/StarSystem.js';
+import { temRegraRepeticao, ehFuncaoRepeticao } from './rules/RepetitionRules.js';
 
 // ============================================
 // TIPOS INTERNOS
@@ -458,31 +455,36 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 conjuge_pendente_id = null; // Consumido
             }
 
-            // Só ativa repetição forçada se NÃO for um fallback normal
-            // Verificando funções com REPETIR_PESSOA (Banheiros: Masculino/Feminino)
-            const ehRepeticao = funcao.regras?.includes('REPETIR_PESSOA');
-            const nomeLower = funcao.nome.toLowerCase();
+            // ============================================
+            // LÓGICA GENÉRICA DE REPETIÇÃO (RepetitionRules)
+            // ============================================
+            const regraRepeticao = temRegraRepeticao(funcao.nome);
 
-            if (!membroObrigatorioId && ehRepeticao && (nomeLower === 'masculino' || nomeLower === 'feminino')) {
-                let fonte: string | undefined;
+            if (!membroObrigatorioId && regraRepeticao) {
+                // Buscar ocupantes das funções fonte
+                for (const fontePattern of regraRepeticao.fontes) {
+                    // Encontrar funções que matcham o padrão fonte
+                    const chavesFonte = Array.from(quemEstaOnde.keys()).filter(k =>
+                        k.toLowerCase().includes(fontePattern.toLowerCase())
+                    );
 
-                // Masculino -> repete do Hall
-                if (nomeLower === 'masculino') {
-                    fonte = REPETICAO_BANHEIRO_MASCULINO[i];
-                }
-                // Feminino -> repete do Apoio
-                else if (nomeLower === 'feminino') {
-                    fonte = REPETICAO_BANHEIRO_FEMININO[i];
-                }
+                    if (chavesFonte.length > 0) {
+                        // Coletar todos os ocupantes das fontes
+                        const todosOcupantes: string[] = [];
+                        chavesFonte.forEach(chave => {
+                            const ocupantes = quemEstaOnde.get(chave) || [];
+                            ocupantes.forEach(o => {
+                                if (o !== 'VAZIO' && !todosOcupantes.includes(o)) {
+                                    todosOcupantes.push(o);
+                                }
+                            });
+                        });
 
-                if (fonte) {
-                    // Tenta achar a função fonte
-                    // Precisamos de match parcial pois o nome da função pode variar (ex: "Hall" em múltiplas instâncias)
-                    const chaveFonte = Array.from(quemEstaOnde.keys()).find(k => k.toLowerCase().includes(fonte!.toLowerCase()));
-                    if (chaveFonte) {
-                        const ocupantes = quemEstaOnde.get(chaveFonte);
-                        if (ocupantes && ocupantes.length > 0) {
-                            membroObrigatorioId = ocupantes[0]; // Pega o primeiro da fonte
+                        // Usar o índice da vaga atual para pegar o ocupante correspondente
+                        const indiceDesejado = regraRepeticao.indices[i] ?? i;
+                        if (todosOcupantes.length > indiceDesejado) {
+                            membroObrigatorioId = todosOcupantes[indiceDesejado];
+                            console.log(`   🔄 ${regraRepeticao.descricao} (índice ${indiceDesejado})`);
                         }
                     }
                 }
