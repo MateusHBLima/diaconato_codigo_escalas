@@ -423,6 +423,21 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 }
             }
 
+            // LÓGICA OFERTA: Quem é Responsável e apoio também vai para Oferta
+            if (!membroObrigatorioId && funcao.nome.toLowerCase().includes('oferta')) {
+                // Buscar quem está escalado como "Responsável e apoio"
+                const chaveResp = Array.from(quemEstaOnde.keys()).find(k =>
+                    k.toLowerCase().includes('responsável') && k.toLowerCase().includes('apoio')
+                );
+                if (chaveResp) {
+                    const ocupantes = quemEstaOnde.get(chaveResp);
+                    if (ocupantes && ocupantes.length > i && ocupantes[i] !== 'VAZIO') {
+                        membroObrigatorioId = ocupantes[i];
+                        console.log(`   🎁 Oferta: Usando líder de ${chaveResp}`);
+                    }
+                }
+            }
+
             const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId);
 
             // LÓGICA CASAL: Se escalamos um líder para "Responsável", buscar o cônjuge para a próxima vaga
