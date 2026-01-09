@@ -402,33 +402,53 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
 
     console.log(`   👑 Líderes Nível 5 disponíveis: ${lideresDisponiveis.length}`);
 
-    if (lideresDisponiveis.length > 0) {
-        // Primeiro líder
-        const lider1 = lideresDisponiveis[0];
-        responsavelGeral1Id = lider1.id;
-        console.log(`   👑 Responsável Geral 1: ${lider1.nome_completo}`);
+    // Responsáveis Gerais devem ser SEMPRE um casal
+    // Procurar um líder que tenha cônjuge também Nível 5 e disponível
+    for (const lider of lideresDisponiveis) {
+        const nomeConjuge = (lider as any).nome_conjuge;
+        const conjugeServeJunto = (lider as any).conjuge_serve_junto;
 
-        // Buscar cônjuge
-        const nomeConjuge = (lider1 as any).nome_conjuge;
-        const conjugeServeJunto = (lider1 as any).conjuge_serve_junto;
+        if (!nomeConjuge || !conjugeServeJunto) continue;
 
-        if (nomeConjuge && conjugeServeJunto) {
-            const conjuge = membros.find(m =>
-                m.nome_completo.toLowerCase().includes(nomeConjuge.toLowerCase()) ||
-                nomeConjuge.toLowerCase().includes(m.nome_completo.toLowerCase().split(' ')[0])
-            );
+        // Buscar cônjuge por nome (normalizado)
+        const nomeConjugeLower = nomeConjuge.toLowerCase().trim();
+        const conjuge = lideresDisponiveis.find(m => {
+            if (m.id === lider.id) return false; // Não é o próprio
 
-            if (conjuge && conjuge.nivel_experiencia === 5) {
-                responsavelGeral2Id = conjuge.id;
-                console.log(`   👑 Responsável Geral 2 (cônjuge): ${conjuge.nome_completo}`);
-            }
+            const nomeLower = m.nome_completo.toLowerCase().trim();
+
+            // Match exato
+            if (nomeLower === nomeConjugeLower) return true;
+
+            // Match parcial: primeiro nome do cônjuge cadastrado
+            const primeiroNomeConjuge = nomeConjugeLower.split(' ')[0];
+            if (nomeLower.includes(primeiroNomeConjuge)) return true;
+
+            // Match parcial: nome do membro contém no nome do cônjuge
+            const primeiroNomeMembro = nomeLower.split(' ')[0];
+            if (nomeConjugeLower.includes(primeiroNomeMembro)) return true;
+
+            return false;
+        });
+
+        if (conjuge) {
+            // Encontrou um casal! Usar como Responsáveis Gerais
+            responsavelGeral1Id = lider.id;
+            responsavelGeral2Id = conjuge.id;
+            console.log(`   👑 Responsável Geral 1: ${lider.nome_completo}`);
+            console.log(`   👑 Responsável Geral 2 (cônjuge): ${conjuge.nome_completo}`);
+            break; // Encontrou casal, parar busca
         }
+    }
 
-        // Se não achou cônjuge, pegar segundo líder disponível
-        if (!responsavelGeral2Id && lideresDisponiveis.length > 1) {
-            const lider2 = lideresDisponiveis[1];
-            responsavelGeral2Id = lider2.id;
-            console.log(`   👑 Responsável Geral 2: ${lider2.nome_completo}`);
+    // Se não encontrou casal, logar aviso
+    if (!responsavelGeral1Id || !responsavelGeral2Id) {
+        console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto`);
+        // Fallback: usar os dois primeiros disponíveis (não ideal)
+        if (lideresDisponiveis.length >= 2) {
+            responsavelGeral1Id = lideresDisponiveis[0].id;
+            responsavelGeral2Id = lideresDisponiveis[1].id;
+            console.log(`   👑 Fallback: ${lideresDisponiveis[0].nome_completo} + ${lideresDisponiveis[1].nome_completo}`);
         }
     }
 
