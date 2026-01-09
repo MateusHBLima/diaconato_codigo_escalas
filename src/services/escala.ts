@@ -225,11 +225,48 @@ function encontrarCandidato(
 
     // Função auxiliar para filtrar candidatos
     const filtrarCandidatos = (ignorarLimite: boolean) => {
+        const nomeFuncaoLower = funcao.nome.toLowerCase();
+        const ehFuncaoMesa = nomeFuncaoLower.includes('mesa');
+
         return membros.filter(membro => {
-            // VERIFICAR ESTRELAS
-            if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo)) {
-                return false;
+            // ============================================
+            // APTIDÕES ESPECIAIS QUE IGNORAM ESTRELAS
+            // ============================================
+
+            // 1. PRIORIDADE MESA - EXIGE aptidão e IGNORA estrelas
+            if (ehFuncaoMesa) {
+                const temPrioridadeMesa = membro.aptidoes?.includes('Prioridade Mesa');
+                if (!temPrioridadeMesa) {
+                    return false; // Função Mesa EXIGE ter a aptidão
+                }
+                // Se tem a aptidão, IGNORA verificação de estrelas para Mesa
             }
+
+            // 2. NECESSIDADE SENTADO - Só pode em funções específicas, IGNORA estrelas
+            else if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
+                // Funções PERMITIDAS para quem precisa ficar sentado:
+                // - Apoio (qualquer setor)
+                // - Correntes Azul e Laranja
+                const ehApoio = nomeFuncaoLower.includes('apoio') && !nomeFuncaoLower.includes('responsável');
+                const ehCorrenteAzulOuLaranja = nomeFuncaoLower.includes('corrente') &&
+                    (nomeFuncaoLower.includes('azul') || nomeFuncaoLower.includes('laranja'));
+
+                if (!ehApoio && !ehCorrenteAzulOuLaranja) {
+                    return false; // Função não permitida para quem precisa sentar
+                }
+                // Se é função permitida, IGNORA verificação de estrelas
+            }
+
+            // 3. DEMAIS CASOS - Usa sistema de estrelas normalmente
+            else {
+                if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo)) {
+                    return false;
+                }
+            }
+
+            // ============================================
+            // REGRAS GERAIS (aplicam para todos)
+            // ============================================
 
             // REPETIR_PESSOA
             if (ehFuncaoRepetivel) {
@@ -245,31 +282,6 @@ function encontrarCandidato(
 
             // Gênero
             if (!atendeGenero(membro.sexo, funcao.especificidade_sexo)) return false;
-
-            // APTIDÕES ESPECIAIS (Apenas estas são verificadas, restante usa Sistema de Estrelas)
-            // 1. NECESSIDADE SENTADO - Se membro precisa ficar sentado, só pode ir para funções compatíveis
-            if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
-                const nomeLower = funcao.nome.toLowerCase();
-
-                // Funções que SEMPRE exigem ficar em pé (barrar completamente)
-                const funcoesEmPe = ['porta', 'hall', 'interno', 'salvas'];
-                if (funcoesEmPe.some(f => nomeLower.includes(f))) {
-                    return false;
-                }
-
-                // Correntes: Só pode nas alas AZUL e LARANJA (não pode na VERDE)
-                if (nomeLower.includes('corrente')) {
-                    const ehAzulOuLaranja = nomeLower.includes('azul') || nomeLower.includes('laranja');
-                    const ehVerde = nomeLower.includes('verde');
-
-                    if (ehVerde || !ehAzulOuLaranja) {
-                        return false; // Barra corrente verde ou correntes sem setor definido
-                    }
-                    // Se for azul ou laranja, permite continuar
-                }
-            }
-
-            // 2. Prioridade Mesa - Será tratada na ordenação, não no filtro
 
             // Disponibilidade básica
             const disp = culto.periodo === 'quinta'
@@ -287,17 +299,8 @@ function encontrarCandidato(
     };
 
     // Função de ordenação
-    const ordenarCandidatos = (lista: MembroComHistorico[], nomeFuncao: string) => {
+    const ordenarCandidatos = (lista: MembroComHistorico[]) => {
         return lista.sort((a, b) => {
-            // 0. PRIORIDADE MESA: Se função é Mesa, quem tem aptidão vem primeiro
-            if (nomeFuncao.toLowerCase().includes('mesa')) {
-                const aPrioridadeMesa = a.aptidoes?.includes('Prioridade mesa') ? 1 : 0;
-                const bPrioridadeMesa = b.aptidoes?.includes('Prioridade mesa') ? 1 : 0;
-                if (aPrioridadeMesa !== bPrioridadeMesa) {
-                    return bPrioridadeMesa - aPrioridadeMesa; // Quem tem prioridade vem primeiro
-                }
-            }
-
             // 1. Quem serviu menos vezes no mês
             if (a.escalas_no_mes !== b.escalas_no_mes) {
                 return a.escalas_no_mes - b.escalas_no_mes;
@@ -316,7 +319,7 @@ function encontrarCandidato(
     let candidatos = filtrarCandidatos(false);
 
     if (candidatos.length > 0) {
-        ordenarCandidatos(candidatos, funcao.nome);
+        ordenarCandidatos(candidatos);
         return candidatos[0];
     }
 
@@ -324,7 +327,7 @@ function encontrarCandidato(
     candidatos = filtrarCandidatos(true);
 
     if (candidatos.length > 0) {
-        ordenarCandidatos(candidatos, funcao.nome);
+        ordenarCandidatos(candidatos);
         // Retorna o que serviu menos, mesmo tendo estourado o limite
         return candidatos[0];
     }
