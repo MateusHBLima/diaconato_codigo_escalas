@@ -7,106 +7,117 @@
 ## PORTA - A1 PAREDE
 | Função | Pessoa |
 |--------|--------|
-| Interno | José de Arimateia da Silva Ribeiro Abreu |
-| Hall | Paulo Felipe |
+| Interno | Kelvin Righi Martins |
+| Hall | Juliano Lange |
 
 ## PORTA - A2
+| Função | Pessoa |
+|--------|--------|
+| Interno | José de Arimateia da Silva Ribeiro Abreu |
+| Hall | Marco Antônio braseiro brum |
+
+## PORTA NOVA - A3
+| Função | Pessoa |
+|--------|--------|
+| Interno | Sérgio dos Santos |
+| Hall | Paulo Felipe |
+
+## PORTA NOVA - A4
 | Função | Pessoa |
 |--------|--------|
 | Interno | Andre chagas |
 | Hall | antonio carlos melo vieira |
 
-## PORTA NOVA - A3
-| Função | Pessoa |
-|--------|--------|
-| Interno | Alexandre Anater |
-| Hall | Kelvin Righi Martins |
-
-## PORTA NOVA - A4
-| Função | Pessoa |
-|--------|--------|
-| Interno | Juliano Lange |
-| Hall | Sérgio dos Santos |
-
 ## BANHEIROS
 | Função | Pessoa |
 |--------|--------|
-| Masculino | Sérgio dos Santos |
-| Masculino | André Aguiar |
-| Feminino | Idalamar Chagas |
-| Feminino | Daise Dalzotto |
+| Masculino | Marco Antônio braseiro brum |
+| Masculino | Paulo Felipe |
+| Feminino | Tatiane Querido |
+| Feminino | Eroni Corrêa Rodrigues de Lima |
 
 ## SETOR AZUL
 | Função | Pessoa |
 |--------|--------|
 | Responsável e apoio | Maria Del Valle May Cedeño |
-| Corrente 1 | Márcia Azevedo |
-| Corrente 2 | Mariá A Dos Santos |
+| Corrente 1 | Sorilene Ramos Moreira |
+| Corrente 2 | Márcia Azevedo |
 | Apoio | Roberta Querido |
 | Apoio | Tatiane Querido |
 
 ## SETOR VERDE
 | Função | Pessoa |
 |--------|--------|
-| Responsável e apoio | Maria Eduarda Marques dos Santos Moreira |
-| Corrente entre verde e azul/Púlpito | Márcia Azevedo |
-| Corrente atrás do Pastor | Pedro Clemente de Souza |
-| Corrente corredor da mídia | Adriana Silva Lino |
-| Corrente entre verde e laranja | Homero Loures Bastos Neto |
-| Apoio | Ana Paula Leite |
+| Responsável e apoio | Mariá A Dos Santos |
+| Corrente entre verde e azul/Púlpito | Alexandre Anater |
+| Corrente atrás do Pastor | Maria Eduarda Marques dos Santos Moreira |
+| Corrente corredor da mídia | Idalamar Chagas |
+| Corrente entre verde e laranja | Dyeime Dayane Ferreira Abreu |
 | Apoio | Eroni Corrêa Rodrigues de Lima |
+| Apoio | Daise Dalzotto |
 
 ## SETOR LARANJA
 | Função | Pessoa |
 |--------|--------|
-| Responsável e apoio | Sorilene Ramos Moreira |
-| Corrente 1 | Dyeime Dayane Ferreira Abreu |
-| Corrente 2 | Amanda Carolina Mathias Macanhão |
+| Responsável e apoio | Amanda Carolina Mathias Macanhão |
+| Corrente 1 | Valdecir Teixeira |
+| Corrente 2 | Aura rangel |
 | Apoio | Janaína Rezendes NUnes |
-| Apoio | Nadi Bicicgo Canello |
+| Apoio | Ana Maria de Andrade Fagundes |
 
 ## ALTAR
 | Função | Pessoa |
 |--------|--------|
-| Mesa, água e microfone | Adilson ferrari lopes  |
-| Púlpito | Dyeime Dayane Ferreira Abreu |
+| Mesa, água e microfone | Jose Celestino Rangel Morey |
+| Púlpito | Alexandre Anater |
 
 ## OFERTA
 | Função | Pessoa |
 |--------|--------|
-| Apoio | Wesley Stahlschmidt Alves |
-| Apoio | Marco Antônio braseiro brum |
-| Apoio | Adilson Miranda Neto |
+| Apoio | Gustavo Nardi |
+| Apoio | Luciane mendes |
+| Apoio | Mariá A Dos Santos |
 
 ## SALVAS
 | Função | Pessoa |
 |--------|--------|
-| Lado Bateria (09 salvas) | Dyeime Dayane Ferreira Abreu |
+| Lado Bateria (09 salvas) | Andre chagas |
 
 ## MÁQUINAS (16 AO TOTAL)
 | Função | Pessoa |
 |--------|--------|
-| Lado bateria (16 máquinas) | Juliano Lange |
-| Lado bateria (16 máquinas) | Ana Maria de Andrade Fagundes |
-| Lado bateria (16 máquinas) | Aura rangel |
-| Lado bateria (16 máquinas) | Giancarlo Brandalise |
-| Lado bateria (16 máquinas) | Felipe da Silva Gonçalves |
-| Lado bateria (16 máquinas) | Everton Barkert |
-| Lado bateria (16 máquinas) | Fabiani da Silva amora |
-| Lado bateria (16 máquinas) | Ilmar da Silva Santos |
+| Lado bateria (16 máquinas) | José de Arimateia da Silva Ribeiro Abreu |
+| Lado bateria (16 máquinas) | Maria Del Valle May Cedeño |
+| Lado bateria (16 máquinas) | Amanda Carolina Mathias Macanhão |
+| Lado bateria (16 máquinas) | Daise Dalzotto |
+| Lado bateria (16 máquinas) | Roberta Querido |
+| Lado bateria (16 máquinas) | Kelvin Righi Martins |
+| Lado bateria (16 máquinas) | Sérgio dos Santos |
+| Lado bateria (16 máquinas) | Janaína Rezendes NUnes |
 
 ## FINALIZAM AS MÁQUINAS
 | Função | Pessoa |
 |--------|--------|
-| Finalização | Dyeime Dayane Ferreira Abreu |
-| Finalização | Juliano Lange |
+| Finalização | Sérgio dos Santos |
+| Finalização | José de Arimateia da Silva Ribeiro Abreu |
 
 ## RESUMO
 - Total de vagas: 45
-- Pessoas únicas: 38
+- Pessoas únicas: 28
 
-## REPETIÇÕES (4 pessoas)
-- Juliano Lange: Interno + Lado bateria (16 máquinas) + Finalização
-- Sérgio dos Santos: Hall + Masculino
-- Márcia Azevedo: Corrente 1 + Corrente entre verde e azul/Púlpito
-- Dyeime Dayane Ferreira Abreu: Corrente 1 + Púlpito + Lado Bateria (09 salvas) + Finalização
+## REPETIÇÕES (15 pessoas)
+- Kelvin Righi Martins: Interno + Lado bateria (16 máquinas)
+- José de Arimateia da Silva Ribeiro Abreu: Interno + Lado bateria (16 máquinas) + Finalização
+- Marco Antônio braseiro brum: Hall + Masculino
+- Sérgio dos Santos: Interno + Lado bateria (16 máquinas) + Finalização
+- Paulo Felipe: Hall + Masculino
+- Andre chagas: Interno + Lado Bateria (09 salvas)
+- Tatiane Querido: Feminino + Apoio
+- Eroni Corrêa Rodrigues de Lima: Feminino + Apoio
+- Maria Del Valle May Cedeño: Responsável e apoio + Lado bateria (16 máquinas)
+- Roberta Querido: Apoio + Lado bateria (16 máquinas)
+- Mariá A Dos Santos: Responsável e apoio + Apoio
+- Alexandre Anater: Corrente entre verde e azul/Púlpito + Púlpito
+- Daise Dalzotto: Apoio + Lado bateria (16 máquinas)
+- Amanda Carolina Mathias Macanhão: Responsável e apoio + Lado bateria (16 máquinas)
+- Janaína Rezendes NUnes: Apoio + Lado bateria (16 máquinas)

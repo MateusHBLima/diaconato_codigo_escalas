@@ -8,7 +8,8 @@ import {
 import { buscarCultoPorId, marcarEscalaCriada } from './cultos.js';
 import type { Membro, Funcao, Culto, Alocacao, ResultadoEscala } from '../types/index.js';
 import { podeExecutarFuncao } from './rules/StarSystem.js';
-import { temRegraRepeticao, vagaDeveRepetir, chaveMatchFonte, ehFuncaoRepeticao } from './rules/RepetitionRules.js';
+import { buscarRegraDetalhada, DETAILED_RULES, type PositionRule } from './rules/RepetitionRules.js';
+import { ordenarFuncoesPorProcessamento } from './rules/ProcessingOrder.js';
 
 // ============================================
 // TIPOS INTERNOS
@@ -357,6 +358,10 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     console.log(`   👥 Membros ativos: ${membros.length}`);
     console.log(`   🎯 Funções ativas: ${funcoes.length}`);
 
+    // Aplicar ordenação customizada: Portas → Setores → Oferta → Máquinas → Banheiros → etc.
+    const funcoesOrdenadas = ordenarFuncoesPorProcessamento(funcoes);
+    console.log(`   📊 Usando ordem customizada de processamento`);
+
     // Log de balanceamento
     const disponiveis = membros.filter(m => m.escalas_no_mes < m.limite_mes).length;
     console.log(`   ⚖️ Com vagas disponíveis: ${disponiveis}`);
@@ -430,7 +435,7 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     let vagasPreenchidas = 0;
     let vagasVazias = 0;
 
-    for (const funcao of funcoes) {
+    for (const funcao of funcoesOrdenadas) {
 
         const ocupantesDestaFuncao: string[] = [];
 
@@ -456,57 +461,67 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
             }
 
             // ============================================
-            // LÓGICA GENÉRICA DE REPETIÇÃO (RepetitionRules)
+            // LÓGICA DE REPETIÇÃO POR POSIÇÃO (DETAILED_RULES)
             // ============================================
-            const regraRepeticao = temRegraRepeticao(funcao.nome);
+            const regraDetalhada = buscarRegraDetalhada(funcao.nome, funcao.setor_pai);
 
-            if (!membroObrigatorioId && regraRepeticao) {
-                // Verificar se ESTA VAGA específica deve repetir ou buscar pessoa nova
-                const deveRepetir = vagaDeveRepetir(regraRepeticao, i);
+            if (!membroObrigatorioId && regraDetalhada) {
+                // Buscar o mapeamento para esta vaga específica
+                const mapping = regraDetalhada.mapeamento.find(m => m.vagaDestino === i);
 
-                if (deveRepetir) {
-                    // Buscar ocupantes das funções fonte usando chaveMatchFonte
-                    const chavesFonte = Array.from(quemEstaOnde.keys()).filter(k =>
-                        chaveMatchFonte(k, regraRepeticao)
-                    );
+                if (mapping) {
+                    // Construir a chave de busca: "NomeFuncao|SetorPai" ou "NomeFuncao"
+                    let chaveEncontrada: string | null = null;
+                    let ocupanteId: string | null = null;
 
-                    console.log(`   🔍 DEBUG: Buscando fontes para "${funcao.nome}" - ${chavesFonte.length} chaves: ${chavesFonte.join(', ')}`);
+                    // Buscar nas chaves do quemEstaOnde
+                    for (const [chave, ocupantes] of quemEstaOnde.entries()) {
+                        // A chave é "NomeFuncao|SetorPai"
+                        const [nomeFuncao, setorPai] = chave.split('|');
+                        const nomeLower = nomeFuncao.toLowerCase();
+                        const pattern = mapping.fontePattern;
 
-                    if (chavesFonte.length > 0) {
-                        // Coletar todos os ocupantes das fontes (na ordem)
-                        const todosOcupantes: string[] = [];
-                        chavesFonte.forEach(chave => {
-                            const ocupantes = quemEstaOnde.get(chave) || [];
-                            ocupantes.forEach(o => {
-                                if (o !== 'VAZIO' && !todosOcupantes.includes(o)) {
-                                    todosOcupantes.push(o);
-                                }
-                            });
-                        });
-
-                        console.log(`   🔍 DEBUG: ${todosOcupantes.length} ocupantes coletados`);
-
-                        // Usar indicesFonte para pegar o ocupante certo
-                        // i = índice da vaga destino (0,1,2...)
-                        // indicesFonte = quais índices das fontes usar
-                        const indiceDaFonte = regraRepeticao.indicesFonte[i];
-                        if (indiceDaFonte !== undefined && todosOcupantes.length > indiceDaFonte) {
-                            membroObrigatorioId = todosOcupantes[indiceDaFonte];
-                            console.log(`   🔄 ${regraRepeticao.descricao} (vaga ${i} → fonte[${indiceDaFonte}])`);
+                        // Verificar se o nome da função bate com o padrão
+                        let patternMatch = false;
+                        if (pattern.startsWith('^') && pattern.endsWith('$')) {
+                            // Regex de match exato: ^Apoio$ só dá match em "Apoio", não em "Responsável e apoio"
+                            const exactPattern = pattern.slice(1, -1).toLowerCase();
+                            patternMatch = nomeLower === exactPattern;
                         } else {
-                            console.log(`   ⚠️ DEBUG: indicesFonte[${i}]=${indiceDaFonte}, só ${todosOcupantes.length} disponíveis`);
+                            // Match parcial (includes)
+                            patternMatch = nomeLower.includes(pattern.toLowerCase());
                         }
+
+                        if (!patternMatch) continue;
+
+                        // Se tem setor específico, verificar se o setor bate
+                        if (mapping.fonteSetor) {
+                            if (!setorPai?.toLowerCase().includes(mapping.fonteSetor.toLowerCase())) continue;
+                        }
+
+                        // Encontrou! Pegar o ocupante no índice especificado
+                        if (ocupantes.length > mapping.vagaFonte && ocupantes[mapping.vagaFonte] !== 'VAZIO') {
+                            chaveEncontrada = chave;
+                            ocupanteId = ocupantes[mapping.vagaFonte];
+                            break;
+                        }
+                    }
+
+                    if (ocupanteId) {
+                        membroObrigatorioId = ocupanteId;
+                        console.log(`   🔄 ${regraDetalhada.descricao} - vaga ${i} ← ${chaveEncontrada}[${mapping.vagaFonte}]`);
                     } else {
-                        console.log(`   ⚠️ DEBUG: Nenhuma função fonte encontrada!`);
+                        console.log(`   ⚠️ Repetição falhou: ${funcao.nome} vaga ${i} - fonte "${mapping.fontePattern}" (${mapping.fonteSetor || 'qualquer'}) não encontrada`);
                     }
                 } else {
-                    // Esta vaga NÃO repete - será preenchida com pessoa nova
-                    console.log(`   ⭐ ${funcao.nome} vaga ${i}: Pessoa NOVA`);
+                    // Esta vaga não tem mapeamento - será preenchida com pessoa nova
+                    console.log(`   ⭐ ${funcao.nome} vaga ${i}: Sem mapeamento (pessoa nova)`);
                 }
             }
 
             // LÓGICA OFERTA: Usa os Responsáveis Gerais (Nível 5) detectados no início
-            if (!membroObrigatorioId && funcao.nome.toLowerCase().includes('oferta')) {
+            // NOTA: As funções de Oferta se chamam "Apoio" mas estão no setor_pai "OFERTA"
+            if (!membroObrigatorioId && funcao.setor_pai?.toLowerCase().includes('oferta')) {
                 // Usar os Responsáveis Gerais que foram detectados no início
                 if (i === 0 && responsavelGeral1Id) {
                     membroObrigatorioId = responsavelGeral1Id;
@@ -514,17 +529,13 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 } else if (i === 1 && responsavelGeral2Id) {
                     membroObrigatorioId = responsavelGeral2Id;
                     console.log(`   🎁 Oferta vaga 1: Responsável Geral 2`);
-                } else if (i >= 2) {
-                    // Vaga 2+ busca outros Nível 5 disponíveis
-                    const outroLider = membros.find(m =>
-                        m.nivel_experiencia === 5 &&
-                        !membrosUsados.has(m.id) &&
-                        m.id !== responsavelGeral1Id &&
-                        m.id !== responsavelGeral2Id
-                    );
-                    if (outroLider) {
-                        membroObrigatorioId = outroLider.id;
-                        console.log(`   🎁 Oferta vaga ${i}: Outro líder Nível 5 (${outroLider.nome_completo})`);
+                } else if (i === 2) {
+                    // Vaga 2: Responsável de Ala Verde (mais experiente)
+                    const chaveRespVerde = 'Responsável e apoio|SETOR VERDE';
+                    const ocupantesVerde = quemEstaOnde.get(chaveRespVerde);
+                    if (ocupantesVerde && ocupantesVerde.length > 0 && ocupantesVerde[0] !== 'VAZIO') {
+                        membroObrigatorioId = ocupantesVerde[0];
+                        console.log(`   🎁 Oferta vaga 2: Responsável Ala Verde`);
                     }
                 }
             }
@@ -566,7 +577,11 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
             }
         }
 
-        quemEstaOnde.set(funcao.nome, ocupantesDestaFuncao);
+        // ACUMULAR em quemEstaOnde com chave composta "NomeFuncao|SetorPai"
+        // Isso permite identificar "Interno|PORTA - A1" vs "Interno|PORTA - A2"
+        const chaveComposta = `${funcao.nome}|${funcao.setor_pai}`;
+        const existente = quemEstaOnde.get(chaveComposta) || [];
+        quemEstaOnde.set(chaveComposta, [...existente, ...ocupantesDestaFuncao]);
     }
 
     // Salvar no banco
