@@ -8,7 +8,7 @@ import {
 import { buscarCultoPorId, marcarEscalaCriada } from './cultos.js';
 import type { Membro, Funcao, Culto, Alocacao, ResultadoEscala } from '../types/index.js';
 import { podeExecutarFuncao } from './rules/StarSystem.js';
-import { temRegraRepeticao, vagaDeveRepetir, ehFuncaoRepeticao } from './rules/RepetitionRules.js';
+import { temRegraRepeticao, vagaDeveRepetir, chaveMatchFonte, ehFuncaoRepeticao } from './rules/RepetitionRules.js';
 
 // ============================================
 // TIPOS INTERNOS
@@ -465,41 +465,39 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 const deveRepetir = vagaDeveRepetir(regraRepeticao, i);
 
                 if (deveRepetir) {
-                    // Buscar ocupantes das funções fonte
-                    for (const fontePattern of regraRepeticao.fontes) {
-                        // Encontrar funções que matcham o padrão fonte
-                        const chavesFonte = Array.from(quemEstaOnde.keys()).filter(k =>
-                            k.toLowerCase().includes(fontePattern.toLowerCase())
-                        );
+                    // Buscar ocupantes das funções fonte usando chaveMatchFonte
+                    const chavesFonte = Array.from(quemEstaOnde.keys()).filter(k =>
+                        chaveMatchFonte(k, regraRepeticao)
+                    );
 
-                        console.log(`   🔍 DEBUG: Buscando fonte "${fontePattern}" - encontradas ${chavesFonte.length} chaves: ${chavesFonte.join(', ')}`);
+                    console.log(`   🔍 DEBUG: Buscando fontes para "${funcao.nome}" - ${chavesFonte.length} chaves: ${chavesFonte.join(', ')}`);
 
-                        if (chavesFonte.length > 0) {
-                            // Coletar todos os ocupantes das fontes
-                            const todosOcupantes: string[] = [];
-                            chavesFonte.forEach(chave => {
-                                const ocupantes = quemEstaOnde.get(chave) || [];
-                                ocupantes.forEach(o => {
-                                    if (o !== 'VAZIO' && !todosOcupantes.includes(o)) {
-                                        todosOcupantes.push(o);
-                                    }
-                                });
+                    if (chavesFonte.length > 0) {
+                        // Coletar todos os ocupantes das fontes (na ordem)
+                        const todosOcupantes: string[] = [];
+                        chavesFonte.forEach(chave => {
+                            const ocupantes = quemEstaOnde.get(chave) || [];
+                            ocupantes.forEach(o => {
+                                if (o !== 'VAZIO' && !todosOcupantes.includes(o)) {
+                                    todosOcupantes.push(o);
+                                }
                             });
+                        });
 
-                            console.log(`   🔍 DEBUG: ${todosOcupantes.length} ocupantes coletados`);
+                        console.log(`   🔍 DEBUG: ${todosOcupantes.length} ocupantes coletados`);
 
-                            // Usar o índice da vaga atual para pegar o ocupante correspondente
-                            const indiceDesejado = regraRepeticao.indices.indexOf(i);
-                            const indiceReal = indiceDesejado >= 0 ? indiceDesejado : i;
-                            if (todosOcupantes.length > indiceReal) {
-                                membroObrigatorioId = todosOcupantes[indiceReal];
-                                console.log(`   🔄 ${regraRepeticao.descricao} (vaga ${i} → fonte ${indiceReal})`);
-                            } else {
-                                console.log(`   ⚠️ DEBUG: Não há ocupante no índice ${indiceReal} (apenas ${todosOcupantes.length} disponíveis)`);
-                            }
+                        // Usar indicesFonte para pegar o ocupante certo
+                        // i = índice da vaga destino (0,1,2...)
+                        // indicesFonte = quais índices das fontes usar
+                        const indiceDaFonte = regraRepeticao.indicesFonte[i];
+                        if (indiceDaFonte !== undefined && todosOcupantes.length > indiceDaFonte) {
+                            membroObrigatorioId = todosOcupantes[indiceDaFonte];
+                            console.log(`   🔄 ${regraRepeticao.descricao} (vaga ${i} → fonte[${indiceDaFonte}])`);
                         } else {
-                            console.log(`   ⚠️ DEBUG: Nenhuma função fonte encontrada para "${fontePattern}"`);
+                            console.log(`   ⚠️ DEBUG: indicesFonte[${i}]=${indiceDaFonte}, só ${todosOcupantes.length} disponíveis`);
                         }
+                    } else {
+                        console.log(`   ⚠️ DEBUG: Nenhuma função fonte encontrada!`);
                     }
                 } else {
                     // Esta vaga NÃO repete - será preenchida com pessoa nova

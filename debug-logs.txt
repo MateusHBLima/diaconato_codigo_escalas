@@ -1,0 +1,5 @@
+
+🏛️ Gerando escala para: Culto da Família (Manhã)
+📅 Data: 2026-01-04T13:00:00.189+00:00
+============================================================
+ERRO: {"code":"ERR_MODULE_NOT_FOUND","url":"file:///C:/tools_progamacao/Antigravity/Diaconato/src/services/escala.js"}
