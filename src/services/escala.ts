@@ -403,7 +403,9 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     console.log(`   👑 Líderes Nível 5 disponíveis: ${lideresDisponiveis.length}`);
 
     // Responsáveis Gerais devem ser SEMPRE um casal
-    // Procurar um líder que tenha cônjuge também Nível 5 e disponível
+    // Primeiro, coletar TODOS os casais disponíveis
+    const casaisDisponiveis: Array<{ lider: typeof lideresDisponiveis[0], conjuge: typeof lideresDisponiveis[0] }> = [];
+
     for (const lider of lideresDisponiveis) {
         const nomeConjuge = (lider as any).nome_conjuge;
         const conjugeServeJunto = (lider as any).conjuge_serve_junto;
@@ -432,13 +434,32 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
         });
 
         if (conjuge) {
-            // Encontrou um casal! Usar como Responsáveis Gerais
-            responsavelGeral1Id = lider.id;
-            responsavelGeral2Id = conjuge.id;
-            console.log(`   👑 Responsável Geral 1: ${lider.nome_completo}`);
-            console.log(`   👑 Responsável Geral 2 (cônjuge): ${conjuge.nome_completo}`);
-            break; // Encontrou casal, parar busca
+            // Verificar se já não adicionamos esse casal (evitar duplicata inversa)
+            const jaAdicionado = casaisDisponiveis.some(c =>
+                (c.lider.id === lider.id && c.conjuge.id === conjuge.id) ||
+                (c.lider.id === conjuge.id && c.conjuge.id === lider.id)
+            );
+            if (!jaAdicionado) {
+                casaisDisponiveis.push({ lider, conjuge });
+            }
         }
+    }
+
+    console.log(`   👑 Casais Nível 5 disponíveis: ${casaisDisponiveis.length}`);
+
+    if (casaisDisponiveis.length > 0) {
+        // Ordenar casais por quem serviu MENOS vezes (balanceamento)
+        casaisDisponiveis.sort((a, b) => {
+            const totalA = a.lider.escalas_no_mes + a.conjuge.escalas_no_mes;
+            const totalB = b.lider.escalas_no_mes + b.conjuge.escalas_no_mes;
+            return totalA - totalB; // Quem serviu menos vem primeiro
+        });
+
+        // Selecionar o casal que serviu menos
+        const casalEscolhido = casaisDisponiveis[0];
+        responsavelGeral1Id = casalEscolhido.lider.id;
+        responsavelGeral2Id = casalEscolhido.conjuge.id;
+        console.log(`   👑 Casal selecionado (menor uso): ${casalEscolhido.lider.nome_completo} + ${casalEscolhido.conjuge.nome_completo}`);
     }
 
     // Se não encontrou casal, logar aviso
