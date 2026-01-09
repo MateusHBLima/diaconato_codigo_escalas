@@ -217,8 +217,33 @@ function encontrarCandidato(
     membroObrigatorioId?: string | null
 ): MembroComHistorico | null {
 
+    const nomeFuncaoLower = funcao.nome.toLowerCase();
+
+    // Função auxiliar para verificar se membro pode executar função (aptidões especiais)
+    const membroPodeExecutar = (membro: MembroComHistorico): boolean => {
+        // NECESSIDADE SENTADO - Só pode em funções específicas
+        if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
+            const ehApoio = nomeFuncaoLower.includes('apoio') && !nomeFuncaoLower.includes('responsável');
+            const ehCorrenteAzulOuLaranja = nomeFuncaoLower.includes('corrente') &&
+                (nomeFuncaoLower.includes('azul') || nomeFuncaoLower.includes('laranja'));
+
+            if (!ehApoio && !ehCorrenteAzulOuLaranja) {
+                return false; // Função não permitida para quem precisa sentar
+            }
+        }
+        return true;
+    };
+
     if (membroObrigatorioId) {
-        return membros.find(m => m.id === membroObrigatorioId) || null;
+        const membro = membros.find(m => m.id === membroObrigatorioId);
+        if (!membro) return null;
+
+        // Verificar se o membro pode executar esta função
+        if (!membroPodeExecutar(membro)) {
+            console.log(`   ⚠️ Repetição bloqueada: ${membro.nome_completo} tem NECESSIDADE SENTADO, não pode ir para ${funcao.nome}`);
+            return null; // Não forçar alocação incompatível
+        }
+        return membro;
     }
 
     const ehFuncaoRepetivel = funcao.regras === 'REPETIR_PESSOA';
