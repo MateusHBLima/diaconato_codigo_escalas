@@ -472,6 +472,8 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                             k.toLowerCase().includes(fontePattern.toLowerCase())
                         );
 
+                        console.log(`   🔍 DEBUG: Buscando fonte "${fontePattern}" - encontradas ${chavesFonte.length} chaves: ${chavesFonte.join(', ')}`);
+
                         if (chavesFonte.length > 0) {
                             // Coletar todos os ocupantes das fontes
                             const todosOcupantes: string[] = [];
@@ -484,13 +486,19 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                                 });
                             });
 
+                            console.log(`   🔍 DEBUG: ${todosOcupantes.length} ocupantes coletados`);
+
                             // Usar o índice da vaga atual para pegar o ocupante correspondente
                             const indiceDesejado = regraRepeticao.indices.indexOf(i);
                             const indiceReal = indiceDesejado >= 0 ? indiceDesejado : i;
                             if (todosOcupantes.length > indiceReal) {
                                 membroObrigatorioId = todosOcupantes[indiceReal];
                                 console.log(`   🔄 ${regraRepeticao.descricao} (vaga ${i} → fonte ${indiceReal})`);
+                            } else {
+                                console.log(`   ⚠️ DEBUG: Não há ocupante no índice ${indiceReal} (apenas ${todosOcupantes.length} disponíveis)`);
                             }
+                        } else {
+                            console.log(`   ⚠️ DEBUG: Nenhuma função fonte encontrada para "${fontePattern}"`);
                         }
                     }
                 } else {
@@ -499,17 +507,26 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 }
             }
 
-            // LÓGICA OFERTA: Quem é Responsável e apoio também vai para Oferta
+            // LÓGICA OFERTA: Usa os Responsáveis Gerais (Nível 5) detectados no início
             if (!membroObrigatorioId && funcao.nome.toLowerCase().includes('oferta')) {
-                // Buscar quem está escalado como "Responsável e apoio"
-                const chaveResp = Array.from(quemEstaOnde.keys()).find(k =>
-                    k.toLowerCase().includes('responsável') && k.toLowerCase().includes('apoio')
-                );
-                if (chaveResp) {
-                    const ocupantes = quemEstaOnde.get(chaveResp);
-                    if (ocupantes && ocupantes.length > i && ocupantes[i] !== 'VAZIO') {
-                        membroObrigatorioId = ocupantes[i];
-                        console.log(`   🎁 Oferta: Usando líder de ${chaveResp}`);
+                // Usar os Responsáveis Gerais que foram detectados no início
+                if (i === 0 && responsavelGeral1Id) {
+                    membroObrigatorioId = responsavelGeral1Id;
+                    console.log(`   🎁 Oferta vaga 0: Responsável Geral 1`);
+                } else if (i === 1 && responsavelGeral2Id) {
+                    membroObrigatorioId = responsavelGeral2Id;
+                    console.log(`   🎁 Oferta vaga 1: Responsável Geral 2`);
+                } else if (i >= 2) {
+                    // Vaga 2+ busca outros Nível 5 disponíveis
+                    const outroLider = membros.find(m =>
+                        m.nivel_experiencia === 5 &&
+                        !membrosUsados.has(m.id) &&
+                        m.id !== responsavelGeral1Id &&
+                        m.id !== responsavelGeral2Id
+                    );
+                    if (outroLider) {
+                        membroObrigatorioId = outroLider.id;
+                        console.log(`   🎁 Oferta vaga ${i}: Outro líder Nível 5 (${outroLider.nome_completo})`);
                     }
                 }
             }
