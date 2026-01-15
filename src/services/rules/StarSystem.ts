@@ -82,3 +82,18 @@ export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especific
 
     return false;
 }
+
+/**
+ * Retorna o nível de estrelas exigido para uma função.
+ * Usado para priorizar membros com nível mais adequado (evitar experientes em funções básicas).
+ */
+export function getNivelExigidoParaFuncao(nomeFuncao: string): number {
+    // Buscar do nível mais alto para o mais baixo
+    for (let nivel = 4; nivel >= 1; nivel--) {
+        const funcoes = STAR_REQUIREMENTS[nivel] || [];
+        if (funcoes.some(f => nomeFuncao.includes(f))) {
+            return nivel;
+        }
+    }
+    return 1; // Default para funções não mapeadas
+}

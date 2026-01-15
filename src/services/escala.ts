@@ -7,7 +7,7 @@ import {
 } from './parser.js';
 import { buscarCultoPorId, marcarEscalaCriada } from './cultos.js';
 import type { Membro, Funcao, Culto, Alocacao, ResultadoEscala } from '../types/index.js';
-import { podeExecutarFuncao } from './rules/StarSystem.js';
+import { podeExecutarFuncao, getNivelExigidoParaFuncao } from './rules/StarSystem.js';
 import { buscarRegraDetalhada, DETAILED_RULES, type PositionRule } from './rules/RepetitionRules.js';
 import { ordenarFuncoesPorProcessamento } from './rules/ProcessingOrder.js';
 
@@ -220,14 +220,20 @@ function encontrarCandidato(
     const nomeFuncaoLower = funcao.nome.toLowerCase();
 
     // Função auxiliar para verificar se membro pode executar função (aptidões especiais)
-    const membroPodeExecutar = (membro: MembroComHistorico): boolean => {
-        // NECESSIDADE SENTADO - Só pode em funções específicas
+    const membroPodeExecutar = (membro: MembroComHistorico, setorPai?: string): boolean => {
+        // NECESSIDADE SENTADO - Só pode em funções específicas dos setores Azul e Laranja
         if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
-            const ehApoio = nomeFuncaoLower.includes('apoio') && !nomeFuncaoLower.includes('responsável');
-            const ehCorrenteAzulOuLaranja = nomeFuncaoLower.includes('corrente') &&
-                (nomeFuncaoLower.includes('azul') || nomeFuncaoLower.includes('laranja'));
+            const setorLower = setorPai?.toLowerCase() || '';
+            const ehSetorAzulOuLaranja = setorLower.includes('azul') || setorLower.includes('laranja');
 
-            if (!ehApoio && !ehCorrenteAzulOuLaranja) {
+            // Apoio permitido APENAS nos setores Azul e Laranja
+            const ehApoioPermitido = nomeFuncaoLower.includes('apoio') &&
+                !nomeFuncaoLower.includes('responsável') && ehSetorAzulOuLaranja;
+
+            // Corrente permitida APENAS nos setores Azul e Laranja
+            const ehCorrentePermitida = nomeFuncaoLower.includes('corrente') && ehSetorAzulOuLaranja;
+
+            if (!ehApoioPermitido && !ehCorrentePermitida) {
                 return false; // Função não permitida para quem precisa sentar
             }
         }
@@ -239,8 +245,8 @@ function encontrarCandidato(
         if (!membro) return null;
 
         // Verificar se o membro pode executar esta função
-        if (!membroPodeExecutar(membro)) {
-            console.log(`   ⚠️ Repetição bloqueada: ${membro.nome_completo} tem NECESSIDADE SENTADO, não pode ir para ${funcao.nome}`);
+        if (!membroPodeExecutar(membro, funcao.setor_pai)) {
+            console.log(`   ⚠️ Repetição bloqueada: ${membro.nome_completo} tem NECESSIDADE SENTADO, não pode ir para ${funcao.nome} (${funcao.setor_pai})`);
             return null; // Não forçar alocação incompatível
         }
         return membro;
@@ -267,16 +273,19 @@ function encontrarCandidato(
                 // Se tem a aptidão, IGNORA verificação de estrelas para Mesa
             }
 
-            // 2. NECESSIDADE SENTADO - Só pode em funções específicas, IGNORA estrelas
+            // 2. NECESSIDADE SENTADO - Só pode em funções dos setores Azul e Laranja, IGNORA estrelas
             else if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
                 // Funções PERMITIDAS para quem precisa ficar sentado:
-                // - Apoio (qualquer setor)
-                // - Correntes Azul e Laranja
-                const ehApoio = nomeFuncaoLower.includes('apoio') && !nomeFuncaoLower.includes('responsável');
-                const ehCorrenteAzulOuLaranja = nomeFuncaoLower.includes('corrente') &&
-                    (nomeFuncaoLower.includes('azul') || nomeFuncaoLower.includes('laranja'));
+                // - Apoio nos setores Azul e Laranja
+                // - Correntes nos setores Azul e Laranja
+                const setorLower = funcao.setor_pai?.toLowerCase() || '';
+                const ehSetorAzulOuLaranja = setorLower.includes('azul') || setorLower.includes('laranja');
 
-                if (!ehApoio && !ehCorrenteAzulOuLaranja) {
+                const ehApoioPermitido = nomeFuncaoLower.includes('apoio') &&
+                    !nomeFuncaoLower.includes('responsável') && ehSetorAzulOuLaranja;
+                const ehCorrentePermitida = nomeFuncaoLower.includes('corrente') && ehSetorAzulOuLaranja;
+
+                if (!ehApoioPermitido && !ehCorrentePermitida) {
                     return false; // Função não permitida para quem precisa sentar
                 }
                 // Se é função permitida, IGNORA verificação de estrelas
@@ -323,9 +332,24 @@ function encontrarCandidato(
         });
     };
 
-    // Função de ordenação
+    // Função de ordenação - prioriza nível adequado + quem serviu menos
     const ordenarCandidatos = (lista: MembroComHistorico[]) => {
+        // Determinar nível mínimo exigido para esta função
+        const nivelExigido = getNivelExigidoParaFuncao(funcao.nome);
+
         return lista.sort((a, b) => {
+            // 0. Priorizar membros com nível mais adequado (mais próximo do exigido)
+            // Isso evita escalar membros 4 estrelas em funções de 1 estrela
+            const estrelasA = a.nivel_experiencia || 1;
+            const estrelasB = b.nivel_experiencia || 1;
+            const diffA = estrelasA - nivelExigido; // 0 = exato, positivo = acima do necessário
+            const diffB = estrelasB - nivelExigido;
+
+            // Preferir quem está mais próximo do nível exigido (reservar experientes)
+            if (diffA !== diffB) {
+                return diffA - diffB;
+            }
+
             // 1. Quem serviu menos vezes no mês
             if (a.escalas_no_mes !== b.escalas_no_mes) {
                 return a.escalas_no_mes - b.escalas_no_mes;
@@ -542,6 +566,7 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                     // Construir a chave de busca: "NomeFuncao|SetorPai" ou "NomeFuncao"
                     let chaveEncontrada: string | null = null;
                     let ocupanteId: string | null = null;
+                    let vagaUsada: number = mapping.vagaFonte;
 
                     // Buscar nas chaves do quemEstaOnde
                     for (const [chave, ocupantes] of quemEstaOnde.entries()) {
@@ -568,19 +593,47 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                             if (!setorPai?.toLowerCase().includes(mapping.fonteSetor.toLowerCase())) continue;
                         }
 
-                        // Encontrou! Pegar o ocupante no índice especificado
-                        if (ocupantes.length > mapping.vagaFonte && ocupantes[mapping.vagaFonte] !== 'VAZIO') {
+                        // Encontrou a fonte! Tentar vagas sequencialmente até achar uma válida
+                        for (let tentativa = mapping.vagaFonte; tentativa < ocupantes.length; tentativa++) {
+                            if (ocupantes[tentativa] === 'VAZIO') continue;
+
+                            const candidatoId = ocupantes[tentativa];
+                            const candidatoMembro = membros.find(m => m.id === candidatoId);
+
+                            if (!candidatoMembro) continue;
+
+                            // Verificar se este membro pode executar a função destino
+                            const nomeFuncaoDestinoLower = funcao.nome.toLowerCase();
+                            const setorDestinoLower = funcao.setor_pai?.toLowerCase() || '';
+
+                            // Verificar NECESSIDADE SENTADO
+                            if (candidatoMembro.aptidoes?.includes('NECESSIDADE SENTADO')) {
+                                const ehSetorAzulOuLaranja = setorDestinoLower.includes('azul') || setorDestinoLower.includes('laranja');
+                                const ehApoioPermitido = nomeFuncaoDestinoLower.includes('apoio') &&
+                                    !nomeFuncaoDestinoLower.includes('responsável') && ehSetorAzulOuLaranja;
+                                const ehCorrentePermitida = nomeFuncaoDestinoLower.includes('corrente') && ehSetorAzulOuLaranja;
+
+                                if (!ehApoioPermitido && !ehCorrentePermitida) {
+                                    console.log(`   ⚠️ Vaga ${tentativa} bloqueada: ${candidatoMembro.nome_completo} tem NECESSIDADE SENTADO`);
+                                    continue; // Tentar próxima vaga
+                                }
+                            }
+
+                            // Membro válido encontrado!
                             chaveEncontrada = chave;
-                            ocupanteId = ocupantes[mapping.vagaFonte];
+                            ocupanteId = candidatoId;
+                            vagaUsada = tentativa;
                             break;
                         }
+
+                        if (ocupanteId) break; // Encontrou, sair do loop de chaves
                     }
 
                     if (ocupanteId) {
                         membroObrigatorioId = ocupanteId;
-                        console.log(`   🔄 ${regraDetalhada.descricao} - vaga ${i} ← ${chaveEncontrada}[${mapping.vagaFonte}]`);
+                        console.log(`   🔄 ${regraDetalhada.descricao} - vaga ${i} ← ${chaveEncontrada}[${vagaUsada}]`);
                     } else {
-                        console.log(`   ⚠️ Repetição falhou: ${funcao.nome} vaga ${i} - fonte "${mapping.fontePattern}" (${mapping.fonteSetor || 'qualquer'}) não encontrada`);
+                        console.log(`   ⚠️ Repetição falhou: ${funcao.nome} vaga ${i} - fonte "${mapping.fontePattern}" (${mapping.fonteSetor || 'qualquer'}) não encontrada ou bloqueada`);
                     }
                 } else {
                     // Esta vaga não tem mapeamento - será preenchida com pessoa nova
