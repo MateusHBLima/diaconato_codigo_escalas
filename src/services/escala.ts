@@ -223,13 +223,16 @@ function encontrarCandidato(
     const membroPodeExecutar = (membro: MembroComHistorico): boolean => {
         // NECESSIDADE SENTADO - Só pode em funções específicas
         if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
-            const ehApoio = nomeFuncaoLower.includes('apoio') && !nomeFuncaoLower.includes('responsável');
-            const ehCorrenteAzulOuLaranja = nomeFuncaoLower.includes('corrente') &&
-                (nomeFuncaoLower.includes('azul') || nomeFuncaoLower.includes('laranja'));
+            // Regra: Só pode Corrente da Ala Azul ou Laranja
+            // Não pode Apoio (pois fica em pé)
+            const ehCorrente = nomeFuncaoLower.includes('corrente');
+            const setorPaiLower = funcao.setor_pai?.toLowerCase() || '';
+            const ehSetorAzulOuLaranja = setorPaiLower.includes('azul') || setorPaiLower.includes('laranja');
 
-            if (!ehApoio && !ehCorrenteAzulOuLaranja) {
-                return false; // Função não permitida para quem precisa sentar
+            if (ehCorrente && ehSetorAzulOuLaranja) {
+                return true; // Permitido
             }
+            return false; // Qualquer outra coisa é proibida
         }
         return true;
     };
@@ -270,16 +273,17 @@ function encontrarCandidato(
             // 2. NECESSIDADE SENTADO - Só pode em funções específicas, IGNORA estrelas
             else if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
                 // Funções PERMITIDAS para quem precisa ficar sentado:
-                // - Apoio (qualquer setor)
-                // - Correntes Azul e Laranja
-                const ehApoio = nomeFuncaoLower.includes('apoio') && !nomeFuncaoLower.includes('responsável');
-                const ehCorrenteAzulOuLaranja = nomeFuncaoLower.includes('corrente') &&
-                    (nomeFuncaoLower.includes('azul') || nomeFuncaoLower.includes('laranja'));
+                // - Apenas Corrente da Ala Azul ou Laranja
+                // - Apoio NÃO é permitido
+                const ehCorrente = nomeFuncaoLower.includes('corrente');
+                const setorPaiLower = funcao.setor_pai?.toLowerCase() || '';
+                const ehSetorAzulOuLaranja = setorPaiLower.includes('azul') || setorPaiLower.includes('laranja');
 
-                if (!ehApoio && !ehCorrenteAzulOuLaranja) {
-                    return false; // Função não permitida para quem precisa sentar
+                if (ehCorrente && ehSetorAzulOuLaranja) {
+                    // Permitido - IGNORA verificação de estrelas
+                } else {
+                    return false; // Função não permitida
                 }
-                // Se é função permitida, IGNORA verificação de estrelas
             }
 
             // 3. DEMAIS CASOS - Usa sistema de estrelas normalmente
@@ -368,6 +372,7 @@ function encontrarCandidato(
  * Gera a escala completa para um culto COM BALANCEAMENTO
  */
 export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEscala> {
+    process.stdout.write(`\nDEBUG: Entered gerarEscalaParaCulto with ${cultoId}\n`);
     console.log(`\n📋 Gerando escala para culto ${cultoId}`);
 
     // Buscar culto

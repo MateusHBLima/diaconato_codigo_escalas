@@ -1,0 +1,12 @@
+
+👤 Membro encontrado: Janaína Rezendes NUnes
+   Sexo: MULHER
+   Nível Experiência (Estrelas): 1
+   Aptidões: ["NECESSIDADE SENTADO"]
+
+
+✅ Posições PERMITIDAS (4):
+ - Corrente 1 (SETOR AZUL)
+ - Corrente 1 (SETOR LARANJA)
+ - Corrente 2 (SETOR AZUL)
+ - Corrente 2 (SETOR LARANJA)

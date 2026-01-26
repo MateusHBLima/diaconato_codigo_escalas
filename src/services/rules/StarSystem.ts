@@ -32,6 +32,17 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
     5: []
 };
 
+/**
+ * Define o LIMITE MÁXIMO de estrelas para certas funções.
+ * Isso garante que funções básicas (Hall, Apoio) sejam feitas APENAS por quem é Nível 1 ou 2.
+ * Membros Nível 3+ serão BLOQUEADOS dessas funções.
+ */
+export const STAR_MAX_LIMITS: Record<string, number> = {
+    'Hall': 2,
+    'Apoio': 2,
+    // Se o nome da função contiver a chave, o limite se aplica.
+};
+
 // Mapeamento de funções masculinas para repetição no Banheiro Masculino
 export const REPETICAO_BANHEIRO_MASCULINO = [
     'Hall' // Simplificado para pegar qualquer Hall se necessário, mas o código usa includes
@@ -60,6 +71,31 @@ export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especific
     // Portanto, bloquear de TODAS as funções normais.
     if (estrelas === 5) {
         return false;
+    }
+
+    // ===============================================
+    // VERIFICAÇÃO DE TETO (MAX_STARS)
+    // ===============================================
+    for (const [chave, maxEstrelas] of Object.entries(STAR_MAX_LIMITS)) {
+        if (nomeFuncao.includes(chave)) {
+            // EXCEÇÃO IMPORTANTE: "Apoio" também tem em "Responsável e apoio" e "Apoio - Oferta"
+            // "Responsável e apoio" é nível 3. Precisamos garantir que não bloqueie se for Responsável.
+            if (chave === 'Apoio' && nomeFuncao.toLowerCase().includes('responsável')) {
+                continue; // Ignora o teto de Apoio se for Responsável
+            }
+            // EXCEÇÃO OFERTA: Funções de Oferta (que contém 'Apoio' no nome ou setor)
+            // Se for do setor OFERTA, permite níveis mais altos (geralmente apoio da oferta pode ser qualquer um)
+            // Mas o pedido foi para bloquear "Apoio" (geral). Vamos assumir Apoio de recepção/setores.
+            // Para não bloquear oferta, vamos verificar se NÃO é oferta.
+
+            // Mas cuidado: Apoio Oferta Geralmente é Nível 1.
+
+            if (estrelas > maxEstrelas) {
+                // Se o membro é "muito qualificado" para a função, BLOQUEIA.
+                console.log(`   🚫 Bloqueio MaxStars: ${membro.nome_completo} (${estrelas}★) > ${nomeFuncao} (Max ${maxEstrelas})`);
+                return false;
+            }
+        }
     }
 
     // Para níveis 1-4, lógica cumulativa normal

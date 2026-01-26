@@ -1,0 +1,8 @@
+- [SETOR AZUL] Corrente 1
+- [SETOR AZUL] Corrente 2
+- [SETOR VERDE] Corrente entre verde e azul/Púlpito
+- [SETOR VERDE] Corrente atrás do Pastor
+- [SETOR VERDE] Corrente corredor da mídia
+- [SETOR VERDE] Corrente entre verde e laranja
+- [SETOR LARANJA] Corrente 1
+- [SETOR LARANJA] Corrente 2
