@@ -1,0 +1,112 @@
+🔄 REGENERANDO ESCALA - 15/01/2026
+
+============================================================
+📅 Culto: Culto da Vitória
+📆 Data: 2026-01-15T22:30:00.189+00:00
+🕐 Período: quinta
+🆔 ID: f26629d3-2720-4520-9735-2cf8a71e984b
+
+🗑️ Deletando alocações antigas...
+✅ Alocações deletadas
+
+🔓 Resetando timestamp do culto...
+✅ Culto resetado
+
+🚀 Gerando nova escala com correções...
+
+✅ ESCALA REGENERADA!
+   Vagas preenchidas: 45
+   Vagas vazias: 0
+
+============================================================
+📋 DETALHES DA ESCALA GERADA:
+
+
+📍 PORTA Nova - A3:
+   ✅ Interno: Andre chagas ⭐⭐⭐
+   ✅ Hall: Claudio Spindler Junior ⭐⭐⭐
+
+📍 SETOR LARANJA:
+   ✅ Corrente 1: Anderson Rodrigues de Andrade (CASAL JB E MARISA) ⭐ [NECESSIDADE SENTADO]
+   ✅ Corrente 2: Janaína Rezendes NUnes ⭐ [NECESSIDADE SENTADO]
+   ✅ Responsável e apoio: Sorilene Ramos Moreira ⭐⭐⭐
+   ✅ Apoio: Nadi Bicicgo Canello ⭐ [NECESSIDADE SENTADO]
+   ✅ Apoio: Mellânia Guimarães ⭐⭐
+
+📍 SETOR VERDE:
+   ✅ Corrente atrás do Pastor: Denilce grabowski ⭐⭐⭐
+   ✅ Corrente entre verde e azul/Púlpito: Juliano Lange ⭐⭐⭐
+   ✅ Corrente entre verde e laranja: Eduardo Vargas Serpa ⭐⭐⭐
+   ✅ Corrente corredor da mídia: José Dalzotto ⭐⭐⭐
+   ✅ Apoio: Neiva Aguiar ⭐
+   ✅ Apoio: Dulcilene de Nazaré Costa da Silva ⭐⭐
+   ✅ Responsável e apoio: Maria Del Valle May Cedeño ⭐⭐⭐
+
+📍 SETOR AZUL:
+   ✅ Apoio: Idalamar Chagas ⭐⭐⭐⭐
+   ✅ Apoio: Eroni Corrêa Rodrigues de Lima ⭐
+   ✅ Responsável e apoio: Josiane Massaneiro Stahlschmidt alves ⭐⭐⭐
+   ✅ Corrente 2: Dyeime Dayane Ferreira Abreu ⭐⭐⭐
+   ✅ Corrente 1: Cícero Bezerra de Araújo ⭐ [NECESSIDADE SENTADO]
+
+📍 PORTA - A1 Parede:
+   ✅ Hall: Anildo Valentim Rodrigues de Lima ⭐
+   ✅ Interno: Rogério Adalberto Ferreira ⭐⭐
+
+📍 BANHEIROS:
+   ✅ Feminino: Eroni Corrêa Rodrigues de Lima ⭐
+   ✅ Feminino: Dulcilene de Nazaré Costa da Silva ⭐⭐
+   ✅ Masculino: Claudio Spindler Junior ⭐⭐⭐
+   ✅ Masculino: Paulo Felipe ⭐⭐
+
+📍 PORTA - A2:
+   ✅ Interno: Tulio de Melo ⭐⭐
+   ✅ Hall: Paulo Felipe ⭐⭐
+
+📍 SALVAS:
+   ✅ Lado Bateria (09 salvas): Lucas Thome de Souza ⭐⭐
+
+📍 OFERTA:
+   ✅ Apoio: Maria Del Valle May Cedeño ⭐⭐⭐
+   ✅ Apoio: Érico Andrei Bueno ⭐⭐⭐⭐⭐
+   ✅ Apoio: Andreia de Cassia Juchem Bueno ⭐⭐⭐⭐⭐
+
+📍 FINALIZAM AS MÁQUINAS:
+   ✅ Finalização: Andre chagas ⭐⭐⭐
+   ✅ Finalização: Tulio de Melo ⭐⭐
+
+📍 MÁQUINAS (16 ao total):
+   ✅ Lado bateria (16 máquinas): Neiva Aguiar ⭐
+   ✅ Lado bateria (16 máquinas): Tulio de Melo ⭐⭐
+   ✅ Lado bateria (16 máquinas): Andre chagas ⭐⭐⭐
+   ✅ Lado bateria (16 máquinas): Rogério Adalberto Ferreira ⭐⭐
+   ✅ Lado bateria (16 máquinas): Idalamar Chagas ⭐⭐⭐⭐
+   ✅ Lado bateria (16 máquinas): Mellânia Guimarães ⭐⭐
+   ✅ Lado bateria (16 máquinas): Josiane Massaneiro Stahlschmidt alves ⭐⭐⭐
+   ✅ Lado bateria (16 máquinas): Sorilene Ramos Moreira ⭐⭐⭐
+
+📍 PORTA Nova - A4:
+   ✅ Hall: antonio carlos melo vieira ⭐
+   ✅ Interno: Lucas Thome de Souza ⭐⭐
+
+📍 ALTAR:
+   ✅ Púlpito: Juliano Lange ⭐⭐⭐
+   ✅ Mesa, água e microfone: Jose Duarte ⭐⭐⭐⭐ [Púlpito, Prioridade Mesa]
+
+============================================================
+🔍 VALIDAÇÃO DAS CORREÇÕES:
+
+👤 Membros com NECESSIDADE SENTADO:
+   ✅ Anderson Rodrigues de Andrade (CASAL JB E MARISA) → Corrente 1 (SETOR LARANJA)
+   ✅ Janaína Rezendes NUnes → Corrente 2 (SETOR LARANJA)
+   ✅ Cícero Bezerra de Araújo → Corrente 1 (SETOR AZUL)
+   ✅ Nadi Bicicgo Canello → Apoio (SETOR LARANJA)
+
+🎤 Púlpito:
+   ✅ Púlpito repetiu Corrente Verde/Azul: Juliano Lange
+
+🚪 Hall (nível de estrelas):
+   ⚠️ Hall: Claudio Spindler Junior (3⭐)
+   ✅ Hall: Anildo Valentim Rodrigues de Lima (1⭐)
+   ✅ Hall: antonio carlos melo vieira (1⭐)
+   ✅ Hall: Paulo Felipe (2⭐)

@@ -26,16 +26,17 @@ export const PROCESSING_ORDER: string[] = [
     'PORTA Nova - A3',
     'PORTA Nova - A4',
 
-    // Fase 2: Setores (fontes secundárias)
+    // Fase 2: Setores (fontes secundárias) - Correntes são alocadas aqui
     'SETOR AZUL',
     'SETOR VERDE',
     'SETOR LARANJA',
 
-    // Fase 3: Altar (Mesa é pessoa nova, Púlpito vem no fim)
-    'ALTAR',
-
-    // Fase 4: Oferta (usa Responsáveis)
+    // Fase 3: Oferta (usa Responsáveis Gerais)
     'OFERTA',
+
+    // Fase 4: Altar - APÓS os setores para que Púlpito encontre Corrente Verde/Azul
+    // (Mesa é pessoa nova, Púlpito repete da Corrente)
+    'ALTAR',
 
     // Fase 5: Máquinas (usa Interno + Apoio + Resp. Ala)
     'MÁQUINAS (16 ao total)',
