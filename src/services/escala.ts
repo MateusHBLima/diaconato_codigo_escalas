@@ -214,7 +214,8 @@ function encontrarCandidato(
     funcao: Funcao,
     culto: Culto,
     membrosUsados: Set<string>,
-    membroObrigatorioId?: string | null
+    membroObrigatorioId?: string | null,
+    numeroVaga: number = 0
 ): MembroComHistorico | null {
 
     const nomeFuncaoLower = funcao.nome.toLowerCase();
@@ -223,7 +224,6 @@ function encontrarCandidato(
     const membroPodeExecutar = (membro: MembroComHistorico, setorPai?: string): boolean => {
         // NECESSIDADE SENTADO - Só pode em funções específicas dos setores Azul e Laranja
         if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
-<<<<<<< HEAD
             // Regra: Só pode Corrente da Ala Azul ou Laranja
             // Não pode Apoio (pois fica em pé)
             const ehCorrente = nomeFuncaoLower.includes('corrente');
@@ -232,20 +232,6 @@ function encontrarCandidato(
 
             if (ehCorrente && ehSetorAzulOuLaranja) {
                 return true; // Permitido
-=======
-            const setorLower = setorPai?.toLowerCase() || '';
-            const ehSetorAzulOuLaranja = setorLower.includes('azul') || setorLower.includes('laranja');
-
-            // Apoio permitido APENAS nos setores Azul e Laranja
-            const ehApoioPermitido = nomeFuncaoLower.includes('apoio') &&
-                !nomeFuncaoLower.includes('responsável') && ehSetorAzulOuLaranja;
-
-            // Corrente permitida APENAS nos setores Azul e Laranja
-            const ehCorrentePermitida = nomeFuncaoLower.includes('corrente') && ehSetorAzulOuLaranja;
-
-            if (!ehApoioPermitido && !ehCorrentePermitida) {
-                return false; // Função não permitida para quem precisa sentar
->>>>>>> 20beea53b535e767286da908633e8e9e49d6cd72
             }
             return false; // Qualquer outra coisa é proibida
         }
@@ -288,7 +274,6 @@ function encontrarCandidato(
             // 2. NECESSIDADE SENTADO - Só pode em funções dos setores Azul e Laranja, IGNORA estrelas
             else if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
                 // Funções PERMITIDAS para quem precisa ficar sentado:
-<<<<<<< HEAD
                 // - Apenas Corrente da Ala Azul ou Laranja
                 // - Apoio NÃO é permitido
                 const ehCorrente = nomeFuncaoLower.includes('corrente');
@@ -299,25 +284,12 @@ function encontrarCandidato(
                     // Permitido - IGNORA verificação de estrelas
                 } else {
                     return false; // Função não permitida
-=======
-                // - Apoio nos setores Azul e Laranja
-                // - Correntes nos setores Azul e Laranja
-                const setorLower = funcao.setor_pai?.toLowerCase() || '';
-                const ehSetorAzulOuLaranja = setorLower.includes('azul') || setorLower.includes('laranja');
-
-                const ehApoioPermitido = nomeFuncaoLower.includes('apoio') &&
-                    !nomeFuncaoLower.includes('responsável') && ehSetorAzulOuLaranja;
-                const ehCorrentePermitida = nomeFuncaoLower.includes('corrente') && ehSetorAzulOuLaranja;
-
-                if (!ehApoioPermitido && !ehCorrentePermitida) {
-                    return false; // Função não permitida para quem precisa sentar
->>>>>>> 20beea53b535e767286da908633e8e9e49d6cd72
                 }
             }
 
             // 3. DEMAIS CASOS - Usa sistema de estrelas normalmente
             else {
-                if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo)) {
+                if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo, funcao.setor_pai, numeroVaga)) {
                     return false;
                 }
             }
@@ -687,7 +659,7 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 }
             }
 
-            const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId);
+            const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId, i);
 
             // NOTA: Responsáveis Gerais (Nível 5) são detectados no início da função,
             // não através da alocação de funções. A captura abaixo foi removida.

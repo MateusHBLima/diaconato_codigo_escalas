@@ -40,7 +40,20 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
 export const STAR_MAX_LIMITS: Record<string, number> = {
     'Hall': 2,
     'Apoio': 2,
-    // Se o nome da função contiver a chave, o limite se aplica.
+};
+
+type MinStarRule = {
+    minStars: number;
+    setores?: string[];
+    vagaIndex?: number;
+};
+
+export const STAR_MIN_LIMITS: Record<string, MinStarRule> = {
+    'Apoio': {
+        minStars: 2,
+        setores: ['Verde', 'Azul', 'Laranja'],
+        vagaIndex: 0
+    }
 };
 
 // Mapeamento de funções masculinas para repetição no Banheiro Masculino
@@ -59,7 +72,13 @@ export const REPETICAO_BANHEIRO_FEMININO = [
  * EXCEÇÃO: Nível 5 (Líderes) SÓ fazem funções de nível 5 (Responsável Geral e Apoio Oferta).
  * FALLBACK: Se função não está mapeada, permite qualquer membro (exceto Líderes que são restritos).
  */
-export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especificidadeSexoFuncao: string): boolean {
+export function podeExecutarFuncao(
+    membro: Membro,
+    nomeFuncao: string,
+    especificidadeSexoFuncao: string,
+    setorPai?: string,
+    numeroVaga?: number
+): boolean {
     const estrelas = membro.nivel_experiencia || 1; // Default para 1 estrela se não definido
 
     // Verifica sexo
@@ -91,8 +110,32 @@ export function podeExecutarFuncao(membro: Membro, nomeFuncao: string, especific
             // Mas cuidado: Apoio Oferta Geralmente é Nível 1.
 
             if (estrelas > maxEstrelas) {
-                // Se o membro é "muito qualificado" para a função, BLOQUEIA.
-                console.log(`   🚫 Bloqueio MaxStars: ${membro.nome_completo} (${estrelas}★) > ${nomeFuncao} (Max ${maxEstrelas})`);
+                // console.log(`   🚫 Bloqueio MaxStars: ${membro.nome_completo} (${estrelas}★) > ${nomeFuncao} (Max ${maxEstrelas})`);
+                return false;
+            }
+        }
+    }
+
+    // ===============================================
+    // VERIFICAÇÃO DE PISO (MIN_STARS)
+    // ===============================================
+    for (const [chave, regra] of Object.entries(STAR_MIN_LIMITS)) {
+        if (nomeFuncao.includes(chave)) {
+            // Verifica Setor
+            if (regra.setores && setorPai) {
+                const setorPermitido = regra.setores.some(s => setorPai.toLowerCase().includes(s.toLowerCase()));
+                if (!setorPermitido) continue;
+            } else if (regra.setores && !setorPai) {
+                continue; // Se requer setor e não foi passado, ignora (ou assume seguro não bloquear)
+            }
+
+            // Verifica Vaga
+            if (regra.vagaIndex !== undefined && numeroVaga !== undefined) {
+                if (numeroVaga !== regra.vagaIndex) continue;
+            }
+
+            if (estrelas < regra.minStars) {
+                // console.log(`   🚫 Bloqueio MinStars: ${membro.nome_completo} (${estrelas}★) < ${nomeFuncao} (Min ${regra.minStars})`);
                 return false;
             }
         }
