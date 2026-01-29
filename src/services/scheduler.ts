@@ -6,12 +6,15 @@ import { gerarEscalaParaCulto } from './escala.js';
 export function iniciarAgendamento() {
     // Rodar dia 1 de cada mês às 00:00
     // Formato cron: min hora dia_mes mes dia_semana
+    // ROTINA AUTOMÁTICA DESATIVADA EM FAVOR DO DISPARO MANUAL (PERGUNTA 4)
+    /*
     cron.schedule('0 0 1 * *', async () => {
         console.log('⏰ Iniciando tarefa agendada: Gerar escalas do mês');
         await executarRotinaMensal();
     });
+    */
 
-    console.log('✅ Agendador iniciado: Configurado para dia 1 de cada mês às 00:00');
+    console.log('✅ Agendador iniciado (Rotina automática DESATIVADA)');
 }
 
 export async function executarRotinaMensal(mes?: number, ano?: number) {

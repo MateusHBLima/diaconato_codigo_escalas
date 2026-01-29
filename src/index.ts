@@ -150,48 +150,16 @@ app.post('/api/gerar-escala-mes', async (req, res) => {
             return res.status(400).json({ error: 'mes e ano são obrigatórios' });
         }
 
-        console.log(`\n🗓️ Gerando escalas para ${mes}/${ano}`);
+        console.log(`\n🗓️ Gerando escalas para ${mes}/${ano} (NOVO FLUXO MENSAL)`);
 
-        // Primeiro, garantir que os cultos existem
-        const cultosGerados = await gerarCultosDoMes(mes, ano);
-        await salvarCultos(cultosGerados);
+        // Import dinâmico do novo serviço para garantir isolamento
+        const { gerarEscalaMensal } = await import('./services/escala_mensal.js');
 
-        // Buscar cultos do mês
-        const cultos = await buscarCultosDoMes(mes, ano);
-
-        const resultados = [];
-        let totalAlocacoes = 0;
-        let totalPreenchidas = 0;
-        let totalVazias = 0;
-
-        for (const culto of cultos) {
-            try {
-                const resultado = await gerarEscalaParaCulto(culto.id);
-                resultados.push(resultado);
-                totalAlocacoes += resultado.alocacoes.length;
-                totalPreenchidas += resultado.vagas_preenchidas;
-                totalVazias += resultado.vagas_vazias;
-            } catch (err: any) {
-                console.error(`Erro no culto ${culto.id}: ${err.message}`);
-                resultados.push({ culto_id: culto.id, error: err.message });
-            }
-        }
-
-        console.log(`\n📊 RESUMO ${mes}/${ano}`);
-        console.log(`   Cultos: ${cultos.length}`);
-        console.log(`   Alocações: ${totalAlocacoes}`);
-        console.log(`   Preenchidas: ${totalPreenchidas}`);
-        console.log(`   Vazias: ${totalVazias}`);
+        const resultado = await gerarEscalaMensal(mes, ano);
 
         res.json({
             success: true,
-            mes,
-            ano,
-            total_cultos: cultos.length,
-            total_alocacoes: totalAlocacoes,
-            vagas_preenchidas: totalPreenchidas,
-            vagas_vazias: totalVazias,
-            resultados
+            ...resultado
         });
     } catch (error: any) {
         console.error('Erro ao gerar escalas do mês:', error);
