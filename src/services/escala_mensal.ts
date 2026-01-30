@@ -97,17 +97,26 @@ function distribuirPresencaQuintas(
     const ocupacao = new Map<string, number>();
     cultosOrdenados.forEach(c => ocupacao.set(c.id, 0));
 
-    // Separar grupos por frequência
-    const grupo3x = membros.filter(m => m.limite_mes >= 3);
-    const grupo2x = [...membros.filter(m => m.limite_mes === 2)]; // Cópia para consumir
-    const grupo1x = [...membros.filter(m => m.limite_mes === 1)]; // Cópia para consumir
+    // ============================================
+    // SEPARAR N5 - NÃO CONTAM NO MÍNIMO DE 28
+    // Responsáveis gerais (N5) são ADICIONAIS ao pool
+    // ============================================
+    const membrosN5 = membros.filter(m => m.nivel_experiencia === 5);
+    const membrosSemN5 = membros.filter(m => m.nivel_experiencia !== 5);
+
+    console.log(`   👑 N5 (não contam no mínimo): ${membrosN5.length} membros`);
+
+    // Separar grupos por frequência (EXCLUINDO N5)
+    const grupo3x = membrosSemN5.filter(m => m.limite_mes >= 3);
+    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)]; // Cópia para consumir
+    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)]; // Cópia para consumir
 
     // Identificar as 3 primeiras quintas e as restantes
     const primeirasTresQuintas = cultosOrdenados.slice(0, 3);
     const quintasRestantes = cultosOrdenados.slice(3);
 
     console.log(`   📅 Quintas do mês: ${cultosOrdenados.length} (3 primeiras + ${quintasRestantes.length} restantes)`);
-    console.log(`   👥 Grupos: 3x=${grupo3x.length}, 2x=${grupo2x.length}, 1x=${grupo1x.length}`);
+    console.log(`   👥 Grupos (sem N5): 3x=${grupo3x.length}, 2x=${grupo2x.length}, 1x=${grupo1x.length}`);
 
     // ============================================
     // PASSO 1: Grupo 3x vai nas 3 primeiras quintas

@@ -74,9 +74,12 @@ async function gerarRelatorio(mes: number, ano: number) {
     const ocupacao = new Map<string, number>();
     cultosOrdenados.forEach(c => ocupacao.set(c.id, 0));
 
-    const grupo3x = membrosQuinta.filter(m => m.limite_mes >= 3);
-    const grupo2x = [...membrosQuinta.filter(m => m.limite_mes === 2)];
-    const grupo1x = [...membrosQuinta.filter(m => m.limite_mes === 1)];
+    // N5 são ADICIONAIS - não contam no mínimo de 28
+    const membrosSemN5 = membrosQuinta.filter(m => m.nivel_experiencia !== 5);
+
+    const grupo3x = membrosSemN5.filter(m => m.limite_mes >= 3);
+    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)];
+    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)];
 
     const primeirasTresQuintas = cultosOrdenados.slice(0, 3);
     const quintasRestantes = cultosOrdenados.slice(3);
