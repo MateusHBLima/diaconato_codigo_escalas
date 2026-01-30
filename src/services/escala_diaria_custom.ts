@@ -307,6 +307,7 @@ export async function gerarEscalaComPool(
 
     // ============================================
     // ENCONTRAR RESPONSÁVEIS GERAIS (NÍVEL 5)
+    // REGRA ABSOLUTA: SEMPRE DEVEM SER UM CASAL
     // ============================================
     let responsavelGeral1Id: string | null = null;
     let responsavelGeral2Id: string | null = null;
@@ -315,14 +316,12 @@ export async function gerarEscalaComPool(
     const lideresDisponiveis = membros.filter(m => {
         if (m.nivel_experiencia !== 5) return false;
 
-        // Verificar disponibilidade
         const disp = culto.periodo === 'quinta'
             ? m.disponibilidade_quinta
             : m.disponibilidade_domingo;
         const { disponivel } = parseDisponibilidade(disp);
         if (!disponivel) return false;
 
-        // Verificar período
         if (!atendePeriodo(m.melhor_periodo_domingo, culto.periodo)) return false;
 
         return true;
@@ -330,29 +329,37 @@ export async function gerarEscalaComPool(
 
     console.log(`   👑 Líderes Nível 5 disponíveis: ${lideresDisponiveis.length}`);
 
-    // Responsáveis Gerais devem ser SEMPRE um casal
-    const casaisDisponiveis: Array<{ lider: typeof lideresDisponiveis[0], conjuge: typeof lideresDisponiveis[0] }> = [];
+    // Para cada líder, buscar o CÔNJUGE no pool COMPLETO (não apenas Nível 5)
+    // Se o cônjuge existir e estiver disponível, formam um casal válido
+    const casaisDisponiveis: Array<{ lider: typeof lideresDisponiveis[0], conjuge: typeof membros[0] }> = [];
 
     for (const lider of lideresDisponiveis) {
         const nomeConjuge = (lider as any).nome_conjuge;
-        const conjugeServeJunto = (lider as any).conjuge_serve_junto; // Pode vir undefined se não tiver na interface base
+        if (!nomeConjuge) continue;
 
-        if (!nomeConjuge) continue; // Skip se não tem conjuge
-
-        // Buscar cônjuge por nome
         const nomeConjugeLower = nomeConjuge.toLowerCase().trim();
-        const conjuge = lideresDisponiveis.find(m => {
+
+        // MUDANÇA: Buscar cônjuge no POOL COMPLETO, não apenas em lideresNível5
+        const conjuge = membros.find(m => {
             if (m.id === lider.id) return false;
             const nomeLower = m.nome_completo.toLowerCase().trim();
+            // Match exato ou parcial
             if (nomeLower === nomeConjugeLower) return true;
             const primeiroNomeConjuge = nomeConjugeLower.split(' ')[0];
             if (nomeLower.includes(primeiroNomeConjuge)) return true;
-            const primeiroNomeMembro = nomeLower.split(' ')[0];
-            if (nomeConjugeLower.includes(primeiroNomeMembro)) return true;
             return false;
         });
 
         if (conjuge) {
+            // Verificar se cônjuge está disponível para este período
+            const dispConj = culto.periodo === 'quinta'
+                ? conjuge.disponibilidade_quinta
+                : conjuge.disponibilidade_domingo;
+            const { disponivel: conjDisp } = parseDisponibilidade(dispConj);
+            if (!conjDisp) continue;
+            if (!atendePeriodo(conjuge.melhor_periodo_domingo, culto.periodo)) continue;
+
+            // Evitar duplicatas (casal inverso)
             const jaAdicionado = casaisDisponiveis.some(c =>
                 (c.lider.id === lider.id && c.conjuge.id === conjuge.id) ||
                 (c.lider.id === conjuge.id && c.conjuge.id === lider.id)
@@ -363,9 +370,10 @@ export async function gerarEscalaComPool(
         }
     }
 
-    console.log(`   👑 Casais Nível 5 disponíveis: ${casaisDisponiveis.length}`);
+    console.log(`   👑 Casais válidos (Líder N5 + Cônjuge disponível): ${casaisDisponiveis.length}`);
 
     if (casaisDisponiveis.length > 0) {
+        // Ordenar por menor uso combinado
         casaisDisponiveis.sort((a, b) => {
             const totalA = a.lider.escalas_no_mes + a.conjuge.escalas_no_mes;
             const totalB = b.lider.escalas_no_mes + b.conjuge.escalas_no_mes;
@@ -375,14 +383,10 @@ export async function gerarEscalaComPool(
         const casalEscolhido = casaisDisponiveis[0];
         responsavelGeral1Id = casalEscolhido.lider.id;
         responsavelGeral2Id = casalEscolhido.conjuge.id;
-        console.log(`   👑 Casal selecionado (menor uso): ${casalEscolhido.lider.nome_completo} + ${casalEscolhido.conjuge.nome_completo}`);
-    }
-
-    if (!responsavelGeral1Id || !responsavelGeral2Id) {
-        console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto - Responsáveis Gerais ficarão VAZIOS`);
-        // REGRA ESTRITA: Não usar fallback de líderes individuais
-        responsavelGeral1Id = null;
-        responsavelGeral2Id = null;
+        console.log(`   👑 CASAL RESPONSÁVEL GERAL: ${casalEscolhido.lider.nome_completo} + ${casalEscolhido.conjuge.nome_completo}`);
+    } else {
+        // SEM FALLBACK! Se não há casal, os responsáveis ficam vazios.
+        console.log(`   ⚠️ NENHUM CASAL disponível para Responsável Geral. Posição ficará vazia.`);
     }
 
     let vagasPreenchidas = 0;
