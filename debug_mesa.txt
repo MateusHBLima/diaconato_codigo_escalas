@@ -1,0 +1,40 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì DEBUG: ALOCA├ç├âO DE MESA
+============================================================
+
+­ƒôï JOS├ë DUARTE:
+   Nome: Jose Duarte
+   Aptid├Áes: ["P├║lpito","Prioridade Mesa"]
+   Per├¡odo: QUALQUER PERIODO
+   Disponibilidade Domingo: SIM, 3 DOMINGOS POR M├èS
+
+­ƒôï FUN├ç├âO MESA:
+   Nome: Mesa, ├ígua e microfone
+   Setor Pai: ALTAR
+   G├¬nero: Homem
+   Ativo: true
+   Santa Ceia: false
+
+­ƒôà CULTO DE TESTE:
+   ID: e4bb16e4-6d57-478f-9ade-a42d06cfc02f
+   Data: 2026-03-01T13:00:00.735+00:00
+   Per├¡odo: domingo_manha
+   Santa Ceia: true
+
+­ƒöä SIMULANDO filtrarCandidatos():
+----------------------------------------
+   ehFuncaoMesa: true
+   temPrioridadeMesa: true
+   Ô£à PASSOU: Prioridade Mesa
+   atendeGenero(HOMEM, Homem): true
+   Ô£à PASSOU: G├¬nero
+   parseDisponibilidade("SIM, 3 DOMINGOS POR M├èS"): disponivel=true
+   Ô£à PASSOU: Disponibilidade
+   atendePeriodo("QUALQUER PERIODO", "domingo_manha"): true
+   Ô£à PASSOU: Per├¡odo
+
+Ô£à JOS├ë DUARTE DEVERIA SER SELECIONADO!
+
+­ƒöì VERIFICANDO A ALOCA├ç├âO REAL:
+   Alocado: VAZIO (status: SEM_CANDIDATO)

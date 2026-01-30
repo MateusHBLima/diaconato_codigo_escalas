@@ -1,0 +1,132 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì VERIFICA├ç├âO DE ESCALAS: 3/2026
+============================================================
+­ƒôà 14 cultos a verificar
+
+
+­ƒôï Verificando: Culto da Fam├¡lia (Manh├ú) (2026-03-01T13:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   ­ƒôè Preenchidas: 33 | Vazias: 12
+
+­ƒôï Verificando: Culto da Fam├¡lia (Noite) (2026-03-01T21:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno (casal)
+   ­ƒôè Preenchidas: 34 | Vazias: 11
+
+­ƒôï Verificando: Culto da Vit├│ria (2026-03-05T22:30:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno (casal)
+   Ô£à Jos├® Duarte na Mesa: Jose Duarte
+   ­ƒôè Preenchidas: 40 | Vazias: 5
+
+­ƒôï Verificando: Culto da Fam├¡lia (Manh├ú) (2026-03-08T13:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   Ô£à Jos├® Duarte na Mesa: Jose Duarte
+   ­ƒôè Preenchidas: 41 | Vazias: 4
+
+­ƒôï Verificando: Culto da Fam├¡lia (Noite) (2026-03-08T21:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   ­ƒôè Preenchidas: 27 | Vazias: 18
+
+­ƒôï Verificando: Culto da Vit├│ria (2026-03-12T22:30:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   Ô£à Jos├® Duarte na Mesa: Jose Duarte
+   ­ƒôè Preenchidas: 41 | Vazias: 4
+
+­ƒôï Verificando: Culto da Fam├¡lia (Manh├ú) (2026-03-15T13:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   ­ƒôè Preenchidas: 37 | Vazias: 8
+
+­ƒôï Verificando: Culto da Fam├¡lia (Noite) (2026-03-15T21:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno (casal)
+   ­ƒôè Preenchidas: 37 | Vazias: 8
+
+­ƒôï Verificando: Culto da Vit├│ria (2026-03-19T22:30:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno (casal)
+   Ô£à Jos├® Duarte na Mesa: Jose Duarte
+   ­ƒôè Preenchidas: 38 | Vazias: 7
+
+­ƒôï Verificando: Culto da Fam├¡lia (Manh├ú) (2026-03-22T13:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   Ô£à Jos├® Duarte na Mesa: Jose Duarte
+   ­ƒôè Preenchidas: 37 | Vazias: 8
+
+­ƒôï Verificando: Culto da Fam├¡lia (Noite) (2026-03-22T21:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   ­ƒôè Preenchidas: 31 | Vazias: 14
+
+­ƒôï Verificando: Culto da Vit├│ria (2026-03-26T22:30:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   Ô£à Jos├® Duarte na Mesa: Jose Duarte
+   ­ƒôè Preenchidas: 43 | Vazias: 2
+
+­ƒôï Verificando: Culto da Fam├¡lia (Manh├ú) (2026-03-29T13:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Gustavo Nardi + Luciane mendes (casal)
+   ­ƒôè Preenchidas: 33 | Vazias: 12
+
+­ƒôï Verificando: Culto da Fam├¡lia (Noite) (2026-03-29T21:00:00.735+00:00)
+   Ô£à Respons├íveis Gerais: Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno (casal)
+   ­ƒôè Preenchidas: 38 | Vazias: 7
+
+============================================================
+­ƒôè RESUMO DA VERIFICA├ç├âO
+============================================================
+
+­ƒö┤ CR├ìTICOS: 8
+­ƒƒí ALERTAS: 42
+­ƒöÁ INFO: 0
+
+­ƒö┤ VIOLA├ç├òES CR├ìTICAS:
+----------------------------------------
+   [2026-03-01T13:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+   [2026-03-01T21:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+   [2026-03-08T21:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+   [2026-03-15T13:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+   [2026-03-15T21:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+   [2026-03-22T21:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+   [2026-03-29T13:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+   [2026-03-29T21:00:00.735+00:00] PRIORIDADE MESA: Jos├® Duarte (Prioridade Mesa) N├âO est├í na fun├º├úo Mesa
+
+­ƒƒí ALERTAS:
+----------------------------------------
+   [2026-03-01T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-01T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-01T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Aura rangel (4Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-01T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Andreia de Cassia Juchem Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-01T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): ├ërico Andrei Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-01T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Dayane Galiotto (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-05T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Andreia de Cassia Juchem Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-05T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): ├ërico Andrei Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-05T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Maria Del Valle May Cede├▒o (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-08T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-08T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-08T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Maria Del Valle May Cede├▒o (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-08T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-08T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-08T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Michele C S Menezes (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-12T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-12T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-12T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Sorilene Ramos Moreira (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-15T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-15T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-15T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Sorilene Ramos Moreira (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-15T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Andreia de Cassia Juchem Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-15T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): ├ërico Andrei Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-15T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Marisa Aparecida Costa (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-19T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Andreia de Cassia Juchem Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-19T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): ├ërico Andrei Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-19T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Maria Del Valle May Cede├▒o (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-22T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-22T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-22T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Dyeime Dayane Ferreira Abreu (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-22T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-22T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-22T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Cintia de Almeida Fernandes (4Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-26T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-26T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-26T22:30:00.735+00:00] SISTEMA ESTRELAS (TETO): Sorilene Ramos Moreira (3Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-29T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Gustavo Nardi (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-29T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Luciane mendes (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-29T13:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Maria Eduarda Marques dos Santos Moreira (4Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-29T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Andreia de Cassia Juchem Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-29T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): ├ërico Andrei Bueno (5Ôÿà) em Apoio (M├íx: 2Ôÿà)
+   [2026-03-29T21:00:00.735+00:00] SISTEMA ESTRELAS (TETO): Marisa Aparecida Costa (3Ôÿà) em Apoio (M├íx: 2Ôÿà)

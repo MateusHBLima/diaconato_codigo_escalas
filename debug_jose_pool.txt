@@ -1,0 +1,29 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì DEBUG: GERA├ç├âO MENSAL COM TRACE DE JOS├ë DUARTE
+============================================================
+
+­ƒæñ JOS├ë DUARTE ANTES DA FASE 1:
+   ID: 6b9caca4-4fab-4273-98b9-a327a754a3ca
+   limite_mes: 0
+   pool_cultos_ids.size: 0
+
+­ƒæñ JOS├ë DUARTE DEPOIS DA FASE 1:
+   pool_cultos_ids.size: 0
+   IDs: 
+
+­ƒæñ JOS├ë DUARTE DEPOIS DA FASE 1.6:
+   pool_cultos_ids.size: 0
+   IDs: 
+
+­ƒôà JOS├ë DUARTE NO POOL DE CADA CULTO:
+   ÔØî 2026-03-01 domingo_manha (ID: 9af9461b-e598-4fab-a726-8d7acdd7cec7)
+   ÔØî 2026-03-08 domingo_manha (ID: 92d72095-6b77-4fd9-9170-3022ee07f2f3)
+   ÔØî 2026-03-15 domingo_manha (ID: d353701d-5157-4745-899c-fbc26882e188)
+   ÔØî 2026-03-22 domingo_manha (ID: 7d1feb05-da6d-4a00-b60e-b115e4085d9c)
+   ÔØî 2026-03-29 domingo_manha (ID: e53675d6-3823-492e-840a-3d40e7952739)
+   ÔØî 2026-03-01 domingo_noite (ID: 31879172-6419-4e1c-a1b8-2d550c498aaa)
+   ÔØî 2026-03-08 domingo_noite (ID: b9714f7f-5a7b-4a4f-ae0e-10be755e31bc)
+   ÔØî 2026-03-15 domingo_noite (ID: 29fcb97b-b2f8-45b2-b8ed-c5119ca264b7)
+   ÔØî 2026-03-22 domingo_noite (ID: e65f9b27-c3eb-44be-b9d4-80d4882319f0)
+   ÔØî 2026-03-29 domingo_noite (ID: c77be42f-6d77-4c63-aa85-69a33436a0fe)

@@ -1,0 +1,68 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì TRACE COMPLETO: ESCALA MENSAL
+============================================================
+
+­ƒôà Domingos: 10
+
+­ƒôï FASE 0: Preparando membros...
+   Membros dispon├¡veis para domingo: 91
+
+­ƒôï FASE 1: Distribui├º├úo de Presen├ºa...
+   Datas de domingo: 2026-03-01, 2026-03-08, 2026-03-15, 2026-03-22, 2026-03-29
+
+­ƒôï FASE 1.6: For├ºando Prioridade Mesa...
+   Jose Duarte: 3 -> 10 cultos
+
+­ƒôï VERIFICA├ç├âO POR CULTO:
+------------------------------------------------------------
+
+2026-03-01 domingo_manha
+   Pool size: 16
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-08 domingo_manha
+   Pool size: 26
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-15 domingo_manha
+   Pool size: 19
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-22 domingo_manha
+   Pool size: 20
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-29 domingo_manha
+   Pool size: 17
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-01 domingo_noite
+   Pool size: 23
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-08 domingo_noite
+   Pool size: 14
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-15 domingo_noite
+   Pool size: 22
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-22 domingo_noite
+   Pool size: 16
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte
+
+2026-03-29 domingo_noite
+   Pool size: 25
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: 1 -> Jose Duarte

@@ -1,0 +1,59 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì TRACE: CONSTRU├ç├âO DO POOL
+============================================================
+
+­ƒôà Cultos: 4 quintas, 10 domingos
+
+­ƒæÑ Membros dispon├¡veis para domingo: 91
+
+­ƒì¢´©Å FASE 1.6: For├ºando Prioridade Mesa...
+   Membros com Prioridade Mesa: 1
+
+   Jose Duarte:
+      - pool_cultos_ids ANTES: 0 cultos
+      - pool_cultos_ids DEPOIS: 10 cultos
+      - IDs: e4bb16e4-6d57-478f-9ade-a42d06cfc02f, f94a40d4-2fce-4b14-aaa3-32897a6d988d, 5c35923e-b543-40d2-a283-398197d68712, 11b6532b-f456-4d3d-a11d-deea8974dc81, e76dc45e-e6e0-4977-a4c9-a32e87c79ba2, fb350ad8-1cba-461f-9136-c65c47b8c599, 56f0ae66-0cde-4802-9a42-277ff7ec1220, c5852c65-b991-406f-9213-94715c99d1eb, 7fb4c0a0-85c2-4d74-82a3-b202a415987f, 2858ede8-4144-48c7-871d-138299229831
+
+­ƒôï VERIFICA├ç├âO POR CULTO:
+------------------------------------------------------------
+2026-03-01T13:00:00.735+00:00 (domingo_manha)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-08T13:00:00.735+00:00 (domingo_manha)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-15T13:00:00.735+00:00 (domingo_manha)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-22T13:00:00.735+00:00 (domingo_manha)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-29T13:00:00.735+00:00 (domingo_manha)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-01T21:00:00.735+00:00 (domingo_noite)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-08T21:00:00.735+00:00 (domingo_noite)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-15T21:00:00.735+00:00 (domingo_noite)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-22T21:00:00.735+00:00 (domingo_noite)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte
+2026-03-29T21:00:00.735+00:00 (domingo_noite)
+   Pool size: 1
+   Jos├® Duarte no Pool: Ô£à SIM
+   Membros Mesa no Pool: Jose Duarte

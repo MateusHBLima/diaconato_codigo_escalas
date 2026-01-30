@@ -1,0 +1,17 @@
+🔄 REGENERANDO ESCALA COM NOVAS REGRAS
+
+============================================================
+📅 Culto: Culto da Família (Manhã)
+🆔 ID: a35b73b4-e565-4cde-8a95-be5f4c6353eb
+
+🗑️ Deletando alocações antigas...
+✅ Alocações deletadas
+
+🔓 Resetando timestamp do culto...
+✅ Culto resetado
+
+🚀 Chamando API para regenerar escala...
+
+✅ ESCALA REGENERADA!
+   Vagas preenchidas: 42
+   Vagas vazias: 3

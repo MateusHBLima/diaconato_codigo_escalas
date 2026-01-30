@@ -1,0 +1,22 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì DEBUG: buscarMembrosAtivos
+============================================================
+
+­ƒôï JOS├ë DUARTE RAW:
+   nome_completo: Jose Duarte
+   disponibilidade_quinta: SIM, 3 VEZ POR M├èS
+   disponibilidade_domingo: SIM, 3 DOMINGOS POR M├èS
+
+­ƒôï PARSE RESULT:
+   parseDisponibilidade("SIM, 3 DOMINGOS POR M├èS")
+   => disponivel: true
+   => vezesPorMes: 3
+
+­ƒôï SIMULA├ç├âO buscarMembrosAtivos:
+   limite_mes seria: 3
+
+­ƒôï TODOS COM PRIORIDADE MESA:
+   Jose Duarte:
+      Quinta: disponivel=true, vezes=3
+      Domingo: disponivel=true, vezes=3

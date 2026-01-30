@@ -1,0 +1,23 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì DIAGN├ôSTICO: ESCALA DI├üRIA vs MENSAL
+============================================================
+
+­ƒôè CONSTRUINDO POOL PARA DOMINGO:
+   ÔØî Eduardo Duarte Silva N├âO DISPON├ìVEL para domingo (disponivel=false)
+   Ô£à Jose Duarte (Prioridade Mesa) INCLU├ìDO no Pool
+
+   Total no Pool: 91
+   Jos├® Duarte no Pool: SIM
+
+­ƒôï FUN├ç├òES DE MESA:
+   Decora├º├úo Mesa (Manh├ú) (SANTA CEIA) - Qty: 2
+   Desmontar Mesa (Noite) (SANTA CEIA) - Qty: 3
+   Montar Mesas e Toalhas (SANTA CEIA) - Qty: 1
+   Guardar Toalhas e Mesas (Noite) (SANTA CEIA) - Qty: 1
+   Mesa, ├ígua e microfone (ALTAR) - Qty: 1
+
+­ƒôï MEMBROS COM PRIORIDADE MESA:
+   Jose Duarte
+      - Dispon├¡vel Domingo: true
+      - Per├¡odo: QUALQUER PERIODO

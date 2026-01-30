@@ -54,19 +54,30 @@ async function buscarMembrosAtivos(
     const { data: membros } = await supabase.from('membros').select('*').eq('ativo', true);
     if (!membros) return [];
 
-    return membros.map(membro => {
-        const dispTexto = periodo === 'quinta'
-            ? membro.disponibilidade_quinta
-            : membro.disponibilidade_domingo;
-        const { vezesPorMes } = parseDisponibilidade(dispTexto);
+    return membros
+        .map(membro => {
+            const dispTexto = periodo === 'quinta'
+                ? membro.disponibilidade_quinta
+                : membro.disponibilidade_domingo;
+            const res = parseDisponibilidade(dispTexto);
 
-        return {
-            ...membro,
-            escalas_no_mes: 0,
-            limite_mes: vezesPorMes,
-            pool_cultos_ids: new Set()
-        };
-    });
+            // CORREÇÃO CRÍTICA: Prioridade Mesa ignora limites de frequência
+            let limiteFinal = res.vezesPorMes;
+            if (membro.aptidoes?.includes('Prioridade Mesa')) {
+                limiteFinal = 10; // Força limite alto
+            }
+
+            return {
+                ...membro,
+                escalas_no_mes: 0,
+                limite_mes: limiteFinal,
+                pool_cultos_ids: new Set(),
+                disponivel: res.disponivel // Auxiliar temporário
+            };
+        })
+        .filter(m => {
+            return m.disponivel;
+        });
 }
 
 // ============================================

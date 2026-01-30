@@ -92,6 +92,17 @@ export function podeExecutarFuncao(
         return false;
     }
 
+    // Verificação de Teto (MAX_STARS)
+    // ...
+
+    // REGRA DE PRIORIDADE:
+    // Quem tem "Prioridade Mesa" só deve fazer Mesa (para não ser roubado por outras funções processadas antes)
+    if (membro.aptidoes?.includes('Prioridade Mesa')) {
+        if (!nomeFuncao.toLowerCase().includes('mesa')) {
+            return false;
+        }
+    }
+
     // ===============================================
     // VERIFICAÇÃO DE TETO (MAX_STARS)
     // ===============================================

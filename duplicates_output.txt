@@ -1,0 +1,45 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöì VERIFICA├ç├âO DE DUPLICIDADE: DUARTE
+============================================================
+Encontrados: 2 registros
+
+­ƒåö ID: 6b9caca4-4fab-4273-98b9-a327a754a3ca
+­ƒæñ Nome: Eduardo Duarte Silva
+­ƒôà Disp. Domingo: "N├âO TENHO DISPONIBILIDADE AOS DOMINGOS"
+Ô£¿ Aptid├Áes: []
+­ƒƒó Ativo: true
+
+­ƒåö ID: 7163e575-36a3-4910-a5c1-78b92ccc12e8
+­ƒæñ Nome: Jose Duarte
+­ƒôà Disp. Domingo: "SIM, 3 DOMINGOS POR M├èS"
+Ô£¿ Aptid├Áes: ["P├║lpito","Prioridade Mesa"]
+­ƒƒó Ativo: true
+node.exe : Assertion 
+failed: 
+!(handle->flags & 
+UV_HANDLE_CLOSING), 
+file 
+src\win\async.c, 
+line 76
+No linha:1 
+caractere:1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Users\PLANEE-CAROL\A
+ppData\R ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Asserti   
+ on faile...sync.    
+c, line 76:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 

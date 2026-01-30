@@ -1,0 +1,52 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒôï FUN├ç├òES COM "MESA" OU "ALTAR":
+------------------------------------------------------------
+Nome: Decora├º├úo Mesa (Manh├ú)
+   Setor Pai: SANTA CEIA
+   Quantidade: 2
+   Santa Ceia: true
+   Ativo: false
+
+Nome: Desmontar Mesa (Noite)
+   Setor Pai: SANTA CEIA
+   Quantidade: 3
+   Santa Ceia: true
+   Ativo: false
+
+Nome: Montar Mesas e Toalhas
+   Setor Pai: SANTA CEIA
+   Quantidade: 1
+   Santa Ceia: true
+   Ativo: false
+
+Nome: Guardar Toalhas e Mesas (Noite)
+   Setor Pai: SANTA CEIA
+   Quantidade: 1
+   Santa Ceia: true
+   Ativo: false
+
+Nome: Mesa, ├ígua e microfone
+   Setor Pai: ALTAR
+   Quantidade: 1
+   Santa Ceia: false
+   Ativo: true
+
+
+­ƒôà CULTOS SEM SANTA CEIA:
+   2026-03-08T13:00:00.735+00:00 | domingo_manha | Culto da Fam├¡lia (Manh├ú)
+   2026-03-15T13:00:00.735+00:00 | domingo_manha | Culto da Fam├¡lia (Manh├ú)
+   2026-03-22T13:00:00.735+00:00 | domingo_manha | Culto da Fam├¡lia (Manh├ú)
+   2026-03-29T13:00:00.735+00:00 | domingo_manha | Culto da Fam├¡lia (Manh├ú)
+   2026-03-08T21:00:00.735+00:00 | domingo_noite | Culto da Fam├¡lia (Noite)
+   2026-03-15T21:00:00.735+00:00 | domingo_noite | Culto da Fam├¡lia (Noite)
+   2026-03-22T21:00:00.735+00:00 | domingo_noite | Culto da Fam├¡lia (Noite)
+   2026-03-29T21:00:00.735+00:00 | domingo_noite | Culto da Fam├¡lia (Noite)
+   2026-03-05T22:30:00.735+00:00 | quinta | Culto da Vit├│ria
+   2026-03-12T22:30:00.735+00:00 | quinta | Culto da Vit├│ria
+   2026-03-19T22:30:00.735+00:00 | quinta | Culto da Vit├│ria
+   2026-03-26T22:30:00.735+00:00 | quinta | Culto da Vit├│ria
+
+­ƒôà CULTOS COM SANTA CEIA:
+   2026-03-01T13:00:00.735+00:00 | domingo_manha | Culto da Fam├¡lia (Manh├ú)
+   2026-03-01T21:00:00.735+00:00 | domingo_noite | Culto da Fam├¡lia (Noite)
