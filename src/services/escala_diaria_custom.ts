@@ -373,17 +373,19 @@ export async function gerarEscalaComPool(
     console.log(`   👑 Casais válidos (Líder N5 + Cônjuge disponível): ${casaisDisponiveis.length}`);
 
     if (casaisDisponiveis.length > 0) {
-        // Ordenar por menor uso combinado
-        casaisDisponiveis.sort((a, b) => {
-            const totalA = a.lider.escalas_no_mes + a.conjuge.escalas_no_mes;
-            const totalB = b.lider.escalas_no_mes + b.conjuge.escalas_no_mes;
-            return totalA - totalB;
-        });
+        // ALTERNÂNCIA: Usar índice baseado na data do culto (semana do mês)
+        // Isso faz Casal A servir na semana 1, Casal B na semana 2, etc.
+        const diaCulto = parseInt(culto.data_culto.split('-')[2]) || 1; // Dia do mês
+        const semanaDoMes = Math.ceil(diaCulto / 7); // 1-5
+        const indiceCasal = (semanaDoMes - 1) % casaisDisponiveis.length;
 
-        const casalEscolhido = casaisDisponiveis[0];
+        // Ordenar para consistência (sempre mesma ordem base)
+        casaisDisponiveis.sort((a, b) => a.lider.nome_completo.localeCompare(b.lider.nome_completo));
+
+        const casalEscolhido = casaisDisponiveis[indiceCasal];
         responsavelGeral1Id = casalEscolhido.lider.id;
         responsavelGeral2Id = casalEscolhido.conjuge.id;
-        console.log(`   👑 CASAL RESPONSÁVEL GERAL: ${casalEscolhido.lider.nome_completo} + ${casalEscolhido.conjuge.nome_completo}`);
+        console.log(`   👑 CASAL RESPONSÁVEL GERAL (Semana ${semanaDoMes}, Alternância): ${casalEscolhido.lider.nome_completo} + ${casalEscolhido.conjuge.nome_completo}`);
     } else {
         // SEM FALLBACK! Se não há casal, os responsáveis ficam vazios.
         console.log(`   ⚠️ NENHUM CASAL disponível para Responsável Geral. Posição ficará vazia.`);

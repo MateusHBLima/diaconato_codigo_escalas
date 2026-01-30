@@ -249,6 +249,50 @@ function distribuirPresencaDomingos(
 }
 
 // ============================================
+// FASE 1.5: LÍDERES N5 SEMPRE PRESENTES + SINCRONIZAÇÃO DE CASAIS
+// Líderes N5 ignoram frequência e estão em TODOS os cultos
+// ============================================
+
+function sincronizarCasaisLideres(
+    membros: MembroComHistorico[],
+    todosCultos: Culto[]
+): void {
+    console.log(`   👑 Forçando Líderes N5 em TODOS os cultos...`);
+
+    // Identificar líderes Nível 5
+    const lideresN5 = membros.filter(m => m.nivel_experiencia === 5);
+
+    for (const lider of lideresN5) {
+        // REGRA 1: Líder N5 está em TODOS os cultos (ignora frequência)
+        for (const culto of todosCultos) {
+            lider.pool_cultos_ids!.add(culto.id);
+        }
+        console.log(`      ✅ ${lider.nome_completo} (N5) forçado em ${todosCultos.length} cultos`);
+
+        // REGRA 2: Cônjuge também vai em TODOS os cultos
+        const nomeConjuge = (lider as any).nome_conjuge;
+        if (!nomeConjuge) continue;
+
+        const nomeConjugeLower = nomeConjuge.toLowerCase().trim();
+        const conjuge = membros.find(m => {
+            if (m.id === lider.id) return false;
+            const nomeLower = m.nome_completo.toLowerCase().trim();
+            if (nomeLower === nomeConjugeLower) return true;
+            const primeiroNome = nomeConjugeLower.split(' ')[0];
+            if (nomeLower.includes(primeiroNome)) return true;
+            return false;
+        });
+
+        if (conjuge) {
+            for (const culto of todosCultos) {
+                conjuge.pool_cultos_ids!.add(culto.id);
+            }
+            console.log(`      ✅ ${conjuge.nome_completo} (cônjuge) forçado em ${todosCultos.length} cultos`);
+        }
+    }
+}
+
+// ============================================
 // ORQUESTRADOR PRINCIPAL
 // ============================================
 
@@ -274,6 +318,11 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
     console.log(`\n🌊 Fase 1: Distribuição de Presença`);
     distribuirPresencaQuintas(membrosQuinta, quintas);
     distribuirPresencaDomingos(membrosDomingo, domingos);
+
+    // FASE 1.5: LÍDERES N5 SEMPRE PRESENTES (IGNORAM FREQUÊNCIA)
+    // Garantir que líderes N5 + cônjuges estejam em TODOS os cultos
+    sincronizarCasaisLideres(membrosQuinta, quintas);
+    sincronizarCasaisLideres(membrosDomingo, domingos);
 
     // FASE 2: ALOCAÇÃO TÁTICA (DELEGADA AO CLONE DIÁRIO)
     console.log(`\n🧩 Fase 2: Alocação Tática (Via Clone Diário)`);
