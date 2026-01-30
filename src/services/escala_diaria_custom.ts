@@ -379,12 +379,10 @@ export async function gerarEscalaComPool(
     }
 
     if (!responsavelGeral1Id || !responsavelGeral2Id) {
-        console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto`);
-        if (lideresDisponiveis.length >= 2) {
-            responsavelGeral1Id = lideresDisponiveis[0].id;
-            responsavelGeral2Id = lideresDisponiveis[1].id;
-            console.log(`   👑 Fallback: ${lideresDisponiveis[0].nome_completo} + ${lideresDisponiveis[1].nome_completo}`);
-        }
+        console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto - Responsáveis Gerais ficarão VAZIOS`);
+        // REGRA ESTRITA: Não usar fallback de líderes individuais
+        responsavelGeral1Id = null;
+        responsavelGeral2Id = null;
     }
 
     let vagasPreenchidas = 0;
