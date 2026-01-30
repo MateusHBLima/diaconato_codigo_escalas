@@ -115,14 +115,13 @@ function distribuirPresencaQuintas(
     }
 
     // 2. Grupo 2x: Alternância Balanceada (Impar vs Par)
-    // Definir sets
     const quintasImpares: Culto[] = []; // 1ª, 3ª, 5ª...
     const quintasPares: Culto[] = [];   // 2ª, 4ª...
     let totalImpar = 0;
     let totalPar = 0;
 
     cultosOrdenados.forEach((c, idx) => {
-        if (idx % 2 === 0) { // Index 0 é a 1ª (impar na contagem humana)
+        if (idx % 2 === 0) { // Index 0 é a 1ª (impar)
             quintasImpares.push(c);
             totalImpar += ocupacao.get(c.id) || 0;
         } else {
@@ -183,7 +182,7 @@ function distribuirPresencaDomingos(
     // Sort das datas para lógica 1ª, 2ª, 3ª semana
     const datasOrdenadas = Array.from(diasMap.keys()).sort();
 
-    // 2. Identificar Casais e Solteiros
+    // 2. Identificar Duplas (Casais) e Singles
     const processados = new Set<string>();
 
     for (const mPrincipal of membros) {
@@ -199,59 +198,62 @@ function distribuirPresencaDomingos(
             );
         }
 
-        // Definir par (ou single)
         const dupla = conjuge ? [mPrincipal, conjuge] : [mPrincipal];
         dupla.forEach(d => processados.add(d.id));
 
-        // Calcular Limite da Dupla (o menor limite vence? Ou cada um tem seu limite?)
-        // Regra geral diz "3x, 2x, 1x". Se um é 3x e outro 1x, complexo.
-        // Assumindo limite do principal para simplificar a distribuição do casal.
-        // Ou melhor: usar Math.min para garantir que vão juntos.
+        // Limite da Dupla: Usar o menor limite para garantir que vão juntos
         const limite = Math.min(...dupla.map(d => d.limite_mes));
 
-        // === PASSO A: Definir SEMANAS de presença (Frequência) ===
-        const semanasAlvoIndices: number[] = []; // Indices 0, 1, 2...
+        // === PASSO A: Definir SEMANAS de presença (Frequência 3x/2x/1x) ===
+        const semanasAlvoIndices: number[] = [];
+        const totalSemanas = datasOrdenadas.length;
+
+        // Base determinística para rotação (ID numérico ou hash simples)
+        // Somar char codes para ter variedade
+        const idSum = mPrincipal.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
         if (limite >= 3) {
-            // 3 primeiras semanas
-            semanasAlvoIndices.push(0, 1, 2);
-        } else if (limite === 2) {
-            // Alternado (Sim/Não). Balanceamento simples global (Count total de pessoas escaladas no dia)
-            // Como otimização simples: Randomizar inicio ou usar ID par/impar para distribuir load
-            // Usando par/impar do mês para determinismo
-            // Se (mes + index) % 2 === 0...
-
-            // Vamos balancear simples:
-            // "Impares" (Semana 1, 3) vs "Pares" (Semana 2, 4)
-            // Arbitrariamente: IDs terminados em par -> Pares.
-            const isPar = mPrincipal.id.charCodeAt(mPrincipal.id.length - 1) % 2 === 0;
-            if (isPar) {
-                semanasAlvoIndices.push(1, 3); // Semanas 2 e 4
-            } else {
-                semanasAlvoIndices.push(0, 2); // Semanas 1 e 3
+            // 3x: 3 semanas consecutivas rotacionadas
+            // Ex 5 semanas: (0,1,2), (1,2,3), (2,3,4), (3,4,0), (4,0,1)
+            const start = idSum % totalSemanas;
+            for (let i = 0; i < 3; i++) {
+                semanasAlvoIndices.push((start + i) % totalSemanas);
             }
+        } else if (limite === 2) {
+            // 2x: Alternado com salto de 1 (Semana sim, semana não aprox)
+            // Ex 5 semanas: (0,2), (1,3), (2,4), (3,0), (4,1)
+            const start = idSum % totalSemanas;
+            semanasAlvoIndices.push(start % totalSemanas);
+            semanasAlvoIndices.push((start + 2) % totalSemanas);
         } else {
-            // 1x -> Semana com menos gente? Vamos fixar na semana 3 ou 4 para preencher fim de mes
-            semanasAlvoIndices.push(3); // Ultima semana (se houver) ou 1a
+            // 1x: Espalhado uniformemente
+            const start = idSum % totalSemanas;
+            semanasAlvoIndices.push(start);
         }
 
         // === PASSO B: Definir PERÍODO (Manhã vs Noite) ===
-        // Regra: Qualquer + Noite = Noite. Qualquer + Manha = Manha.
-        // Regra Solteiro: Qualquer -> Noite.
+        // Regra RESTRITIVA e "Qualquer = Noite"
 
-        let periodoFinal: 'manha' | 'noite' = 'noite'; // Default
+        let periodoFinal: 'manha' | 'noite' = 'noite'; // Default seguro
 
         const prefs = dupla.map(d => d.melhor_periodo_domingo?.toLowerCase() || 'qualquer');
         const temManha = prefs.some(p => p.includes('manhã'));
         const temNoite = prefs.some(p => p.includes('noite'));
-        const soQualquer = prefs.every(p => p.includes('qualquer'));
+        const soQualquer = prefs.every(p => p.includes('qualquer') || p === '');
 
         if (soQualquer) {
             periodoFinal = 'noite'; // Regra Solteiro/Casal Qualquer -> Noite
         } else if (temManha && !temNoite) {
+            // Se alguém quer manhã e ninguém EXIGE noite -> Manhã
+            // Mas espere, a regra diz: "um Qualquer, outro Noite -> Noite".
+            // E "um Qualquer, outro Manhã -> Manhã".
+            // Então se só tem (Manhã + Qualquer) ou (Manhã + Manhã) -> Manhã.
             periodoFinal = 'manha';
-        } else if (temNoite) {
-            periodoFinal = 'noite'; // Noite vence (conforme "Any + Night = Night")
+        } else {
+            // Se tem "Noite" envolvido (ex: Noite + Manhã [conflito->noite], Noite + Qualquer -> Noite)
+            // Ou se tem conflito Manhã+Noite -> priorizamos Noite por ser culto principal?
+            // Vamos assumir Noite como fallback de conflito.
+            periodoFinal = 'noite';
         }
 
         // === PASSO C: Aplicar aos cultos ===
@@ -260,7 +262,7 @@ function distribuirPresencaDomingos(
             const dataAlvo = datasOrdenadas[idx];
             const cultosDoDia = diasMap.get(dataAlvo) || [];
 
-            // Achar o culto alvo
+            // Achar o culto alvo do período correto
             const cultoAlvo = cultosDoDia.find(c => {
                 if (periodoFinal === 'manha') return c.periodo === 'domingo_manha';
                 return c.periodo === 'domingo_noite';
@@ -285,6 +287,26 @@ function gerarMotivoFalha(funcao: Funcao, periodoCulto: string): string {
     return `Sem candidato: ${motivos.join(', ')}`;
 }
 
+// Função Auxiliar para verificar "Necessidade Sentado"
+// Centraliza a lógica de Whitelist
+function verificaAptidaoSentado(membro: Membro, funcao: Funcao): boolean {
+    if (!membro.aptidoes?.includes('NECESSIDADE SENTADO')) return true;
+
+    const nomeFuncaoLower = funcao.nome.toLowerCase();
+    const setorPaiLower = funcao.setor_pai?.toLowerCase() || '';
+
+    // WHITELIST EXPLICITA
+    // 1. Correntes da Ala Azul ou Laranja
+    const ehCorrente = nomeFuncaoLower.includes('corrente');
+    const ehSetorPermitido = setorPaiLower.includes('azul') || setorPaiLower.includes('laranja');
+
+    if (ehCorrente && ehSetorPermitido) {
+        return true;
+    }
+
+    return false; // Bloqueado p/ qualquer outra coisa (Apoio, Porta, Púlpito, etc)
+}
+
 function encontrarCandidatoRestrito(
     poolMembros: MembroComHistorico[], // JÁ FILTRADO PELA FASE 1
     funcao: Funcao,
@@ -294,34 +316,21 @@ function encontrarCandidatoRestrito(
     numeroVaga: number = 0
 ): MembroComHistorico | null {
 
-    const nomeFuncaoLower = funcao.nome.toLowerCase();
-
-    // Verificação de permissão 'NECESSIDADE SENTADO'
-    const membroPodeExecutar = (membro: MembroComHistorico): boolean => {
-        if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
-            const ehCorrente = nomeFuncaoLower.includes('corrente');
-            const setorPaiLower = funcao.setor_pai?.toLowerCase() || '';
-            const ehSetorAzulOuLaranja = setorPaiLower.includes('azul') || setorPaiLower.includes('laranja');
-            if (ehCorrente && ehSetorAzulOuLaranja) return true;
-            return false;
-        }
-        return true;
-    };
-
     if (membroObrigatorioId) {
         const membro = poolMembros.find(m => m.id === membroObrigatorioId);
-        if (!membro) return null; // Membro não está no pool do dia? Falha crítica de repetição
-        if (!membroPodeExecutar(membro)) return null;
+        if (!membro) return null; // Membro não está no pool do dia?
+        // Validação extra de segurança para repetição forçada
+        if (!verificaAptidaoSentado(membro, funcao)) return null;
         return membro;
     }
 
     const candidatos = poolMembros.filter(membro => {
-        // 1. Filtro Básico (Já está no culto? etc)
+        // 1. Filtro Básico
         if (membrosUsadosNoCulto.has(membro.id) && funcao.regras !== 'REPETIR_PESSOA') return false;
 
-        // 2. Aptidões
-        if (nomeFuncaoLower.includes('mesa') && !membro.aptidoes?.includes('Prioridade Mesa')) return false;
-        if (membro.aptidoes?.includes('NECESSIDADE SENTADO') && !membroPodeExecutar(membro)) return false;
+        // 2. Aptidões Especiais
+        if (funcao.nome.toLowerCase().includes('mesa') && !membro.aptidoes?.includes('Prioridade Mesa')) return false;
+        if (!verificaAptidaoSentado(membro, funcao)) return false;
 
         // 3. Sistema de Estrelas
         if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo, funcao.setor_pai, numeroVaga)) return false;
@@ -337,7 +346,7 @@ function encontrarCandidatoRestrito(
     // Classificação
     const nivelExigido = getNivelExigidoParaFuncao(funcao.nome);
     candidatos.sort((a, b) => {
-        // 1. Nível
+        // 1. Nível (Prioridade Absoluta)
         const diffA = Math.abs((a.nivel_experiencia || 1) - nivelExigido);
         const diffB = Math.abs((b.nivel_experiencia || 1) - nivelExigido);
         if (diffA !== diffB) return diffA - diffB;
@@ -345,10 +354,10 @@ function encontrarCandidatoRestrito(
         // 2. Quem serviu menos no mês (Load balance)
         if (a.escalas_no_mes !== b.escalas_no_mes) return a.escalas_no_mes - b.escalas_no_mes;
 
-        // 3. Quem serviu há mais tempo (Rodízio/Descanso) - NOVO PEDIDO
+        // 3. Quem serviu há mais tempo (Rodízio/Descanso)
         const dataA = a.ultima_escala || '0000-00-00';
         const dataB = b.ultima_escala || '0000-00-00';
-        return dataA.localeCompare(dataB); // Mais antigo vem primeiro
+        return dataA.localeCompare(dataB); // Mais antigo ('0000') vem primeiro
     });
 
     return candidatos[0];
@@ -363,11 +372,9 @@ async function alocarResponsaveisGerais(
 
     const mapaAlocacao = new Map<string, { r1: string, r2: string }>();
 
-    // Identificar casais de líderes
+    // Identificar casais
     const casais: Array<{ l1: Membro, l2: Membro }> = [];
     const processados = new Set<string>();
-
-    // Ordenar para rodízio determinístico
     lideres.sort((a, b) => a.nome_completo.localeCompare(b.nome_completo));
 
     for (const l of lideres) {
@@ -378,9 +385,6 @@ async function alocarResponsaveisGerais(
             casais.push({ l1: l, l2: conjuge });
             processados.add(l.id);
             processados.add(conjuge.id);
-        } else {
-            // Líder solteiro? Tratar como casal fake pra rotação ou ignorar?
-            // Regra do legado: "Sempre um casal". Vamos ignorar solteiros por ora ou pareá-los
         }
     }
 
@@ -390,7 +394,7 @@ async function alocarResponsaveisGerais(
         if (casais.length === 0) break;
         const casal = casais[index % casais.length];
 
-        // Salvar no DB direto (datas_cultos)
+        // Salvar no DB
         await supabase.from('datas_cultos').update({
             responsavel_geral_1_id: casal.l1.id,
             responsavel_geral_2_id: casal.l2.id
@@ -465,8 +469,9 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
             const ocupantesFuncao: string[] = [];
             for (let i = 0; i < funcao.quantidade_pessoas; i++) {
 
-                // Lógica de Repetição (Simplificada do legado)
                 let membroObrigatorioId: string | null = null;
+
+                // Lógica de Repetição (Regras Detalhadas: Máquinas, Banheiros, etc)
                 const regraDetalhada = buscarRegraDetalhada(funcao.nome, funcao.setor_pai);
                 if (regraDetalhada) {
                     const mapping = regraDetalhada.mapeamento.find(m => m.vagaDestino === i);
@@ -474,17 +479,32 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
                         // Buscar fonte no mapa local
                         for (const [chave, ocupantes] of quemEstaOnde.entries()) {
                             if (chave.toLowerCase().includes(mapping.fontePattern.toLowerCase())) {
+                                // Filtro extra de Setor se necessário
+                                if (mapping.fonteSetor && !chave.toLowerCase().includes(mapping.fonteSetor.toLowerCase())) {
+                                    continue;
+                                }
+
                                 const cand = ocupantes[mapping.vagaFonte];
                                 if (cand && cand !== 'VAZIO') {
-                                    membroObrigatorioId = cand;
-                                    break;
+                                    // TRAVA DE SEGURANÇA: Verificar se o membro pode assumir o destino
+                                    // Ex: Alguém da Corrente (que senta) indo pro Apoio (em pé)
+                                    const membroObj = poolDoDia.find(m => m.id === cand)
+                                        || membrosDomingo.find(m => m.id === cand) // Fallback busca global
+                                        || membrosQuinta.find(m => m.id === cand);
+
+                                    if (membroObj && verificaAptidaoSentado(membroObj, funcao)) {
+                                        membroObrigatorioId = cand;
+                                        break;
+                                    } else {
+                                        console.log(`   🚫 Repetição bloqueada: ${membroObj?.nome_completo} não pode ir para ${funcao.nome}`);
+                                    }
                                 }
                             }
                         }
                     }
                 }
 
-                // Lógica Oferta (Líderes)
+                // Lógica Oferta (Líderes) - Hardcoded conforme legacy
                 if (!membroObrigatorioId && funcao.setor_pai?.toLowerCase().includes('oferta')) {
                     if (i === 0 && lideres?.r1) membroObrigatorioId = lideres.r1;
                     else if (i === 1 && lideres?.r2) membroObrigatorioId = lideres.r2;
@@ -503,8 +523,6 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
                 if (candidato) {
                     if (!membroObrigatorioId) {
                         membrosUsadosNesteCulto.add(candidato.id);
-                        // Atualizar stats NO OBJETO ORIGINAL DA LISTA COMPLETA 
-                        // (para o sort de rodízio funcionar nos próximos dias)
                         candidato.escalas_no_mes++;
                         candidato.ultima_escala = culto.data_culto;
                     }
@@ -529,6 +547,7 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
                     vagasV++;
                 }
             }
+            // Guarda com chave composta para diferenciar setores (Ex: Interno|PORTA - A1 vs Interno|PORTA - A2)
             quemEstaOnde.set(`${funcao.nome}|${funcao.setor_pai}`, ocupantesFuncao);
         }
         alocacoesTotais.push(...alocacoesCulto);

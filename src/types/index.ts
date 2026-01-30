@@ -15,6 +15,7 @@ export interface Membro {
     melhor_periodo_domingo: string;
     monitor: string;
     nivel_experiencia?: number; // 1 a 5
+    nome_conjuge?: string;
 }
 
 export interface Funcao {
