@@ -4,7 +4,7 @@ Nova lógica: 3x→primeiras 3, 2x→completa+alterna, 1x→preenche até 24
 
 
 ## Quinta - quinta-feira, 01/01/2026
-ID: 114fcabd-2937-4211-b5d3-018b76488f5d | Santa Ceia: Não
+ID: c7b7d046-c721-4182-bf34-10934e853fe6 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -17,6 +17,8 @@ ID: 114fcabd-2937-4211-b5d3-018b76488f5d | Santa Ceia: Não
 | Idalamar Chagas | 3x | 4★ | Andre | - | 3x/mês |
 | Gabriel Luiz Grabowski | 3x | 4★ | Denilce | - | 3x/mês |
 | Alexandre Anater | 3x | 4★ | - | - | 3x/mês |
+| Giancarlo Brandalise | 2x | 4★ | Elizandra | - | 2x/mês |
+| Elizandra Gloria Martins Br... | 2x | 4★ | Giancarlo | - | 2x/mês |
 | Andre chagas | 3x | 3★ | Idalamar | - | 3x/mês |
 | José Dalzotto | 3x | 3★ | Daise | - | 3x/mês |
 | José de Arimateia da Silva ... | 3x | 3★ | Dyeime | - | 3x/mês |
@@ -30,19 +32,21 @@ ID: 114fcabd-2937-4211-b5d3-018b76488f5d | Santa Ceia: Não
 | Adilson Miranda Neto | 2x | 2★ | - | - | 2x/mês |
 | Dari Kruger | 2x | 2★ | - | - | 2x/mês |
 | Dulcilene de Nazaré Costa d... | 2x | 2★ | José | - | 2x/mês |
+| José Carlos Cavalcante da S... | 2x | 2★ | Dulcilene | - | 2x/mês |
 | Antonio osni Cardoso | 3x | 1★ | - | - | 3x/mês |
 | Anderson Rodrigues de Andra... | 2x | 1★ | MARISA | NECESSIDADE SENTADO | 2x/mês |
+| Cícero Bezerra de Araújo | 2x | 1★ | - | NECESSIDADE SENTADO | 2x/mês |
 
-**📊 Total: 24 membros** (mínimo: 24)
+**📊 Total: 28 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
 | Prioridade Mesa | 1 |
 | 3x | 13 |
-| 2x | 6 |
+| 2x | 10 |
 
 ## Domingo Manhã - domingo, 04/01/2026
-ID: 58061348-1e67-42b1-bb71-932febc4b669 | Santa Ceia: Sim
+ID: 9926430f-108d-4337-8ddd-86dd6a7d6f1b | Santa Ceia: Sim
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -72,7 +76,7 @@ ID: 58061348-1e67-42b1-bb71-932febc4b669 | Santa Ceia: Sim
 | Rogério Adalberto Ferreira | 1x | 2★ | MANHÃ | - | - | 1x/mês |
 | André Aguiar | 2x | 1★ | MANHÃ | Tatiane | - | 2x/mês |
 
-**📊 Total: 25 membros** (mínimo: 24)
+**📊 Total: 25 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -82,7 +86,7 @@ ID: 58061348-1e67-42b1-bb71-932febc4b669 | Santa Ceia: Sim
 | 1x | 1 |
 
 ## Domingo Noite - domingo, 04/01/2026
-ID: d3108058-2a91-4f1a-bdea-58a2e831f598 | Santa Ceia: Sim
+ID: dd5e78b5-1292-4cae-9db4-a15ebf704970 | Santa Ceia: Sim
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -117,7 +121,7 @@ ID: d3108058-2a91-4f1a-bdea-58a2e831f598 | Santa Ceia: Sim
 | Francielle Silva | 3x | 1★ | NOITE | - | - | 3x/mês |
 | Antonio osni Cardoso | 2x | 1★ | NOITE | - | - | 2x/mês |
 
-**📊 Total: 30 membros** (mínimo: 24)
+**📊 Total: 30 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -127,7 +131,7 @@ ID: d3108058-2a91-4f1a-bdea-58a2e831f598 | Santa Ceia: Sim
 | 1x | 1 |
 
 ## Quinta - quinta-feira, 08/01/2026
-ID: 5ef62805-6b3f-476f-9903-6e7c6c12d49f | Santa Ceia: Não
+ID: b8eaccd6-6aff-40b7-a9c1-4a8e131ea0a5 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -140,32 +144,36 @@ ID: 5ef62805-6b3f-476f-9903-6e7c6c12d49f | Santa Ceia: Não
 | Idalamar Chagas | 3x | 4★ | Andre | - | 3x/mês |
 | Gabriel Luiz Grabowski | 3x | 4★ | Denilce | - | 3x/mês |
 | Alexandre Anater | 3x | 4★ | - | - | 3x/mês |
-| Giancarlo Brandalise | 2x | 4★ | Elizandra | - | 2x/mês |
-| Elizandra Gloria Martins Br... | 2x | 4★ | Giancarlo | - | 2x/mês |
 | Jose Celestino Rangel Morey | 2x | 4★ | Maria | - | 2x/mês |
+| José Henrique Ferreira | 2x | 4★ | - | - | 2x/mês |
 | Andre chagas | 3x | 3★ | Idalamar | - | 3x/mês |
 | José Dalzotto | 3x | 3★ | Daise | - | 3x/mês |
 | José de Arimateia da Silva ... | 3x | 3★ | Dyeime | - | 3x/mês |
 | Josiane Massaneiro Stahlsch... | 3x | 3★ | Wesley | - | 3x/mês |
 | Denilce grabowski | 3x | 3★ | Gabriel | - | 3x/mês |
 | Dyeime Dayane Ferreira Abreu | 3x | 3★ | José | - | 3x/mês |
+| Juliano Lange | 2x | 3★ | - | - | 2x/mês |
+| Leandro Zimmermann | 2x | 3★ | - | - | 2x/mês |
+| Maria Del Valle May Cedeño | 2x | 3★ | Jose | - | 2x/mês |
 | Elvis correa | 3x | 2★ | - | - | 3x/mês |
 | Paulo Felipe | 3x | 2★ | - | - | 3x/mês |
-| José Carlos Cavalcante da S... | 2x | 2★ | Dulcilene | - | 2x/mês |
 | Jheyson Deotti | 2x | 2★ | - | - | 2x/mês |
+| JEFERSON dos Santos Fernandes | 2x | 2★ | - | - | 2x/mês |
 | Antonio osni Cardoso | 3x | 1★ | - | - | 3x/mês |
-| Cícero Bezerra de Araújo | 2x | 1★ | - | NECESSIDADE SENTADO | 2x/mês |
+| Jonas Jesus Belmonte | 2x | 1★ | - | - | 2x/mês |
+| Janaína Rezendes NUnes | 2x | 1★ | - | NECESSIDADE SENTADO | 2x/mês |
+| Neiva Aguiar | 2x | 1★ | - | - | 2x/mês |
 
-**📊 Total: 24 membros** (mínimo: 24)
+**📊 Total: 28 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
 | Prioridade Mesa | 1 |
 | 3x | 13 |
-| 2x | 6 |
+| 2x | 10 |
 
 ## Domingo Manhã - domingo, 11/01/2026
-ID: 5fbd7a05-98c6-426b-9595-56f0df8cd97e | Santa Ceia: Não
+ID: 3af77142-4a61-48e6-8e60-ed6ba6f05a2b | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -201,7 +209,7 @@ ID: 5fbd7a05-98c6-426b-9595-56f0df8cd97e | Santa Ceia: Não
 | Jonas Jesus Belmonte | 2x | 1★ | MANHÃ | - | - | 2x/mês |
 | Nadi Bicicgo Canello | 1x | 1★ | MANHÃ | - | NECESSIDADE SENTADO | 1x/mês |
 
-**📊 Total: 31 membros** (mínimo: 24)
+**📊 Total: 31 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -211,7 +219,7 @@ ID: 5fbd7a05-98c6-426b-9595-56f0df8cd97e | Santa Ceia: Não
 | 1x | 3 |
 
 ## Domingo Noite - domingo, 11/01/2026
-ID: e0499f05-a6f9-4bd7-9369-8eea41cb7fa9 | Santa Ceia: Não
+ID: 1ae57009-4eef-4cdd-b90a-2b36c40baab2 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -238,7 +246,7 @@ ID: e0499f05-a6f9-4bd7-9369-8eea41cb7fa9 | Santa Ceia: Não
 | Josiel Gelbari | 3x | 1★ | NOITE | Betty | - | 3x/mês |
 | Anderson Rodrigues de Andra... | 2x | 1★ | NOITE | MARISA | NECESSIDADE SENTADO | 2x/mês |
 
-**📊 Total: 22 membros** (mínimo: 24)
+**📊 Total: 22 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -247,7 +255,7 @@ ID: e0499f05-a6f9-4bd7-9369-8eea41cb7fa9 | Santa Ceia: Não
 | 2x | 11 |
 
 ## Quinta - quinta-feira, 15/01/2026
-ID: 26f852d1-12ab-4fda-a9a2-da4f3c57d38d | Santa Ceia: Não
+ID: ce9cf179-6268-45d3-8b84-8ab061460605 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -260,32 +268,36 @@ ID: 26f852d1-12ab-4fda-a9a2-da4f3c57d38d | Santa Ceia: Não
 | Idalamar Chagas | 3x | 4★ | Andre | - | 3x/mês |
 | Gabriel Luiz Grabowski | 3x | 4★ | Denilce | - | 3x/mês |
 | Alexandre Anater | 3x | 4★ | - | - | 3x/mês |
-| José Henrique Ferreira | 2x | 4★ | - | - | 2x/mês |
+| Carla Santos Caetano | 2x | 4★ | - | - | 2x/mês |
+| João Batista da Silva | 2x | 4★ | Marisa | - | 2x/mês |
+| Márcia Azevedo | 2x | 4★ | Everton | - | 2x/mês |
 | Andre chagas | 3x | 3★ | Idalamar | - | 3x/mês |
 | José Dalzotto | 3x | 3★ | Daise | - | 3x/mês |
 | José de Arimateia da Silva ... | 3x | 3★ | Dyeime | - | 3x/mês |
 | Josiane Massaneiro Stahlsch... | 3x | 3★ | Wesley | - | 3x/mês |
 | Denilce grabowski | 3x | 3★ | Gabriel | - | 3x/mês |
 | Dyeime Dayane Ferreira Abreu | 3x | 3★ | José | - | 3x/mês |
-| Juliano Lange | 2x | 3★ | - | - | 2x/mês |
-| Leandro Zimmermann | 2x | 3★ | - | - | 2x/mês |
+| Marisa Aparecida Costa | 2x | 3★ | João | - | 2x/mês |
+| Valdecir Teixeira | 2x | 3★ | Eloisa | - | 2x/mês |
+| Sorilene Ramos Moreira | 2x | 3★ | - | - | 2x/mês |
+| Solange Pimentel Bueno Gimenez | 2x | 3★ | - | - | 2x/mês |
+| Eduardo Vargas Serpa | 2x | 3★ | - | - | 2x/mês |
 | Elvis correa | 3x | 2★ | - | - | 3x/mês |
 | Paulo Felipe | 3x | 2★ | - | - | 3x/mês |
-| JEFERSON dos Santos Fernandes | 2x | 2★ | - | - | 2x/mês |
+| Wesley Stahlschmidt Alves | 2x | 2★ | Josiane | - | 2x/mês |
+| Tulio de Melo | 2x | 2★ | - | - | 2x/mês |
 | Antonio osni Cardoso | 3x | 1★ | - | - | 3x/mês |
-| Jonas Jesus Belmonte | 2x | 1★ | - | - | 2x/mês |
-| Janaína Rezendes NUnes | 2x | 1★ | - | NECESSIDADE SENTADO | 2x/mês |
 
-**📊 Total: 24 membros** (mínimo: 24)
+**📊 Total: 28 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
 | Prioridade Mesa | 1 |
 | 3x | 13 |
-| 2x | 6 |
+| 2x | 10 |
 
 ## Domingo Manhã - domingo, 18/01/2026
-ID: c5773cec-4a3e-4f8c-914f-61e1d6a0cf3e | Santa Ceia: Não
+ID: 8a0d47cc-f9c0-4dc0-aecf-6ca78909fb51 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -316,7 +328,7 @@ ID: c5773cec-4a3e-4f8c-914f-61e1d6a0cf3e | Santa Ceia: Não
 | André Aguiar | 2x | 1★ | MANHÃ | Tatiane | - | 2x/mês |
 | Janaína Rezendes NUnes | 1x | 1★ | MANHÃ | - | NECESSIDADE SENTADO | 1x/mês |
 
-**📊 Total: 26 membros** (mínimo: 24)
+**📊 Total: 26 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -326,7 +338,7 @@ ID: c5773cec-4a3e-4f8c-914f-61e1d6a0cf3e | Santa Ceia: Não
 | 1x | 3 |
 
 ## Domingo Noite - domingo, 18/01/2026
-ID: 951870f3-7fe6-44b8-b956-eb216ccee241 | Santa Ceia: Não
+ID: 9c4ee2ab-e832-4adf-b158-944b7ffbaa8b | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -362,7 +374,7 @@ ID: 951870f3-7fe6-44b8-b956-eb216ccee241 | Santa Ceia: Não
 | Francielle Silva | 3x | 1★ | NOITE | - | - | 3x/mês |
 | Antonio osni Cardoso | 2x | 1★ | NOITE | - | - | 2x/mês |
 
-**📊 Total: 31 membros** (mínimo: 24)
+**📊 Total: 31 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -372,7 +384,7 @@ ID: 951870f3-7fe6-44b8-b956-eb216ccee241 | Santa Ceia: Não
 | 1x | 2 |
 
 ## Quinta - quinta-feira, 22/01/2026
-ID: 3eeefbcc-d299-43b5-b595-202fb924f53d | Santa Ceia: Não
+ID: 71c1cbce-2128-4f79-8f8c-41ae22f5b510 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -381,14 +393,8 @@ ID: 3eeefbcc-d299-43b5-b595-202fb924f53d | Santa Ceia: Não
 | Luciane mendes | 10x | 5★ | Gustavo | - | Líder N5 |
 | Érico Andrei Bueno | 10x | 5★ | Andreia | - | Líder N5 |
 | Jose Duarte | 10x | 4★ | - | Púlpito, Prioridade Mesa | Prioridade Mesa |
-| Carla Santos Caetano | 2x | 4★ | - | - | 2x/mês |
-| João Batista da Silva | 2x | 4★ | Marisa | - | 2x/mês |
 | Dane de Matos | 1x | 4★ | Jean | - | 1x/mês |
 | Jean Carlo de Matos | 1x | 4★ | Dane | - | 1x/mês |
-| Maria Del Valle May Cedeño | 2x | 3★ | Jose | - | 2x/mês |
-| Marisa Aparecida Costa | 2x | 3★ | João | - | 2x/mês |
-| Sorilene Ramos Moreira | 2x | 3★ | - | - | 2x/mês |
-| Wesley Stahlschmidt Alves | 2x | 2★ | Josiane | - | 2x/mês |
 | Mateus Henrique Brignoli Lima | 2x | 2★ | - | - | 2x/mês |
 | David Rosa | 1x | 2★ | - | - | 1x/mês |
 | Lucas Thome de Souza | 1x | 2★ | - | - | 1x/mês |
@@ -399,16 +405,16 @@ ID: 3eeefbcc-d299-43b5-b595-202fb924f53d | Santa Ceia: Não
 | Eroni Corrêa Rodrigues de Lima | 1x | 1★ | - | - | 1x/mês |
 | Nadi Bicicgo Canello | 1x | 1★ | - | NECESSIDADE SENTADO | 1x/mês |
 
-**📊 Total: 22 membros** (mínimo: 24)
+**📊 Total: 16 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
 | Prioridade Mesa | 1 |
-| 2x | 7 |
+| 2x | 1 |
 | 1x | 10 |
 
 ## Domingo Manhã - domingo, 25/01/2026
-ID: 19eba21a-15cd-40e6-bd8c-45a69565c006 | Santa Ceia: Não
+ID: 19649a47-f4ee-4c2c-b59a-e0ae6a9d13c3 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -444,7 +450,7 @@ ID: 19eba21a-15cd-40e6-bd8c-45a69565c006 | Santa Ceia: Não
 | Anildo Valentim Rodrigues d... | 1x | 1★ | MANHÃ | - | - | 1x/mês |
 | Eroni Corrêa Rodrigues de Lima | 1x | 1★ | MANHÃ | - | - | 1x/mês |
 
-**📊 Total: 31 membros** (mínimo: 24)
+**📊 Total: 31 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -454,7 +460,7 @@ ID: 19eba21a-15cd-40e6-bd8c-45a69565c006 | Santa Ceia: Não
 | 1x | 3 |
 
 ## Domingo Noite - domingo, 25/01/2026
-ID: b66e0ce9-463b-405e-80e2-a2409701b630 | Santa Ceia: Não
+ID: 95365145-9f5a-4e69-8b4a-280b5c0f30c8 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -479,7 +485,7 @@ ID: b66e0ce9-463b-405e-80e2-a2409701b630 | Santa Ceia: Não
 | Josiel Gelbari | 3x | 1★ | NOITE | Betty | - | 3x/mês |
 | Anderson Rodrigues de Andra... | 2x | 1★ | NOITE | MARISA | NECESSIDADE SENTADO | 2x/mês |
 
-**📊 Total: 20 membros** (mínimo: 24)
+**📊 Total: 20 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
@@ -489,7 +495,7 @@ ID: b66e0ce9-463b-405e-80e2-a2409701b630 | Santa Ceia: Não
 | 1x | 1 |
 
 ## Quinta - quinta-feira, 29/01/2026
-ID: 94f0134f-6006-4ee3-a134-5d50157d59d1 | Santa Ceia: Não
+ID: a24697aa-d0c8-454c-a0b6-e6259dab36c2 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -498,27 +504,21 @@ ID: 94f0134f-6006-4ee3-a134-5d50157d59d1 | Santa Ceia: Não
 | Luciane mendes | 10x | 5★ | Gustavo | - | Líder N5 |
 | Érico Andrei Bueno | 10x | 5★ | Andreia | - | Líder N5 |
 | Jose Duarte | 10x | 4★ | - | Púlpito, Prioridade Mesa | Prioridade Mesa |
-| Márcia Azevedo | 2x | 4★ | Everton | - | 2x/mês |
 | Cintia de Almeida Fernandes | 1x | 4★ | - | - | 1x/mês |
 | Pedro Clemente de Souza | 1x | 4★ | - | - | 1x/mês |
 | Flavio Juliano Meneghelli | 1x | 4★ | - | - | 1x/mês |
 | Maria Eduarda Marques dos S... | 1x | 4★ | Joel | - | 1x/mês |
-| Valdecir Teixeira | 2x | 3★ | Eloisa | - | 2x/mês |
-| Solange Pimentel Bueno Gimenez | 2x | 3★ | - | - | 2x/mês |
-| Eduardo Vargas Serpa | 2x | 3★ | - | - | 2x/mês |
 | Eloisa Elena Balock Teixeira | 1x | 3★ | Valdecir | - | 1x/mês |
-| Tulio de Melo | 2x | 2★ | - | - | 2x/mês |
 | Rafael Souza de Oliveira | 2x | 2★ | - | - | 2x/mês |
 | Eduardo Duarte Silva | 1x | 2★ | - | - | 1x/mês |
 | Roberto Goes | 1x | 2★ | - | - | 1x/mês |
 | Mellânia Guimarães | 1x | 2★ | - | - | 1x/mês |
-| Neiva Aguiar | 2x | 1★ | - | - | 2x/mês |
 | Anildo Valentim Rodrigues d... | 1x | 1★ | - | - | 1x/mês |
 
-**📊 Total: 21 membros** (mínimo: 24)
+**📊 Total: 15 membros** (mínimo: 28)
 | Categoria | Qtd |
 |-----------|-----|
 | Líder N5 | 4 |
 | Prioridade Mesa | 1 |
-| 2x | 7 |
+| 2x | 1 |
 | 1x | 9 |

@@ -6,7 +6,7 @@ import { supabase } from '../src/config/supabase.js';
 import { parseDisponibilidade } from '../src/services/parser.js';
 import fs from 'fs';
 
-const MINIMO_MEMBROS = 24;
+const MINIMO_MEMBROS = 28;
 
 interface Membro {
     id: string;

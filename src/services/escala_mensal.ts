@@ -88,7 +88,7 @@ function distribuirPresencaQuintas(
     membros: MembroComHistorico[],
     cultos: Culto[]
 ): void {
-    const MINIMO_MEMBROS = 24; // Mínimo de membros por culto
+    const MINIMO_MEMBROS = 28; // Mínimo de membros por culto
 
     // Ordenar cultos cronologicamente
     const cultosOrdenados = [...cultos].sort((a, b) => a.data_culto.localeCompare(b.data_culto));
