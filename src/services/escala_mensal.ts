@@ -296,6 +296,29 @@ function sincronizarCasaisLideres(
 }
 
 // ============================================
+// FASE 1.6: MEMBROS COM PRIORIDADE MESA SEMPRE PRESENTES
+// José Duarte e outros com "Prioridade Mesa" devem estar em TODOS os cultos
+// ============================================
+
+function sincronizarMembrosMesa(
+    membros: MembroComHistorico[],
+    todosCultos: Culto[]
+): void {
+    console.log(`   🍽️ Forçando membros com Prioridade Mesa em TODOS os cultos...`);
+
+    // Identificar membros com aptidão "Prioridade Mesa"
+    const membrosMesa = membros.filter(m => m.aptidoes?.includes('Prioridade Mesa'));
+
+    for (const membro of membrosMesa) {
+        // REGRA: Membro com Prioridade Mesa está em TODOS os cultos (ignora frequência)
+        for (const culto of todosCultos) {
+            membro.pool_cultos_ids!.add(culto.id);
+        }
+        console.log(`      ✅ ${membro.nome_completo} (Prioridade Mesa) forçado em ${todosCultos.length} cultos`);
+    }
+}
+
+// ============================================
 // ORQUESTRADOR PRINCIPAL
 // ============================================
 
@@ -326,6 +349,11 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
     // Garantir que líderes N5 + cônjuges estejam em TODOS os cultos
     sincronizarCasaisLideres(membrosQuinta, quintas);
     sincronizarCasaisLideres(membrosDomingo, domingos);
+
+    // FASE 1.6: MEMBROS COM PRIORIDADE MESA SEMPRE PRESENTES
+    // José Duarte e outros com aptidão "Prioridade Mesa" devem estar em TODOS os cultos
+    sincronizarMembrosMesa(membrosQuinta, quintas);
+    sincronizarMembrosMesa(membrosDomingo, domingos);
 
     // FASE 2: ALOCAÇÃO TÁTICA (DELEGADA AO CLONE DIÁRIO)
     console.log(`\n🧩 Fase 2: Alocação Tática (Via Clone Diário)`);
