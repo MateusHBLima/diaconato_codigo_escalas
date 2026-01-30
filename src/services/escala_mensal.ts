@@ -88,6 +88,8 @@ function distribuirPresencaQuintas(
     membros: MembroComHistorico[],
     cultos: Culto[]
 ): void {
+    const MINIMO_MEMBROS = 24; // Mínimo de membros por culto
+
     // Ordenar cultos cronologicamente
     const cultosOrdenados = [...cultos].sort((a, b) => a.data_culto.localeCompare(b.data_culto));
 
@@ -97,56 +99,94 @@ function distribuirPresencaQuintas(
 
     // Separar grupos por frequência
     const grupo3x = membros.filter(m => m.limite_mes >= 3);
-    const grupo2x = membros.filter(m => m.limite_mes === 2);
-    const grupo1x = membros.filter(m => m.limite_mes === 1);
+    const grupo2x = [...membros.filter(m => m.limite_mes === 2)]; // Cópia para consumir
+    const grupo1x = [...membros.filter(m => m.limite_mes === 1)]; // Cópia para consumir
 
-    // 1. Grupo 3x: Quintas 1, 2 e 3 (Rígido)
+    // Identificar as 3 primeiras quintas e as restantes
+    const primeirasTresQuintas = cultosOrdenados.slice(0, 3);
+    const quintasRestantes = cultosOrdenados.slice(3);
+
+    console.log(`   📅 Quintas do mês: ${cultosOrdenados.length} (3 primeiras + ${quintasRestantes.length} restantes)`);
+    console.log(`   👥 Grupos: 3x=${grupo3x.length}, 2x=${grupo2x.length}, 1x=${grupo1x.length}`);
+
+    // ============================================
+    // PASSO 1: Grupo 3x vai nas 3 primeiras quintas
+    // ============================================
     for (const m of grupo3x) {
-        for (let i = 0; i < 3 && i < cultosOrdenados.length; i++) {
-            const c = cultosOrdenados[i];
+        for (const c of primeirasTresQuintas) {
             m.pool_cultos_ids!.add(c.id);
             ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
         }
     }
+    console.log(`   ✅ 3x: ${grupo3x.length} membros alocados nas 3 primeiras quintas`);
 
-    // 2. Grupo 2x: Alternância Balanceada (Impar vs Par)
-    const quintasImpares: Culto[] = []; // 1ª, 3ª, 5ª...
-    const quintasPares: Culto[] = [];   // 2ª, 4ª...
-    let totalImpar = 0;
-    let totalPar = 0;
+    // ============================================
+    // PASSO 2: Grupo 2x completa as 3 primeiras quintas até 24 membros
+    // ============================================
+    const membros2xUsados = new Set<string>(); // Track quem já foi usado
 
-    cultosOrdenados.forEach((c, idx) => {
-        if (idx % 2 === 0) { // Index 0 é a 1ª (impar)
-            quintasImpares.push(c);
-            totalImpar += ocupacao.get(c.id) || 0;
-        } else {
-            quintasPares.push(c);
-            totalPar += ocupacao.get(c.id) || 0;
+    for (const c of primeirasTresQuintas) {
+        const atual = ocupacao.get(c.id) || 0;
+        const faltam = Math.max(0, MINIMO_MEMBROS - atual);
+
+        if (faltam > 0) {
+            console.log(`   🔄 Quinta ${c.data_culto}: tem ${atual}, faltam ${faltam} para ${MINIMO_MEMBROS}`);
+
+            // Pegar membros 2x que ainda não foram usados
+            let preenchidos = 0;
+            for (const m of grupo2x) {
+                if (membros2xUsados.has(m.id)) continue;
+                if (preenchidos >= faltam) break;
+
+                m.pool_cultos_ids!.add(c.id);
+                ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
+                membros2xUsados.add(m.id);
+                preenchidos++;
+            }
         }
-    });
+    }
 
-    for (const m of grupo2x) {
-        // Escolher lado com MENOS pessoas
-        let alvos: Culto[] = [];
-        if (totalImpar <= totalPar) {
-            alvos = quintasImpares;
-            totalImpar++; // Incrementa estimativa p/ próximo
-        } else {
-            alvos = quintasPares;
-            totalPar++;
-        }
+    // ============================================
+    // PASSO 3: Grupo 2x restante vai para quintas restantes (alternância dia sim/dia não)
+    // ============================================
+    const membros2xSobrando = grupo2x.filter(m => !membros2xUsados.has(m.id));
+    console.log(`   🔄 2x: ${membros2xUsados.size} usados nas primeiras, ${membros2xSobrando.length} sobrando`);
 
-        alvos.forEach(c => {
-            m.pool_cultos_ids!.add(c.id);
-            ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
+    if (quintasRestantes.length > 0 && membros2xSobrando.length > 0) {
+        // Separar quintas restantes em ímpares e pares (índice relativo)
+        const quintasImparesRest: Culto[] = []; // 4ª, 6ª... (semana par do mês)
+        const quintasParesRest: Culto[] = [];   // 5ª, 7ª... (semana ímpar do mês)
+
+        quintasRestantes.forEach((c, idx) => {
+            if (idx % 2 === 0) quintasImparesRest.push(c);
+            else quintasParesRest.push(c);
         });
+
+        // Distribuir alternadamente
+        let toggle = false;
+        for (const m of membros2xSobrando) {
+            const alvos = toggle ? quintasParesRest : quintasImparesRest;
+            toggle = !toggle;
+
+            // Pegar no máximo 2 quintas (respeitando limite 2x)
+            const qtdAlocar = Math.min(2, alvos.length);
+            for (let i = 0; i < qtdAlocar; i++) {
+                const c = alvos[i];
+                m.pool_cultos_ids!.add(c.id);
+                ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
+            }
+        }
     }
 
-    // 3. Grupo 1x: Tapa-Buraco (Menor Absoluto)
+    // ============================================
+    // PASSO 4: Grupo 1x preenche quintas com menos de 24 membros
+    // ============================================
+    console.log(`   🔧 1x: Preenchendo quintas com menos de ${MINIMO_MEMBROS} membros...`);
+
     for (const m of grupo1x) {
-        // Achar o culto com menor ocupação
-        let menorCulto = cultosOrdenados[0];
-        let menorCount = ocupacao.get(menorCulto.id) || 999;
+        // Encontrar a quinta com MENOR ocupação que ainda não atingiu 24
+        let menorCulto: Culto | null = null;
+        let menorCount = MINIMO_MEMBROS; // Só pega se < 24
 
         for (const c of cultosOrdenados) {
             const count = ocupacao.get(c.id) || 0;
@@ -156,9 +196,18 @@ function distribuirPresencaQuintas(
             }
         }
 
-        m.pool_cultos_ids!.add(menorCulto.id);
-        ocupacao.set(menorCulto.id, menorCount + 1);
+        // Se encontrou uma quinta que precisa de ajuda
+        if (menorCulto) {
+            m.pool_cultos_ids!.add(menorCulto.id);
+            ocupacao.set(menorCulto.id, menorCount + 1);
+        }
     }
+
+    // Log final
+    console.log(`   📊 Ocupação final das quintas:`);
+    cultosOrdenados.forEach((c, idx) => {
+        console.log(`      Quinta ${idx + 1} (${c.data_culto.split('T')[0]}): ${ocupacao.get(c.id)} membros`);
+    });
 }
 
 function distribuirPresencaDomingos(
