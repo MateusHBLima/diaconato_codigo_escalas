@@ -335,7 +335,10 @@ export async function gerarEscalaComPool(
 
     for (const lider of lideresDisponiveis) {
         const nomeConjuge = (lider as any).nome_conjuge;
-        if (!nomeConjuge) continue;
+        const conjugeServeJunto = (lider as any).conjuge_serve_junto;
+
+        // Verificar se tem cônjuge E se serve junto (igual ao original)
+        if (!nomeConjuge || !conjugeServeJunto) continue;
 
         const nomeConjugeLower = nomeConjuge.toLowerCase().trim();
 

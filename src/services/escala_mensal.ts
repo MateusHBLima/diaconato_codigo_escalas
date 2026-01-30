@@ -269,9 +269,12 @@ function sincronizarCasaisLideres(
         }
         console.log(`      ✅ ${lider.nome_completo} (N5) forçado em ${todosCultos.length} cultos`);
 
-        // REGRA 2: Cônjuge também vai em TODOS os cultos
+        // REGRA 2: Cônjuge também vai em TODOS os cultos (se serve junto)
         const nomeConjuge = (lider as any).nome_conjuge;
-        if (!nomeConjuge) continue;
+        const conjugeServeJunto = (lider as any).conjuge_serve_junto;
+
+        // Verificar se tem cônjuge E se serve junto
+        if (!nomeConjuge || !conjugeServeJunto) continue;
 
         const nomeConjugeLower = nomeConjuge.toLowerCase().trim();
         const conjuge = membros.find(m => {
