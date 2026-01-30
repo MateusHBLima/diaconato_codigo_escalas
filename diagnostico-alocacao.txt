@@ -1,0 +1,16 @@
+
+DIAGNÓSTICO - 2026-01-01
+
+Total alocações: 45
+Alocados: 39
+Sem candidato: 6
+
+Funções SEM CANDIDATO:
+  - Hall: Sem candidato: exige homem
+  - Apoio: Sem candidato: exige mulher
+  - Apoio: Sem candidato: exige mulher
+  - Apoio: Sem candidato: exige mulher
+  - Apoio: Sem candidato: exige mulher
+  - Apoio: Sem candidato: exige mulher
+
+Membros únicos alocados: 24

@@ -64,4 +64,5 @@ export interface ResultadoEscala {
     alocacoes: Alocacao[];
     vagas_preenchidas: number;
     vagas_vazias: number;
+    banco_reserva?: { membro_id: string; nome: string }[]; // Membros do Pool não alocados
 }

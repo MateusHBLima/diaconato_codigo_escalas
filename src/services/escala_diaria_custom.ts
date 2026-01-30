@@ -566,12 +566,23 @@ export async function gerarEscalaComPool(
         if (error) console.error(`   ⚠️ Erro ao salvar responsáveis gerais: ${error.message}`);
     }
 
+    // ============================================
+    // BANCO DE RESERVA: Membros do Pool não alocados
+    // ============================================
+    const bancoReserva = membros
+        .filter(m => !membrosUsados.has(m.id))
+        .map(m => ({ membro_id: m.id, nome: m.nome_completo }));
+
+    console.log(`   🪑 Banco de Reserva: ${bancoReserva.length} membros não alocados`);
+    if (bancoReserva.length > 0) {
+        console.log(`      ${bancoReserva.map(b => b.nome.split(' ')[0]).join(', ')}`);
+    }
+
     return {
         culto_id: culto.id,
-        alocacoes: alocacoes as Alocacao[], // Retornar para o pai gerenciar ou salvar?
-        // O código original salvava. Para minimizar impacto, vamos RETORNAR e o pai salva.
-        // Se eu salvar aqui, tenho que garantir que o pai não salve de novo.
+        alocacoes: alocacoes as Alocacao[],
         vagas_preenchidas: vagasPreenchidas,
-        vagas_vazias: vagasVazias
+        vagas_vazias: vagasVazias,
+        banco_reserva: bancoReserva
     };
 }
