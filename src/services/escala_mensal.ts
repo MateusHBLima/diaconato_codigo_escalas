@@ -19,12 +19,12 @@ interface MembroComHistorico extends Membro {
     escalas_no_mes: number;
     ultima_escala?: string;
     limite_mes: number;
-    // Controle interno para distribuição de quintas
-    quintas_alocadas?: number;
+    // Marcação interna para fase de distribuição
+    pool_cultos_ids?: Set<string>;
 }
 
 // ============================================
-// HELPERS PRIVADOS (DUPLICADOS PARA ISOLAMENTO)
+// HELPERS GERAIS
 // ============================================
 
 async function buscarFuncoesAtivas(isSantaCeia: boolean): Promise<Funcao[]> {
@@ -37,19 +37,11 @@ async function buscarFuncoesAtivas(isSantaCeia: boolean): Promise<Funcao[]> {
     if (!isSantaCeia) {
         query = query.eq('is_santa_ceia', false);
     }
-
-    const { data, error } = await query;
-
-    if (error) {
-        console.error(`Erro ao buscar funções: ${error.message}`);
-        return [];
-    }
-
+    const { data } = await query;
     return data || [];
 }
 
 async function limparDadosDoMes(mes: number, ano: number): Promise<void> {
-    // Buscar IDs dos cultos do mês para limpeza
     const { data: cultos } = await supabase
         .from('datas_cultos')
         .select('id')
@@ -60,60 +52,23 @@ async function limparDadosDoMes(mes: number, ano: number): Promise<void> {
 
     const ids = cultos.map(c => c.id);
 
-    // 1. Apagar alocações
-    const { error: erroAloc } = await supabase
-        .from('escalas_alocacoes')
-        .delete()
-        .in('culto_id', ids);
-
-    if (erroAloc) {
-        console.error(`Erro ao limpar alocações do mês: ${erroAloc.message}`);
-        throw erroAloc;
-    }
-
-    // 2. Apagar cultos (Evita duplicidade de horário/timezone)
-    const { error: erroCulto } = await supabase
-        .from('datas_cultos')
-        .delete()
-        .in('id', ids);
-
-    if (erroCulto) {
-        console.error(`Erro ao limpar cultos do mês: ${erroCulto.message}`);
-        throw erroCulto;
-    }
+    await supabase.from('escalas_alocacoes').delete().in('culto_id', ids);
+    await supabase.from('datas_cultos').delete().in('id', ids);
 }
 
 async function salvarAlocacoes(alocacoes: Omit<Alocacao, 'id'>[]): Promise<void> {
-    // Salvar em lotes de 100 para evitar timeout/erro
     const batchSize = 100;
     for (let i = 0; i < alocacoes.length; i += batchSize) {
         const batch = alocacoes.slice(i, i + batchSize);
-        const { error } = await supabase
-            .from('escalas_alocacoes')
-            .insert(batch);
-
-        if (error) {
-            console.error(`Erro ao salvar lote alocações: ${error.message}`);
-            throw error;
-        }
+        await supabase.from('escalas_alocacoes').insert(batch);
     }
 }
 
-/**
- * Busca membros ativos e inicializa histórico zerado (pois vamos regerar tudo)
- */
 async function buscarMembrosAtivos(
     periodo: 'quinta' | 'domingo'
 ): Promise<MembroComHistorico[]> {
-    const { data: membros, error } = await supabase
-        .from('membros')
-        .select('*')
-        .eq('ativo', true);
-
-    if (error || !membros) {
-        console.error(`Erro ao buscar membros: ${error?.message}`);
-        return [];
-    }
+    const { data: membros } = await supabase.from('membros').select('*').eq('ativo', true);
+    if (!membros) return [];
 
     return membros.map(membro => {
         const dispTexto = periodo === 'quinta'
@@ -123,15 +78,203 @@ async function buscarMembrosAtivos(
 
         return {
             ...membro,
-            escalas_no_mes: 0, // Resetado pois vamos gerar o mês do zero
+            escalas_no_mes: 0,
             limite_mes: vezesPorMes,
-            quintas_alocadas: 0
+            pool_cultos_ids: new Set()
         };
     });
 }
 
 // ============================================
-// LÓGICA DE ALOCAÇÃO MENSAL (DUPLICADA COM AJUSTES)
+// FASE 1: DISTRIBUIÇÃO ESTRATÉGICA (PRESENÇA)
+// ============================================
+
+function distribuirPresencaQuintas(
+    membros: MembroComHistorico[],
+    cultos: Culto[]
+): void {
+    // Ordenar cultos cronologicamente
+    const cultosOrdenados = [...cultos].sort((a, b) => a.data_culto.localeCompare(b.data_culto));
+
+    // Preparar contadores para balanceamento (cultoId -> count)
+    const ocupacao = new Map<string, number>();
+    cultosOrdenados.forEach(c => ocupacao.set(c.id, 0));
+
+    // Separar grupos por frequência
+    const grupo3x = membros.filter(m => m.limite_mes >= 3);
+    const grupo2x = membros.filter(m => m.limite_mes === 2);
+    const grupo1x = membros.filter(m => m.limite_mes === 1);
+
+    // 1. Grupo 3x: Quintas 1, 2 e 3 (Rígido)
+    for (const m of grupo3x) {
+        for (let i = 0; i < 3 && i < cultosOrdenados.length; i++) {
+            const c = cultosOrdenados[i];
+            m.pool_cultos_ids!.add(c.id);
+            ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
+        }
+    }
+
+    // 2. Grupo 2x: Alternância Balanceada (Impar vs Par)
+    // Definir sets
+    const quintasImpares: Culto[] = []; // 1ª, 3ª, 5ª...
+    const quintasPares: Culto[] = [];   // 2ª, 4ª...
+    let totalImpar = 0;
+    let totalPar = 0;
+
+    cultosOrdenados.forEach((c, idx) => {
+        if (idx % 2 === 0) { // Index 0 é a 1ª (impar na contagem humana)
+            quintasImpares.push(c);
+            totalImpar += ocupacao.get(c.id) || 0;
+        } else {
+            quintasPares.push(c);
+            totalPar += ocupacao.get(c.id) || 0;
+        }
+    });
+
+    for (const m of grupo2x) {
+        // Escolher lado com MENOS pessoas
+        let alvos: Culto[] = [];
+        if (totalImpar <= totalPar) {
+            alvos = quintasImpares;
+            totalImpar++; // Incrementa estimativa p/ próximo
+        } else {
+            alvos = quintasPares;
+            totalPar++;
+        }
+
+        alvos.forEach(c => {
+            m.pool_cultos_ids!.add(c.id);
+            ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
+        });
+    }
+
+    // 3. Grupo 1x: Tapa-Buraco (Menor Absoluto)
+    for (const m of grupo1x) {
+        // Achar o culto com menor ocupação
+        let menorCulto = cultosOrdenados[0];
+        let menorCount = ocupacao.get(menorCulto.id) || 999;
+
+        for (const c of cultosOrdenados) {
+            const count = ocupacao.get(c.id) || 0;
+            if (count < menorCount) {
+                menorCount = count;
+                menorCulto = c;
+            }
+        }
+
+        m.pool_cultos_ids!.add(menorCulto.id);
+        ocupacao.set(menorCulto.id, menorCount + 1);
+    }
+}
+
+function distribuirPresencaDomingos(
+    membros: MembroComHistorico[], // Lista completa
+    cultosDomingo: Culto[]
+): void {
+    // 1. Agrupar cultos por Data Lógica de Domingo (para frequencia 3x/2x)
+    // Map: '2026-01-05' -> [CultoManha, CultoNoite]
+    const diasMap = new Map<string, Culto[]>();
+    cultosDomingo.forEach(c => {
+        const dataBase = c.data_culto.split('T')[0]; // YYYY-MM-DD
+        if (!diasMap.has(dataBase)) diasMap.set(dataBase, []);
+        diasMap.get(dataBase)!.push(c);
+    });
+
+    // Sort das datas para lógica 1ª, 2ª, 3ª semana
+    const datasOrdenadas = Array.from(diasMap.keys()).sort();
+
+    // 2. Identificar Casais e Solteiros
+    const processados = new Set<string>();
+
+    for (const mPrincipal of membros) {
+        if (processados.has(mPrincipal.id)) continue;
+
+        // Tentar achar cônjuge
+        let conjuge: MembroComHistorico | undefined;
+        if (mPrincipal.nome_conjuge) {
+            const nomeConjugeClean = mPrincipal.nome_conjuge.trim().toLowerCase();
+            conjuge = membros.find(m =>
+                m.id !== mPrincipal.id &&
+                m.nome_completo.toLowerCase().includes(nomeConjugeClean)
+            );
+        }
+
+        // Definir par (ou single)
+        const dupla = conjuge ? [mPrincipal, conjuge] : [mPrincipal];
+        dupla.forEach(d => processados.add(d.id));
+
+        // Calcular Limite da Dupla (o menor limite vence? Ou cada um tem seu limite?)
+        // Regra geral diz "3x, 2x, 1x". Se um é 3x e outro 1x, complexo.
+        // Assumindo limite do principal para simplificar a distribuição do casal.
+        // Ou melhor: usar Math.min para garantir que vão juntos.
+        const limite = Math.min(...dupla.map(d => d.limite_mes));
+
+        // === PASSO A: Definir SEMANAS de presença (Frequência) ===
+        const semanasAlvoIndices: number[] = []; // Indices 0, 1, 2...
+
+        if (limite >= 3) {
+            // 3 primeiras semanas
+            semanasAlvoIndices.push(0, 1, 2);
+        } else if (limite === 2) {
+            // Alternado (Sim/Não). Balanceamento simples global (Count total de pessoas escaladas no dia)
+            // Como otimização simples: Randomizar inicio ou usar ID par/impar para distribuir load
+            // Usando par/impar do mês para determinismo
+            // Se (mes + index) % 2 === 0...
+
+            // Vamos balancear simples:
+            // "Impares" (Semana 1, 3) vs "Pares" (Semana 2, 4)
+            // Arbitrariamente: IDs terminados em par -> Pares.
+            const isPar = mPrincipal.id.charCodeAt(mPrincipal.id.length - 1) % 2 === 0;
+            if (isPar) {
+                semanasAlvoIndices.push(1, 3); // Semanas 2 e 4
+            } else {
+                semanasAlvoIndices.push(0, 2); // Semanas 1 e 3
+            }
+        } else {
+            // 1x -> Semana com menos gente? Vamos fixar na semana 3 ou 4 para preencher fim de mes
+            semanasAlvoIndices.push(3); // Ultima semana (se houver) ou 1a
+        }
+
+        // === PASSO B: Definir PERÍODO (Manhã vs Noite) ===
+        // Regra: Qualquer + Noite = Noite. Qualquer + Manha = Manha.
+        // Regra Solteiro: Qualquer -> Noite.
+
+        let periodoFinal: 'manha' | 'noite' = 'noite'; // Default
+
+        const prefs = dupla.map(d => d.melhor_periodo_domingo?.toLowerCase() || 'qualquer');
+        const temManha = prefs.some(p => p.includes('manhã'));
+        const temNoite = prefs.some(p => p.includes('noite'));
+        const soQualquer = prefs.every(p => p.includes('qualquer'));
+
+        if (soQualquer) {
+            periodoFinal = 'noite'; // Regra Solteiro/Casal Qualquer -> Noite
+        } else if (temManha && !temNoite) {
+            periodoFinal = 'manha';
+        } else if (temNoite) {
+            periodoFinal = 'noite'; // Noite vence (conforme "Any + Night = Night")
+        }
+
+        // === PASSO C: Aplicar aos cultos ===
+        semanasAlvoIndices.forEach(idx => {
+            if (idx >= datasOrdenadas.length) return;
+            const dataAlvo = datasOrdenadas[idx];
+            const cultosDoDia = diasMap.get(dataAlvo) || [];
+
+            // Achar o culto alvo
+            const cultoAlvo = cultosDoDia.find(c => {
+                if (periodoFinal === 'manha') return c.periodo === 'domingo_manha';
+                return c.periodo === 'domingo_noite';
+            });
+
+            if (cultoAlvo) {
+                dupla.forEach(m => m.pool_cultos_ids!.add(cultoAlvo.id));
+            }
+        });
+    }
+}
+
+// ============================================
+// FASE 2: ALOCAÇÃO TÁTICA (DIÁRIA)
 // ============================================
 
 function gerarMotivoFalha(funcao: Funcao, periodoCulto: string): string {
@@ -142,14 +285,11 @@ function gerarMotivoFalha(funcao: Funcao, periodoCulto: string): string {
     return `Sem candidato: ${motivos.join(', ')}`;
 }
 
-/**
- * Versão adaptada para o contexto mensal
- */
-function encontrarCandidatoMensal(
-    membros: MembroComHistorico[],
+function encontrarCandidatoRestrito(
+    poolMembros: MembroComHistorico[], // JÁ FILTRADO PELA FASE 1
     funcao: Funcao,
     culto: Culto,
-    membrosUsadosNoCulto: Set<string>, // Apenas neste culto
+    membrosUsadosNoCulto: Set<string>,
     membroObrigatorioId?: string | null,
     numeroVaga: number = 0
 ): MembroComHistorico | null {
@@ -169,347 +309,238 @@ function encontrarCandidatoMensal(
     };
 
     if (membroObrigatorioId) {
-        const membro = membros.find(m => m.id === membroObrigatorioId);
-        if (!membro) return null;
+        const membro = poolMembros.find(m => m.id === membroObrigatorioId);
+        if (!membro) return null; // Membro não está no pool do dia? Falha crítica de repetição
         if (!membroPodeExecutar(membro)) return null;
         return membro;
     }
 
-    const ehFuncaoRepetivel = funcao.regras === 'REPETIR_PESSOA';
+    const candidatos = poolMembros.filter(membro => {
+        // 1. Filtro Básico (Já está no culto? etc)
+        if (membrosUsadosNoCulto.has(membro.id) && funcao.regras !== 'REPETIR_PESSOA') return false;
 
-    const filtrarCandidatos = (ignorarLimite: boolean) => {
-        const ehFuncaoMesa = nomeFuncaoLower.includes('mesa');
+        // 2. Aptidões
+        if (nomeFuncaoLower.includes('mesa') && !membro.aptidoes?.includes('Prioridade Mesa')) return false;
+        if (membro.aptidoes?.includes('NECESSIDADE SENTADO') && !membroPodeExecutar(membro)) return false;
 
-        return membros.filter(membro => {
-            // 1. Aptidões Especiais
-            if (ehFuncaoMesa) {
-                if (!membro.aptidoes?.includes('Prioridade Mesa')) return false;
-            } else if (membro.aptidoes?.includes('NECESSIDADE SENTADO')) {
-                if (!membroPodeExecutar(membro)) return false;
-            } else {
-                // Sistema de Estrelas normal
-                if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo, funcao.setor_pai, numeroVaga)) return false;
-            }
+        // 3. Sistema de Estrelas
+        if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo, funcao.setor_pai, numeroVaga)) return false;
 
-            // 2. Regras Gerais
-            if (ehFuncaoRepetivel) {
-                // permite reusar
-            } else {
-                if (membrosUsadosNoCulto.has(membro.id)) return false;
-            }
+        // 4. Gênero
+        if (!atendeGenero(membro.sexo, funcao.especificidade_sexo)) return false;
 
-            // 3. Limite Mensal
-            if (!ignorarLimite) {
-                if (membro.escalas_no_mes >= membro.limite_mes) return false;
-            }
+        return true;
+    });
 
-            // 4. Gênero e Disponibilidade Básica
-            if (!atendeGenero(membro.sexo, funcao.especificidade_sexo)) return false;
+    if (candidatos.length === 0) return null;
 
-            const disp = culto.periodo === 'quinta'
-                ? membro.disponibilidade_quinta
-                : membro.disponibilidade_domingo;
-            const { disponivel } = parseDisponibilidade(disp);
-            if (!disponivel) return false;
+    // Classificação
+    const nivelExigido = getNivelExigidoParaFuncao(funcao.nome);
+    candidatos.sort((a, b) => {
+        // 1. Nível
+        const diffA = Math.abs((a.nivel_experiencia || 1) - nivelExigido);
+        const diffB = Math.abs((b.nivel_experiencia || 1) - nivelExigido);
+        if (diffA !== diffB) return diffA - diffB;
 
-            // 5. Preferência de Período (RÍGIDA)
-            if (!atendePeriodo(membro.melhor_periodo_domingo, culto.periodo)) return false;
+        // 2. Quem serviu menos no mês (Load balance)
+        if (a.escalas_no_mes !== b.escalas_no_mes) return a.escalas_no_mes - b.escalas_no_mes;
 
-            return true;
-        });
-    };
+        // 3. Quem serviu há mais tempo (Rodízio/Descanso) - NOVO PEDIDO
+        const dataA = a.ultima_escala || '0000-00-00';
+        const dataB = b.ultima_escala || '0000-00-00';
+        return dataA.localeCompare(dataB); // Mais antigo vem primeiro
+    });
 
-    const ordenarCandidatos = (lista: MembroComHistorico[]) => {
-        const nivelExigido = getNivelExigidoParaFuncao(funcao.nome);
-        return lista.sort((a, b) => {
-            // Prioridade Nível
-            const diffA = Math.abs((a.nivel_experiencia || 1) - nivelExigido);
-            const diffB = Math.abs((b.nivel_experiencia || 1) - nivelExigido);
-            if (diffA !== diffB) return diffA - diffB;
+    return candidatos[0];
+}
 
-            // Prioridade Distribuição: Quem serviu menos no mês
-            if (a.escalas_no_mes !== b.escalas_no_mes) return a.escalas_no_mes - b.escalas_no_mes;
+async function alocarResponsaveisGerais(
+    cultos: Culto[]
+): Promise<Map<string, { r1: string, r2: string }>> {
+    // Buscar Líderes Nível 5
+    const { data: lideres } = await supabase.from('membros').select('*').eq('nivel_experiencia', 5).eq('ativo', true);
+    if (!lideres || lideres.length === 0) return new Map();
 
-            return 0;
-        });
-    };
+    const mapaAlocacao = new Map<string, { r1: string, r2: string }>();
 
-    let candidatos = filtrarCandidatos(false);
-    if (candidatos.length > 0) {
-        ordenarCandidatos(candidatos);
-        return candidatos[0];
+    // Identificar casais de líderes
+    const casais: Array<{ l1: Membro, l2: Membro }> = [];
+    const processados = new Set<string>();
+
+    // Ordenar para rodízio determinístico
+    lideres.sort((a, b) => a.nome_completo.localeCompare(b.nome_completo));
+
+    for (const l of lideres) {
+        if (processados.has(l.id)) continue;
+        const conjuge = lideres.find(c => c.id !== l.id && c.nome_completo.includes(l.nome_conjuge || 'XYZW'));
+
+        if (conjuge) {
+            casais.push({ l1: l, l2: conjuge });
+            processados.add(l.id);
+            processados.add(conjuge.id);
+        } else {
+            // Líder solteiro? Tratar como casal fake pra rotação ou ignorar?
+            // Regra do legado: "Sempre um casal". Vamos ignorar solteiros por ora ou pareá-los
+        }
     }
 
-    // Fallback: ignora limite mensal se necessário (mas nunca aptidão/gênero/período)
-    candidatos = filtrarCandidatos(true);
-    if (candidatos.length > 0) {
-        ordenarCandidatos(candidatos);
-        return candidatos[0];
+    // Rodízio simples
+    let index = 0;
+    for (const c of cultos) {
+        if (casais.length === 0) break;
+        const casal = casais[index % casais.length];
+
+        // Salvar no DB direto (datas_cultos)
+        await supabase.from('datas_cultos').update({
+            responsavel_geral_1_id: casal.l1.id,
+            responsavel_geral_2_id: casal.l2.id
+        }).eq('id', c.id);
+
+        mapaAlocacao.set(c.id, { r1: casal.l1.id, r2: casal.l2.id });
+        index++;
     }
 
-    return null;
+    return mapaAlocacao;
 }
 
 // ============================================
-// GERADOR DE ESCALA MENSAL (SERVIÇO PRINCIPAL)
+// ORQUESTRADOR PRINCIPAL
 // ============================================
 
 export async function gerarEscalaMensal(mes: number, ano: number) {
-    console.log(`\n🚀 INICIANDO GERAÇÃO MENSAL HOLÍSTICA: ${mes}/${ano}`);
+    console.log(`\n🚀 INICIANDO GERAÇÃO (FASE 1+2): ${mes}/${ano}`);
 
-    // 1. Limpar TUDO (Cultos e Alocações) para evitar duplicidade de horário
-    // Isso resolve o problema de Timezone (16:30 vs 19:30) pois força recriação
-    console.log(`\n🧹 Limpando dados anteriores de ${mes}/${ano}...`);
+    // FASE 0: LIMPEZA
+    console.log(`\n🧹 Fase 0: Limpeza...`);
     await limparDadosDoMes(mes, ano);
 
-    // 2. Garantir datas de culto (Agora em alicerce limpo)
-    await salvarCultos(await gerarCultosDoMes(mes, ano)); // Salva/Garante no DB
+    // GERAR CULTOS
+    await salvarCultos(await gerarCultosDoMes(mes, ano));
     const cultos = await buscarCultosDoMes(mes, ano);
 
-    // 3. Separar cultos
     const quintas = cultos.filter(c => c.periodo === 'quinta');
     const domingos = cultos.filter(c => c.periodo.startsWith('domingo'));
+
+    // CARREGAR MEMBROS
+    const membrosQuinta = await buscarMembrosAtivos('quinta');
+    const membrosDomingo = await buscarMembrosAtivos('domingo');
+
+    // FASE 1: DISTRIBUIÇÃO (POOL)
+    console.log(`\n🌊 Fase 1: Distribuição de Presença`);
+    distribuirPresencaQuintas(membrosQuinta, quintas);
+    distribuirPresencaDomingos(membrosDomingo, domingos);
+
+    // FASE 2: ALOCAÇÃO TÁTICA
+    console.log(`\n🧩 Fase 2: Alocação Tática`);
+
+    // A. Responsáveis Gerais (Rotação)
+    const lideresMap = await alocarResponsaveisGerais(cultos);
 
     const alocacoesTotais: Omit<Alocacao, 'id'>[] = [];
     const resultadosPorCulto: ResultadoEscala[] = [];
 
-    // ========================================
-    // FASE 1: QUINTAS-FEIRAS (Estratégia 3x/2x/1x)
-    // ========================================
-    if (quintas.length > 0) {
-        console.log(`\n📅 Processando ${quintas.length} Quintas-feiras...`);
-        const membrosQuinta = await buscarMembrosAtivos('quinta');
-        const funcoesQuinta = await buscarFuncoesAtivas(false); // Quinta nunca é Santa Ceia
-        const funcoesOrdenadas = ordenarFuncoesPorProcessamento(funcoesQuinta);
+    // Processar TODOS os cultos
+    for (const culto of cultos) {
+        console.log(`   > Processando ${culto.nome_culto} (${culto.data_culto})`);
 
-        // Estratégia de Pré-alocação (quem vai trabalhar em qual quinta)
-        // Mas como a função "encontrarCandidato" já prioriza quem serviu menos,
-        // vamos processar as quintas em ordem cronológica.
-        // O segredo do 3x/2x está em quem é ELIGÍVEL.
+        // 1. Definir Pool do Dia
+        const listSet = culto.periodo === 'quinta' ? membrosQuinta : membrosDomingo;
+        const poolDoDia = listSet.filter(m => m.pool_cultos_ids!.has(culto.id));
 
-        // Vamos criar uma "máscara de disponibilidade" para cada membro nas quintas
-        const mapaQuintasMembro = new Map<string, Set<string>>(); // membroId -> Set<cultoId> permitidos
+        // Remover Responsáveis Gerais do Pool (já estão alocados)
+        const lideres = lideresMap.get(culto.id);
+        const poolFiltrado = poolDoDia.filter(m => m.id !== lideres?.r1 && m.id !== lideres?.r2);
 
-        for (const m of membrosQuinta) {
-            const permitidos = new Set<string>();
-            const limite = m.limite_mes;
+        // 2. Carregar Funções
+        const funcoes = await buscarFuncoesAtivas(culto.is_santa_ceia);
+        const funcoesOrdenadas = ordenarFuncoesPorProcessamento(funcoes);
 
-            // Fator de correção de limite para novos membros ou exceções?
-            // Não, segue a regra estrita do cadastro.
+        const alocacoesCulto: Omit<Alocacao, 'id'>[] = [];
+        const membrosUsadosNesteCulto = new Set<string>();
+        const quemEstaOnde = new Map<string, string[]>();
 
-            // Se limite >= total de quintas, pode todas
-            if (limite >= quintas.length) {
-                quintas.forEach(q => permitidos.add(q.id));
-            }
-            // Se limite 3 (e temos 4 ou 5 quintas) -> 3 primeiras
-            else if (limite === 3) {
-                quintas.slice(0, 3).forEach(q => permitidos.add(q.id));
-            }
-            // Se limite 2 -> Alternado (0, 2, 4...)
-            else if (limite === 2) {
-                quintas.forEach((q, idx) => {
-                    if (idx % 2 === 0) permitidos.add(q.id); // 1ª, 3ª, 5ª quinta
-                });
-            }
-            // Se limite 1 -> Preferência pela última, ou onde tiver vaga (deixamos livre, mas com limite 1)
-            else if (limite === 1) {
-                // Estratégia: Permitir todas, mas o "encontrarCandidato" vai barrar após a primeira alocação
-                // Para forçar ser na última, poderíamos restringir, mas pode faltar gente.
-                // Melhor deixar livre e o limite atuar.
-                quintas.forEach(q => permitidos.add(q.id));
-            }
+        let vagasP = 0, vagasV = 0;
 
-            mapaQuintasMembro.set(m.id, permitidos);
-        }
+        for (const funcao of funcoesOrdenadas) {
+            const ocupantesFuncao: string[] = [];
+            for (let i = 0; i < funcao.quantidade_pessoas; i++) {
 
-        // Processar cada Quinta
-        for (const culto of quintas) {
-            console.log(`   > Quinta ${culto.data_culto}`);
-            const alocacoesCulto: Omit<Alocacao, 'id'>[] = [];
-            const membrosUsadosNesteCulto = new Set<string>();
-            let vagasP = 0;
-            let vagasV = 0;
-
-            for (const funcao of funcoesOrdenadas) {
-                for (let i = 0; i < funcao.quantidade_pessoas; i++) {
-                    // Filtrar membros que tem permissão para esta quinta específica (conforme regra 3x/2x)
-                    const membrosElegiveisParaData = membrosQuinta.filter(m => {
-                        const permitidos = mapaQuintasMembro.get(m.id);
-                        return permitidos?.has(culto.id);
-                    });
-
-                    // Tenta encontrar na lista filtrada
-                    let candidato = encontrarCandidatoMensal(
-                        membrosElegiveisParaData,
-                        funcao,
-                        culto,
-                        membrosUsadosNesteCulto,
-                        null,
-                        i
-                    );
-
-                    if (candidato) {
-                        membrosUsadosNesteCulto.add(candidato.id);
-                        // Atualiza contadores no objeto original da lista completa
-                        const membroReal = membrosQuinta.find(m => m.id === candidato!.id);
-                        if (membroReal) {
-                            membroReal.escalas_no_mes++;
-                            membroReal.ultima_escala = culto.data_culto;
-                        }
-
-                        alocacoesCulto.push({
-                            culto_id: culto.id,
-                            funcao_id: funcao.id,
-                            membro_id: candidato.id,
-                            status: 'ALOCADO',
-                            motivo_falha: null
-                        });
-                        vagasP++;
-                    } else {
-                        alocacoesCulto.push({
-                            culto_id: culto.id,
-                            funcao_id: funcao.id,
-                            membro_id: null,
-                            status: 'SEM_CANDIDATO',
-                            motivo_falha: gerarMotivoFalha(funcao, culto.periodo)
-                        });
-                        vagasV++;
-                    }
-                }
-            }
-            alocacoesTotais.push(...alocacoesCulto);
-            resultadosPorCulto.push({
-                culto_id: culto.id,
-                alocacoes: alocacoesCulto as any,
-                vagas_preenchidas: vagasP,
-                vagas_vazias: vagasV
-            });
-        }
-    }
-
-    // ========================================
-    // FASE 2: DOMINGOS (Regras de Cônjuges)
-    // ========================================
-    if (domingos.length > 0) {
-        console.log(`\n📅 Processando ${domingos.length} cultos de Domingo...`);
-        const membrosDomingo = await buscarMembrosAtivos('domingo');
-        // Separar funções por SC ou Normal
-        // Assumindo que num mês pode ter SC e cultos normais mixed? Normalmente SC é so 1º
-        // Vamos buscar as funções para cada culto individualmente para ser seguro
-
-        // Agrupar domingos por dia (Manhã e Noite processados juntos para otimizar casais?)
-        // Não, a regra 4.1 diz "Decidir período".
-        // Vamos processar cronologicamente, Manhã e depois Noite.
-
-        for (const culto of domingos) {
-            console.log(`   > Domingo ${culto.data_culto} (${culto.periodo})`);
-
-            const funcoes = await buscarFuncoesAtivas(culto.is_santa_ceia);
-            const funcoesOrdenadas = ordenarFuncoesPorProcessamento(funcoes);
-
-            const alocacoesCulto: Omit<Alocacao, 'id'>[] = [];
-            const membrosUsadosNesteCulto = new Set<string>();
-            let vagasP = 0;
-            let vagasV = 0;
-            const quemEstaOnde = new Map<string, string[]>(); // Para repetições internas
-
-            // Pré-Identificar Líderes/Casais (regra duplicada do original)
-            // Aqui simplificado: se encontrarCandidatoMensal for chamado corretamente com a lista atualizada,
-            // ele deve respeitar quem já serviu.
-
-            // REGRA CÔNJUGES:
-            // "Se um dos cônjuges tem preferência Qualquer e o outro Fixa, ambos vão no Fixo"
-            // Isso deve ser resolvido no "atendePeriodo" ou na hora de validar o candidato.
-            // O "atendePeriodo" já deve olhar a preferência do membro.
-            // O desafio é alinhar o casal no MESMO culto.
-
-            // Implementação Simplificada e Robusta (conforme pedido para não refatorar a logica de casal complexa):
-            // O "encontrarCandidato" original não força casal junto, exceto na alocação de "Responsável Geral".
-            // A regra 4.1 é sobre "Onde eles SERVEM", não necessariamente na mesma função.
-            // Se formos rígidos, deveríamos pré-alocar casais.
-            // Dado o risco, vamos seguir a alocação padrão, mas reforçando a preferência.
-
-            for (const funcao of funcoesOrdenadas) {
-                const ocupantesFuncao: string[] = [];
-
-                for (let i = 0; i < funcao.quantidade_pessoas; i++) {
-                    // Lógica de Repetição Detalhada (Duplicada simplificada)
-                    // Se precisar de repetição (ex: banheiro), tentar pegar de quemEstaOnde
-                    const regraDetalhada = buscarRegraDetalhada(funcao.nome, funcao.setor_pai);
-                    let membroObrigatorioId: string | null = null;
-
-                    if (regraDetalhada) {
-                        const mapping = regraDetalhada.mapeamento.find(m => m.vagaDestino === i);
-                        if (mapping) {
-                            // Tenta achar fonte
-                            for (const [chave, ocupantes] of quemEstaOnde.entries()) {
-                                if (chave.toLowerCase().includes(mapping.fontePattern.toLowerCase())) {
-                                    // Achou fonte, pega o ocupante da vagaFonte
-                                    const candidatoId = ocupantes[mapping.vagaFonte];
-                                    if (candidatoId && candidatoId !== 'VAZIO') {
-                                        // Verificar se já não foi usado NESTE culto (exceto se for a propria repetição)
-                                        // Mas repetição É usar de novo.
-                                        membroObrigatorioId = candidatoId;
-                                        break;
-                                    }
+                // Lógica de Repetição (Simplificada do legado)
+                let membroObrigatorioId: string | null = null;
+                const regraDetalhada = buscarRegraDetalhada(funcao.nome, funcao.setor_pai);
+                if (regraDetalhada) {
+                    const mapping = regraDetalhada.mapeamento.find(m => m.vagaDestino === i);
+                    if (mapping) {
+                        // Buscar fonte no mapa local
+                        for (const [chave, ocupantes] of quemEstaOnde.entries()) {
+                            if (chave.toLowerCase().includes(mapping.fontePattern.toLowerCase())) {
+                                const cand = ocupantes[mapping.vagaFonte];
+                                if (cand && cand !== 'VAZIO') {
+                                    membroObrigatorioId = cand;
+                                    break;
                                 }
                             }
                         }
                     }
-
-                    let candidato = encontrarCandidatoMensal(
-                        membrosDomingo,
-                        funcao,
-                        culto,
-                        membrosUsadosNesteCulto,
-                        membroObrigatorioId,
-                        i
-                    );
-
-                    if (candidato) {
-                        if (!membroObrigatorioId) {
-                            membrosUsadosNesteCulto.add(candidato.id);
-                            const mReal = membrosDomingo.find(m => m.id === candidato!.id);
-                            if (mReal) {
-                                mReal.escalas_no_mes++;
-                                mReal.ultima_escala = culto.data_culto;
-                            }
-                        }
-
-                        alocacoesCulto.push({
-                            culto_id: culto.id,
-                            funcao_id: funcao.id,
-                            membro_id: candidato.id,
-                            status: 'ALOCADO',
-                            motivo_falha: null
-                        });
-                        ocupantesFuncao.push(candidato.id);
-                        vagasP++;
-                    } else {
-                        alocacoesCulto.push({
-                            culto_id: culto.id,
-                            funcao_id: funcao.id,
-                            membro_id: null,
-                            status: 'SEM_CANDIDATO',
-                            motivo_falha: gerarMotivoFalha(funcao, culto.periodo)
-                        });
-                        ocupantesFuncao.push('VAZIO');
-                        vagasV++;
-                    }
                 }
-                quemEstaOnde.set(`${funcao.nome}|${funcao.setor_pai}`, ocupantesFuncao);
+
+                // Lógica Oferta (Líderes)
+                if (!membroObrigatorioId && funcao.setor_pai?.toLowerCase().includes('oferta')) {
+                    if (i === 0 && lideres?.r1) membroObrigatorioId = lideres.r1;
+                    else if (i === 1 && lideres?.r2) membroObrigatorioId = lideres.r2;
+                }
+
+                // BUSCAR CANDIDATO (Somente no Pool Filtrado!)
+                const candidato = encontrarCandidatoRestrito(
+                    poolFiltrado,
+                    funcao,
+                    culto,
+                    membrosUsadosNesteCulto,
+                    membroObrigatorioId,
+                    i
+                );
+
+                if (candidato) {
+                    if (!membroObrigatorioId) {
+                        membrosUsadosNesteCulto.add(candidato.id);
+                        // Atualizar stats NO OBJETO ORIGINAL DA LISTA COMPLETA 
+                        // (para o sort de rodízio funcionar nos próximos dias)
+                        candidato.escalas_no_mes++;
+                        candidato.ultima_escala = culto.data_culto;
+                    }
+                    alocacoesCulto.push({
+                        culto_id: culto.id,
+                        funcao_id: funcao.id,
+                        membro_id: candidato.id,
+                        status: 'ALOCADO',
+                        motivo_falha: null
+                    });
+                    ocupantesFuncao.push(candidato.id);
+                    vagasP++;
+                } else {
+                    alocacoesCulto.push({
+                        culto_id: culto.id,
+                        funcao_id: funcao.id,
+                        membro_id: null,
+                        status: 'SEM_CANDIDATO',
+                        motivo_falha: gerarMotivoFalha(funcao, culto.periodo)
+                    });
+                    ocupantesFuncao.push('VAZIO');
+                    vagasV++;
+                }
             }
-            alocacoesTotais.push(...alocacoesCulto);
-            resultadosPorCulto.push({
-                culto_id: culto.id,
-                alocacoes: alocacoesCulto as any,
-                vagas_preenchidas: vagasP,
-                vagas_vazias: vagasV
-            });
+            quemEstaOnde.set(`${funcao.nome}|${funcao.setor_pai}`, ocupantesFuncao);
         }
+        alocacoesTotais.push(...alocacoesCulto);
+        resultadosPorCulto.push({
+            culto_id: culto.id,
+            alocacoes: alocacoesCulto as any,
+            vagas_preenchidas: vagasP,
+            vagas_vazias: vagasV
+        });
     }
 
-    // 4. Salvar TUDO
+    // SALVAR
     console.log(`\n💾 Salvando ${alocacoesTotais.length} alocações...`);
     await salvarAlocacoes(alocacoesTotais);
 
@@ -517,7 +548,6 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
         success: true,
         mes,
         ano,
-        total_alocacoes: alocacoesTotais.length,
         resultados: resultadosPorCulto
     };
 }
