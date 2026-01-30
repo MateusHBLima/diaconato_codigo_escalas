@@ -48,8 +48,8 @@ async function buscarFuncoesAtivas(isSantaCeia: boolean): Promise<Funcao[]> {
     return data || [];
 }
 
-async function limparAlocacoesAnterioresDoMes(mes: number, ano: number): Promise<void> {
-    // Primeiro buscar os IDs dos cultos do mês
+async function limparDadosDoMes(mes: number, ano: number): Promise<void> {
+    // Buscar IDs dos cultos do mês para limpeza
     const { data: cultos } = await supabase
         .from('datas_cultos')
         .select('id')
@@ -60,13 +60,26 @@ async function limparAlocacoesAnterioresDoMes(mes: number, ano: number): Promise
 
     const ids = cultos.map(c => c.id);
 
-    const { error } = await supabase
+    // 1. Apagar alocações
+    const { error: erroAloc } = await supabase
         .from('escalas_alocacoes')
         .delete()
         .in('culto_id', ids);
 
-    if (error) {
-        console.error(`Erro ao limpar alocações do mês: ${error.message}`);
+    if (erroAloc) {
+        console.error(`Erro ao limpar alocações do mês: ${erroAloc.message}`);
+        throw erroAloc;
+    }
+
+    // 2. Apagar cultos (Evita duplicidade de horário/timezone)
+    const { error: erroCulto } = await supabase
+        .from('datas_cultos')
+        .delete()
+        .in('id', ids);
+
+    if (erroCulto) {
+        console.error(`Erro ao limpar cultos do mês: ${erroCulto.message}`);
+        throw erroCulto;
     }
 }
 
@@ -244,14 +257,14 @@ function encontrarCandidatoMensal(
 export async function gerarEscalaMensal(mes: number, ano: number) {
     console.log(`\n🚀 INICIANDO GERAÇÃO MENSAL HOLÍSTICA: ${mes}/${ano}`);
 
-    // 1. Garantir datas de culto
-    await gerarCultosDoMes(mes, ano); // Apenas gera objeto
+    // 1. Limpar TUDO (Cultos e Alocações) para evitar duplicidade de horário
+    // Isso resolve o problema de Timezone (16:30 vs 19:30) pois força recriação
+    console.log(`\n🧹 Limpando dados anteriores de ${mes}/${ano}...`);
+    await limparDadosDoMes(mes, ano);
+
+    // 2. Garantir datas de culto (Agora em alicerce limpo)
     await salvarCultos(await gerarCultosDoMes(mes, ano)); // Salva/Garante no DB
     const cultos = await buscarCultosDoMes(mes, ano);
-
-    // 2. Limpar tudo desse mês
-    console.log(`\n🧹 Limpando alocações anteriores de ${mes}/${ano}...`);
-    await limparAlocacoesAnterioresDoMes(mes, ano);
 
     // 3. Separar cultos
     const quintas = cultos.filter(c => c.periodo === 'quinta');
@@ -280,6 +293,9 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
         for (const m of membrosQuinta) {
             const permitidos = new Set<string>();
             const limite = m.limite_mes;
+
+            // Fator de correção de limite para novos membros ou exceções?
+            // Não, segue a regra estrita do cadastro.
 
             // Se limite >= total de quintas, pode todas
             if (limite >= quintas.length) {
