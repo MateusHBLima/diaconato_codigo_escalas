@@ -88,18 +88,17 @@ function distribuirPresencaQuintas(
     membros: MembroComHistorico[],
     cultos: Culto[]
 ): void {
-    const MINIMO_MEMBROS = 28; // Mínimo de membros por culto
+    const MINIMO_MEMBROS = 28;
 
     // Ordenar cultos cronologicamente
     const cultosOrdenados = [...cultos].sort((a, b) => a.data_culto.localeCompare(b.data_culto));
 
-    // Preparar contadores para balanceamento (cultoId -> count)
+    // Preparar contadores
     const ocupacao = new Map<string, number>();
     cultosOrdenados.forEach(c => ocupacao.set(c.id, 0));
 
     // ============================================
     // SEPARAR N5 - NÃO CONTAM NO MÍNIMO DE 28
-    // Responsáveis gerais (N5) são ADICIONAIS ao pool
     // ============================================
     const membrosN5 = membros.filter(m => m.nivel_experiencia === 5);
     const membrosSemN5 = membros.filter(m => m.nivel_experiencia !== 5);
@@ -108,109 +107,115 @@ function distribuirPresencaQuintas(
 
     // Separar grupos por frequência (EXCLUINDO N5)
     const grupo3x = membrosSemN5.filter(m => m.limite_mes >= 3);
-    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)]; // Cópia para consumir
-    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)]; // Cópia para consumir
+    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)];
+    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)];
 
-    // Identificar as 3 primeiras quintas e as restantes
-    const primeirasTresQuintas = cultosOrdenados.slice(0, 3);
-    const quintasRestantes = cultosOrdenados.slice(3);
+    // Identificar quintas
+    const Q1 = cultosOrdenados[0];
+    const Q2 = cultosOrdenados[1];
+    const Q3 = cultosOrdenados[2];
+    const Q4 = cultosOrdenados[3]; // pode ser undefined
+    const Q5 = cultosOrdenados[4]; // pode ser undefined
 
-    console.log(`   📅 Quintas do mês: ${cultosOrdenados.length} (3 primeiras + ${quintasRestantes.length} restantes)`);
+    console.log(`   📅 Quintas do mês: ${cultosOrdenados.length}`);
     console.log(`   👥 Grupos (sem N5): 3x=${grupo3x.length}, 2x=${grupo2x.length}, 1x=${grupo1x.length}`);
 
     // ============================================
-    // PASSO 1: Grupo 3x vai nas 3 primeiras quintas
+    // NOVA LÓGICA: ESCALA ESPELHO
+    // Q1 = Q3 (mesmas pessoas)
+    // Q2 = Q4 (mesmas pessoas)
+    // Q5 = preencher com sobras
+    // ============================================
+
+    // Calcular quantos 2x precisamos para Q1/Q3
+    const vagasQ1 = MINIMO_MEMBROS - grupo3x.length;
+    const vagasQ2 = MINIMO_MEMBROS - grupo3x.length;
+
+    console.log(`   📊 Vagas a preencher: Q1/Q3=${vagasQ1}, Q2/Q4=${vagasQ2}`);
+
+    // ============================================
+    // GRUPO A: Membros 3x vão em Q1, Q2, Q3
     // ============================================
     for (const m of grupo3x) {
-        for (const c of primeirasTresQuintas) {
-            m.pool_cultos_ids!.add(c.id);
-            ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
-        }
+        if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
+        if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
+        if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
     }
-    console.log(`   ✅ 3x: ${grupo3x.length} membros alocados nas 3 primeiras quintas`);
+    console.log(`   ✅ 3x: ${grupo3x.length} membros em Q1, Q2, Q3`);
 
     // ============================================
-    // PASSO 2: Grupo 2x completa as 3 primeiras quintas até 24 membros
+    // GRUPO B: Primeiros 2x vão em Q1 + Q3 (espelho)
     // ============================================
-    const membros2xUsados = new Set<string>(); // Track quem já foi usado
+    const grupo2x_Q1Q3 = grupo2x.splice(0, vagasQ1); // Remove do array original
+    for (const m of grupo2x_Q1Q3) {
+        if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
+        if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
+    }
+    console.log(`   ✅ 2x (Q1=Q3): ${grupo2x_Q1Q3.length} membros`);
 
-    for (const c of primeirasTresQuintas) {
-        const atual = ocupacao.get(c.id) || 0;
-        const faltam = Math.max(0, MINIMO_MEMBROS - atual);
+    // ============================================
+    // GRUPO C: Próximos 2x vão em Q2 + Q4 (espelho)
+    // ============================================
+    const grupo2x_Q2Q4 = grupo2x.splice(0, vagasQ2); // Remove do array original
+    for (const m of grupo2x_Q2Q4) {
+        if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
+        if (Q4) { m.pool_cultos_ids!.add(Q4.id); ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1); }
+    }
+    console.log(`   ✅ 2x (Q2=Q4): ${grupo2x_Q2Q4.length} membros`);
 
-        if (faltam > 0) {
-            console.log(`   🔄 Quinta ${c.data_culto}: tem ${atual}, faltam ${faltam} para ${MINIMO_MEMBROS}`);
-
-            // Pegar membros 2x que ainda não foram usados
-            let preenchidos = 0;
-            for (const m of grupo2x) {
-                if (membros2xUsados.has(m.id)) continue;
-                if (preenchidos >= faltam) break;
-
-                m.pool_cultos_ids!.add(c.id);
-                ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
-                membros2xUsados.add(m.id);
-                preenchidos++;
+    // ============================================
+    // GRUPO D: 2x restantes vão em Q4 + Q5 ou só Q5
+    // ============================================
+    const grupo2x_restante = grupo2x; // O que sobrou após splice
+    if (grupo2x_restante.length > 0) {
+        for (const m of grupo2x_restante) {
+            // Se Q4 e Q5 existem, vai nos dois
+            if (Q4 && Q5) {
+                m.pool_cultos_ids!.add(Q4.id);
+                m.pool_cultos_ids!.add(Q5.id);
+                ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1);
+                ocupacao.set(Q5.id, (ocupacao.get(Q5.id) || 0) + 1);
+            } else if (Q5) {
+                // Se só Q5 existe, coloca lá (viola limite 2x, mas ok)
+                m.pool_cultos_ids!.add(Q5.id);
+                ocupacao.set(Q5.id, (ocupacao.get(Q5.id) || 0) + 1);
+            } else if (Q4) {
+                m.pool_cultos_ids!.add(Q4.id);
+                ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1);
             }
         }
+        console.log(`   ✅ 2x (restante): ${grupo2x_restante.length} membros em Q4/Q5`);
     }
 
     // ============================================
-    // PASSO 3: Grupo 2x restante vai para quintas restantes (alternância dia sim/dia não)
+    // GRUPO E: 1x vão para Q5 (ou quinta com menor ocupação)
     // ============================================
-    const membros2xSobrando = grupo2x.filter(m => !membros2xUsados.has(m.id));
-    console.log(`   🔄 2x: ${membros2xUsados.size} usados nas primeiras, ${membros2xSobrando.length} sobrando`);
-
-    if (quintasRestantes.length > 0 && membros2xSobrando.length > 0) {
-        // Separar quintas restantes em ímpares e pares (índice relativo)
-        const quintasImparesRest: Culto[] = []; // 4ª, 6ª... (semana par do mês)
-        const quintasParesRest: Culto[] = [];   // 5ª, 7ª... (semana ímpar do mês)
-
-        quintasRestantes.forEach((c, idx) => {
-            if (idx % 2 === 0) quintasImparesRest.push(c);
-            else quintasParesRest.push(c);
-        });
-
-        // Distribuir alternadamente
-        let toggle = false;
-        for (const m of membros2xSobrando) {
-            const alvos = toggle ? quintasParesRest : quintasImparesRest;
-            toggle = !toggle;
-
-            // Pegar no máximo 2 quintas (respeitando limite 2x)
-            const qtdAlocar = Math.min(2, alvos.length);
-            for (let i = 0; i < qtdAlocar; i++) {
-                const c = alvos[i];
-                m.pool_cultos_ids!.add(c.id);
-                ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
-            }
-        }
-    }
-
-    // ============================================
-    // PASSO 4: Grupo 1x preenche quintas com menos de 24 membros
-    // ============================================
-    console.log(`   🔧 1x: Preenchendo quintas com menos de ${MINIMO_MEMBROS} membros...`);
-
     for (const m of grupo1x) {
-        // Encontrar a quinta com MENOR ocupação que ainda não atingiu 24
-        let menorCulto: Culto | null = null;
-        let menorCount = MINIMO_MEMBROS; // Só pega se < 24
+        // Priorizar Q5, senão Q4, senão menor ocupação
+        let targetCulto: Culto | null = null;
 
-        for (const c of cultosOrdenados) {
-            const count = ocupacao.get(c.id) || 0;
-            if (count < menorCount) {
-                menorCount = count;
-                menorCulto = c;
+        if (Q5 && (ocupacao.get(Q5.id) || 0) < MINIMO_MEMBROS) {
+            targetCulto = Q5;
+        } else if (Q4 && (ocupacao.get(Q4.id) || 0) < MINIMO_MEMBROS) {
+            targetCulto = Q4;
+        } else {
+            // Fallback: menor ocupação
+            let menorCount = Infinity;
+            for (const c of cultosOrdenados) {
+                const count = ocupacao.get(c.id) || 0;
+                if (count < menorCount) {
+                    menorCount = count;
+                    targetCulto = c;
+                }
             }
         }
 
-        // Se encontrou uma quinta que precisa de ajuda
-        if (menorCulto) {
-            m.pool_cultos_ids!.add(menorCulto.id);
-            ocupacao.set(menorCulto.id, menorCount + 1);
+        if (targetCulto) {
+            m.pool_cultos_ids!.add(targetCulto.id);
+            ocupacao.set(targetCulto.id, (ocupacao.get(targetCulto.id) || 0) + 1);
         }
     }
+    console.log(`   ✅ 1x: ${grupo1x.length} membros distribuídos (prioridade Q5/Q4)`);
 
     // Log final
     console.log(`   📊 Ocupação final das quintas:`);

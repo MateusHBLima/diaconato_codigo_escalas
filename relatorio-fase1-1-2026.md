@@ -4,7 +4,7 @@ Nova lógica: 3x→primeiras 3, 2x→completa+alterna, 1x→preenche até 24
 
 
 ## Quinta - quinta-feira, 01/01/2026
-ID: 1a3e640f-645c-4ff1-b91b-9fdf4fe10e81 | Santa Ceia: Não
+ID: f796c998-6cae-4e64-9f0a-604939220ec5 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -50,7 +50,7 @@ ID: 1a3e640f-645c-4ff1-b91b-9fdf4fe10e81 | Santa Ceia: Não
 | 2x | 14 |
 
 ## Domingo Manhã - domingo, 04/01/2026
-ID: 7baa80d5-2f83-4432-8de2-68237f563f67 | Santa Ceia: Sim
+ID: 280185f5-2ac5-4051-b399-73772c850c4e | Santa Ceia: Sim
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -90,7 +90,7 @@ ID: 7baa80d5-2f83-4432-8de2-68237f563f67 | Santa Ceia: Sim
 | 1x | 1 |
 
 ## Domingo Noite - domingo, 04/01/2026
-ID: 1292fa8e-4402-428a-9996-889aa7896819 | Santa Ceia: Sim
+ID: e1fd2127-9785-42f9-aedd-f2ca393b323f | Santa Ceia: Sim
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -135,7 +135,7 @@ ID: 1292fa8e-4402-428a-9996-889aa7896819 | Santa Ceia: Sim
 | 1x | 1 |
 
 ## Quinta - quinta-feira, 08/01/2026
-ID: c3be2d3e-1420-490a-8800-3ec626aff0e4 | Santa Ceia: Não
+ID: c560ef00-bf7f-4782-a7b7-3b336dd8eef8 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -181,7 +181,7 @@ ID: c3be2d3e-1420-490a-8800-3ec626aff0e4 | Santa Ceia: Não
 | 2x | 14 |
 
 ## Domingo Manhã - domingo, 11/01/2026
-ID: fc1890aa-968e-468a-8d07-6e86b03913b0 | Santa Ceia: Não
+ID: 917d9d0b-c900-4ac1-8ac0-8e312e7dbe2a | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -227,7 +227,7 @@ ID: fc1890aa-968e-468a-8d07-6e86b03913b0 | Santa Ceia: Não
 | 1x | 3 |
 
 ## Domingo Noite - domingo, 11/01/2026
-ID: ed311d47-4169-45e4-adb2-5cc337f33235 | Santa Ceia: Não
+ID: ea97d133-6268-43ab-b980-3d4d2a47a013 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -263,7 +263,7 @@ ID: ed311d47-4169-45e4-adb2-5cc337f33235 | Santa Ceia: Não
 | 2x | 11 |
 
 ## Quinta - quinta-feira, 15/01/2026
-ID: 00d31272-20bd-4cec-a886-56ef0018a9bd | Santa Ceia: Não
+ID: 0916cdd5-8c00-45dd-8fe4-6eb8baca3624 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -299,7 +299,7 @@ ID: 00d31272-20bd-4cec-a886-56ef0018a9bd | Santa Ceia: Não
 | 2x | 4 |
 
 ## Domingo Manhã - domingo, 18/01/2026
-ID: 9065fba8-ba9e-43f0-8cfc-71ba77232662 | Santa Ceia: Não
+ID: 80fb3ba9-145f-496f-be46-63e953d45a39 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -340,7 +340,7 @@ ID: 9065fba8-ba9e-43f0-8cfc-71ba77232662 | Santa Ceia: Não
 | 1x | 3 |
 
 ## Domingo Noite - domingo, 18/01/2026
-ID: 10043785-3014-4a17-807f-96d2232d3bd2 | Santa Ceia: Não
+ID: 598fc783-6ff9-45f8-b874-8835a6dfa61c | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -386,7 +386,7 @@ ID: 10043785-3014-4a17-807f-96d2232d3bd2 | Santa Ceia: Não
 | 1x | 2 |
 
 ## Quinta - quinta-feira, 22/01/2026
-ID: 2d5bda50-6993-424c-bfdc-500938b49833 | Santa Ceia: Não
+ID: 72a08c53-06b3-4cbe-9ed9-9f9a14981645 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
@@ -414,7 +414,7 @@ ID: 2d5bda50-6993-424c-bfdc-500938b49833 | Santa Ceia: Não
 | 1x | 10 |
 
 ## Domingo Manhã - domingo, 25/01/2026
-ID: 6e590861-cad6-4587-955f-1b16d7c7be10 | Santa Ceia: Não
+ID: 20abe5e8-4b1e-4498-bbad-a54af626ad1d | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -460,7 +460,7 @@ ID: 6e590861-cad6-4587-955f-1b16d7c7be10 | Santa Ceia: Não
 | 1x | 3 |
 
 ## Domingo Noite - domingo, 25/01/2026
-ID: 3689be39-3d2c-4da7-9561-9693bcf5ae63 | Santa Ceia: Não
+ID: 2a3ba702-801d-4179-bd64-401147999316 | Santa Ceia: Não
 
 | Nome | Lim | ★ | Período | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|---------|----------|--------|
@@ -495,7 +495,7 @@ ID: 3689be39-3d2c-4da7-9561-9693bcf5ae63 | Santa Ceia: Não
 | 1x | 1 |
 
 ## Quinta - quinta-feira, 29/01/2026
-ID: 31bc393a-a607-4beb-bde4-0c4d409597b9 | Santa Ceia: Não
+ID: 759f5982-3176-4053-8e5f-9cc20f24826c | Santa Ceia: Não
 
 | Nome | Lim | ★ | Cônjuge | Aptidões | Motivo |
 |------|-----|---|---------|----------|--------|
