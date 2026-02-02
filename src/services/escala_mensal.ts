@@ -145,28 +145,44 @@ function distribuirPresencaQuintas(
 
     // ============================================
     // GRUPO B: Primeiros 2x vão em Q1 + Q3 (espelho)
+    // CORREÇÃO: Intercalar gêneros para garantir mulheres em Q1 (Apoio precisa)
     // ============================================
-    const grupo2x_Q1Q3 = grupo2x.splice(0, vagasQ1); // Remove do array original
+
+    // Separar 2x por gênero e intercalar
+    const mulheres2x = grupo2x.filter(m => m.sexo === 'MULHER');
+    const homens2x = grupo2x.filter(m => m.sexo === 'HOMEM');
+
+    console.log(`   👥 2x por gênero: ${mulheres2x.length} mulheres, ${homens2x.length} homens`);
+
+    // Intercalar: M, H, M, H, M, H... para garantir distribuição equilibrada
+    const grupo2x_intercalado: typeof grupo2x = [];
+    const maxLen = Math.max(mulheres2x.length, homens2x.length);
+    for (let i = 0; i < maxLen; i++) {
+        if (i < mulheres2x.length) grupo2x_intercalado.push(mulheres2x[i]);
+        if (i < homens2x.length) grupo2x_intercalado.push(homens2x[i]);
+    }
+
+    const grupo2x_Q1Q3 = grupo2x_intercalado.splice(0, vagasQ1);
     for (const m of grupo2x_Q1Q3) {
         if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
         if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
     }
-    console.log(`   ✅ 2x (Q1=Q3): ${grupo2x_Q1Q3.length} membros`);
+    console.log(`   ✅ 2x (Q1=Q3): ${grupo2x_Q1Q3.length} membros (${grupo2x_Q1Q3.filter(m => m.sexo === 'MULHER').length} mulheres)`);
 
     // ============================================
     // GRUPO C: Próximos 2x vão em Q2 + Q4 (espelho)
     // ============================================
-    const grupo2x_Q2Q4 = grupo2x.splice(0, vagasQ2); // Remove do array original
+    const grupo2x_Q2Q4 = grupo2x_intercalado.splice(0, vagasQ2); // Usa o intercalado
     for (const m of grupo2x_Q2Q4) {
         if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
         if (Q4) { m.pool_cultos_ids!.add(Q4.id); ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1); }
     }
-    console.log(`   ✅ 2x (Q2=Q4): ${grupo2x_Q2Q4.length} membros`);
+    console.log(`   ✅ 2x (Q2=Q4): ${grupo2x_Q2Q4.length} membros (${grupo2x_Q2Q4.filter(m => m.sexo === 'MULHER').length} mulheres)`);
 
     // ============================================
     // GRUPO D: 2x restantes vão em Q4 + Q5 ou só Q5
     // ============================================
-    const grupo2x_restante = grupo2x; // O que sobrou após splice
+    const grupo2x_restante = grupo2x_intercalado; // O que sobrou após splice
     if (grupo2x_restante.length > 0) {
         for (const m of grupo2x_restante) {
             // Se Q4 e Q5 existem, vai nos dois
@@ -188,25 +204,19 @@ function distribuirPresencaQuintas(
     }
 
     // ============================================
-    // GRUPO E: 1x vão para Q5 (ou quinta com menor ocupação)
+    // GRUPO E: 1x vão para QUALQUER quinta abaixo do mínimo (incluindo Q1-Q3)
+    // CORREÇÃO: Antes priorizava só Q5/Q4, agora preenche onde precisar
     // ============================================
     for (const m of grupo1x) {
-        // Priorizar Q5, senão Q4, senão menor ocupação
+        // Encontrar a quinta com MENOR ocupação (balanceamento global)
         let targetCulto: Culto | null = null;
+        let menorCount = Infinity;
 
-        if (Q5 && (ocupacao.get(Q5.id) || 0) < MINIMO_MEMBROS) {
-            targetCulto = Q5;
-        } else if (Q4 && (ocupacao.get(Q4.id) || 0) < MINIMO_MEMBROS) {
-            targetCulto = Q4;
-        } else {
-            // Fallback: menor ocupação
-            let menorCount = Infinity;
-            for (const c of cultosOrdenados) {
-                const count = ocupacao.get(c.id) || 0;
-                if (count < menorCount) {
-                    menorCount = count;
-                    targetCulto = c;
-                }
+        for (const c of cultosOrdenados) {
+            const count = ocupacao.get(c.id) || 0;
+            if (count < menorCount) {
+                menorCount = count;
+                targetCulto = c;
             }
         }
 
@@ -215,7 +225,7 @@ function distribuirPresencaQuintas(
             ocupacao.set(targetCulto.id, (ocupacao.get(targetCulto.id) || 0) + 1);
         }
     }
-    console.log(`   ✅ 1x: ${grupo1x.length} membros distribuídos (prioridade Q5/Q4)`);
+    console.log(`   ✅ 1x: ${grupo1x.length} membros distribuídos (balanceamento global)`);
 
     // Log final
     console.log(`   📊 Ocupação final das quintas:`);

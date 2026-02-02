@@ -39,7 +39,7 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
  */
 export const STAR_MAX_LIMITS: Record<string, number> = {
     'Hall': 2,
-    'Apoio': 2,
+    'Apoio': 3, // Alterado de 2 para 3 - permite nível 3★ também
 };
 
 type MinStarRule = {
