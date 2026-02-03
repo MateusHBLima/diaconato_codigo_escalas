@@ -38,7 +38,7 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
  * Membros Nível 3+ serão BLOQUEADOS dessas funções.
  */
 export const STAR_MAX_LIMITS: Record<string, number> = {
-    'Hall': 2,
+    'Hall': 3, // Alterado de 2 para 3 - permite nível 3★ também
     'Apoio': 3, // Alterado de 2 para 3 - permite nível 3★ também
 };
 

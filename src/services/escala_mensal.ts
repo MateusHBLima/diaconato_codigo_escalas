@@ -107,8 +107,11 @@ function distribuirPresencaQuintas(
 
     // Separar grupos por frequência (EXCLUINDO N5)
     const grupo3x = membrosSemN5.filter(m => m.limite_mes >= 3);
-    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)];
-    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)];
+    // Ordenar por nível (1->4) para priorizar "operários" (Level 1-3) nas funções básicas
+    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)]
+        .sort((a, b) => (a.nivel_experiencia || 1) - (b.nivel_experiencia || 1) || (a.nome_completo || '').localeCompare(b.nome_completo || ''));
+    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)]
+        .sort((a, b) => (a.nivel_experiencia || 1) - (b.nivel_experiencia || 1) || (a.nome_completo || '').localeCompare(b.nome_completo || ''));
 
     // Identificar quintas
     const Q1 = cultosOrdenados[0];
@@ -134,6 +137,18 @@ function distribuirPresencaQuintas(
     console.log(`   📊 Vagas a preencher: Q1/Q3=${vagasQ1}, Q2/Q4=${vagasQ2}`);
 
     // ============================================
+    // GRUPO N5: Líderes vão em TODAS as quintas disponíveis
+    // ============================================
+    for (const m of membrosN5) {
+        if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
+        if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
+        if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
+        if (Q4) { m.pool_cultos_ids!.add(Q4.id); ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1); }
+        if (Q5) { m.pool_cultos_ids!.add(Q5.id); ocupacao.set(Q5.id, (ocupacao.get(Q5.id) || 0) + 1); }
+    }
+    console.log(`   ✅ N5: ${membrosN5.length} membros alocados em TODAS as quintas`);
+
+    // ============================================
     // GRUPO A: Membros 3x vão em Q1, Q2, Q3
     // ============================================
     for (const m of grupo3x) {
@@ -148,21 +163,47 @@ function distribuirPresencaQuintas(
     // CORREÇÃO: Intercalar gêneros para garantir mulheres em Q1 (Apoio precisa)
     // ============================================
 
-    // Separar 2x por gênero e intercalar
+    // ============================================
+    // GRUPO B: Primeiros 2x vão em Q1 + Q3 (espelho)
+    // CORREÇÃO: "Smart Selection" - Priorizar quem preenche lacunas (Homem p/ Hall, Mulher p/ Apoio)
+    // ============================================
+
+    // Separar 2x por gênero
     const mulheres2x = grupo2x.filter(m => m.sexo === 'MULHER');
     const homens2x = grupo2x.filter(m => m.sexo === 'HOMEM');
 
-    console.log(`   👥 2x por gênero: ${mulheres2x.length} mulheres, ${homens2x.length} homens`);
+    console.log(`   👥 2x disponíveis: ${mulheres2x.length} mulheres, ${homens2x.length} homens`);
 
-    // Intercalar: M, H, M, H, M, H... para garantir distribuição equilibrada
-    const grupo2x_intercalado: typeof grupo2x = [];
-    const maxLen = Math.max(mulheres2x.length, homens2x.length);
-    for (let i = 0; i < maxLen; i++) {
-        if (i < mulheres2x.length) grupo2x_intercalado.push(mulheres2x[i]);
-        if (i < homens2x.length) grupo2x_intercalado.push(homens2x[i]);
+    // Calcular composição ideal do grupo 2x para Q1
+    // Sabendo que 3x já preenche parte, vamos garantir equilibrio no complemento
+    // Ideal: pegar metade dos 2x disponíveis, mas garantindo mínimos
+
+    const grupo2x_Q1Q3: typeof grupo2x = [];
+
+    // Priorizade 1: Garantir pelo menos X mulheres e Y homens do grupo 2x em Q1
+    // (Números estimados para cobrir Apoio e Hall)
+    const metaMulheres = mulheres2x.length; // Pegar TODAS as mulheres para garantir Q1
+    const metaHomens = homens2x.length;     // Pegar TODOS os homens para garantir Q1
+
+    // Pegar mulheres
+    for (let i = 0; i < metaMulheres; i++) {
+        grupo2x_Q1Q3.push(mulheres2x.shift()!);
+    }
+    // Pegar homens
+    for (let i = 0; i < metaHomens; i++) {
+        grupo2x_Q1Q3.push(homens2x.shift()!);
     }
 
-    const grupo2x_Q1Q3 = grupo2x_intercalado.splice(0, vagasQ1);
+    // Completar vagas restantes com quem sobrou (intercalando)
+    const sobras = [...mulheres2x, ...homens2x]; // O que restou depois de tirar os prioritários
+    while (grupo2x_Q1Q3.length < vagasQ1 && sobras.length > 0) {
+        grupo2x_Q1Q3.push(sobras.shift()!);
+    }
+
+    // O que não foi usado em Q1 vai para Q2/Q4 (grupo intercalado restante)
+    const grupo2x_intercalado = sobras; // Sobras atualizadas
+
+    // Loop de alocação já feito acimamanualmente
     for (const m of grupo2x_Q1Q3) {
         if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
         if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
@@ -234,102 +275,250 @@ function distribuirPresencaQuintas(
     });
 }
 
+
+interface SchedulingUnit {
+    members: MembroComHistorico[];
+    type: 'casal' | 'solteiro';
+    sharedFreq: number; // Frequência garantida juntos (miníma)
+    surplusMember?: MembroComHistorico; // Quem tem dias a mais
+    surplusFreq?: number;
+    preferredShift: 'manha' | 'noite' | 'qualquer';
+    assignedShifts: { [key: string]: 'manha' | 'noite' }; // Rastrear turno por data base
+}
+
 function distribuirPresencaDomingos(
-    membros: MembroComHistorico[], // Lista completa
+    membros: MembroComHistorico[],
     cultosDomingo: Culto[]
 ): void {
-    // 1. Agrupar cultos por Data Lógica de Domingo (para frequencia 3x/2x)
-    const diasMap = new Map<string, Culto[]>();
+    // 1. Agrupar cultos por Data Lógica (YYYY-MM-DD)
+    const diasMap = new Map<string, { manha?: Culto, noite?: Culto }>();
     cultosDomingo.forEach(c => {
-        const dataBase = c.data_culto.split('T')[0]; // YYYY-MM-DD
-        if (!diasMap.has(dataBase)) diasMap.set(dataBase, []);
-        diasMap.get(dataBase)!.push(c);
+        const dataBase = c.data_culto.split('T')[0];
+        if (!diasMap.has(dataBase)) diasMap.set(dataBase, {});
+        const dia = diasMap.get(dataBase)!;
+        if (c.periodo.endsWith('manha')) dia.manha = c;
+        else dia.noite = c;
     });
 
-    // Sort das datas para lógica 1ª, 2ª, 3ª semana
     const datasOrdenadas = Array.from(diasMap.keys()).sort();
 
-    // 2. Identificar Duplas (Casais) e Singles
+    // Identificar Quintas Lógicas (D1, D2, D3, D4, D5)
+    // Usaremos índices 0, 1, 2, 3, 4
+    const D1_Data = datasOrdenadas[0];
+    const D2_Data = datasOrdenadas[1];
+    const D3_Data = datasOrdenadas[2];
+    const D4_Data = datasOrdenadas[3];
+    const D5_Data = datasOrdenadas[4];
+
+    console.log(`   📅 Domingos detectados: ${datasOrdenadas.length}`);
+
+    // 2. Construir Unidades de Agendamento (Casais e Solteiros)
+    const units: SchedulingUnit[] = [];
     const processados = new Set<string>();
 
     for (const mPrincipal of membros) {
         if (processados.has(mPrincipal.id)) continue;
 
+        let membersList = [mPrincipal];
+        let type: 'casal' | 'solteiro' = 'solteiro';
+        let sharedFreq = mPrincipal.limite_mes;
+        let surplusMember: MembroComHistorico | undefined;
+        let surplusFreq = 0;
+
         // Tentar achar cônjuge
-        let conjuge: MembroComHistorico | undefined;
         if (mPrincipal.nome_conjuge) {
             const nomeConjugeClean = mPrincipal.nome_conjuge.trim().toLowerCase();
-            conjuge = membros.find(m =>
+            const conjuge = membros.find(m =>
                 m.id !== mPrincipal.id &&
                 m.nome_completo.toLowerCase().includes(nomeConjugeClean)
             );
-        }
+            if (conjuge) {
+                membersList.push(conjuge);
+                type = 'casal';
+                processados.add(conjuge.id);
 
-        const dupla = conjuge ? [mPrincipal, conjuge] : [mPrincipal];
-        dupla.forEach(d => processados.add(d.id));
+                // Lógica Híbrida:
+                // Shared = Mínimo dos dois
+                // Surplus = Diferença do maior
+                const minLimit = Math.min(mPrincipal.limite_mes, conjuge.limite_mes);
+                sharedFreq = minLimit;
 
-        // Limite da Dupla: Usar o menor limite para garantir que vão juntos
-        const limite = Math.min(...dupla.map(d => d.limite_mes));
-
-        // === PASSO A: Definir SEMANAS de presença (Frequência 3x/2x/1x) ===
-        const semanasAlvoIndices: number[] = [];
-        const totalSemanas = datasOrdenadas.length;
-
-        // Base determinística para rotação
-        const idSum = mPrincipal.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-
-        if (limite >= 3) {
-            // 3x: 3 semanas rotacionadas
-            const start = idSum % totalSemanas;
-            for (let i = 0; i < 3; i++) {
-                semanasAlvoIndices.push((start + i) % totalSemanas);
+                if (mPrincipal.limite_mes > minLimit) {
+                    surplusMember = mPrincipal;
+                    surplusFreq = mPrincipal.limite_mes - minLimit;
+                } else if (conjuge.limite_mes > minLimit) {
+                    surplusMember = conjuge;
+                    surplusFreq = conjuge.limite_mes - minLimit;
+                }
             }
-        } else if (limite === 2) {
-            // 2x: Alternado com salto de 1
-            const start = idSum % totalSemanas;
-            semanasAlvoIndices.push(start % totalSemanas);
-            semanasAlvoIndices.push((start + 2) % totalSemanas);
-        } else {
-            // 1x: Espalhado uniformemente
-            const start = idSum % totalSemanas;
-            semanasAlvoIndices.push(start);
         }
+        processados.add(mPrincipal.id);
 
-        // === PASSO B: Definir PERÍODO (Manhã vs Noite) ===
-        // Regra RESTRITIVA e "Qualquer = Noite"
+        // Definir preferência unificada
+        // Regra "Restritiva": Qualquer + Noite = Noite. Manhã só se Manhã + Manhã ou Manhã + Qualquer
+        const prefs = membersList.map(m => m.melhor_periodo_domingo?.toLowerCase() || 'qualquer');
+        let finalPref: 'manha' | 'noite' | 'qualquer' = 'qualquer';
 
-        let periodoFinal: 'manha' | 'noite' = 'noite'; // Default seguro
+        if (prefs.some(p => p.includes('noite'))) finalPref = 'noite';
+        else if (prefs.some(p => p.includes('manhã'))) finalPref = 'manha';
+        // else mantem 'qualquer'
 
-        const prefs = dupla.map(d => d.melhor_periodo_domingo?.toLowerCase() || 'qualquer');
-        const temManha = prefs.some(p => p.includes('manhã'));
-        const temNoite = prefs.some(p => p.includes('noite'));
-        const soQualquer = prefs.every(p => p.includes('qualquer') || p === '');
-
-        if (soQualquer) {
-            periodoFinal = 'noite'; // Regra Solteiro/Casal Qualquer -> Noite
-        } else if (temManha && !temNoite) {
-            periodoFinal = 'manha';
-        } else {
-            periodoFinal = 'noite'; // Conflito ou Qualquer+Noite -> Noite
-        }
-
-        // === PASSO C: Aplicar aos cultos ===
-        semanasAlvoIndices.forEach(idx => {
-            if (idx >= datasOrdenadas.length) return;
-            const dataAlvo = datasOrdenadas[idx];
-            const cultosDoDia = diasMap.get(dataAlvo) || [];
-
-            // Achar o culto alvo do período correto
-            const cultoAlvo = cultosDoDia.find(c => {
-                if (periodoFinal === 'manha') return c.periodo === 'domingo_manha';
-                return c.periodo === 'domingo_noite';
-            });
-
-            if (cultoAlvo) {
-                dupla.forEach(m => m.pool_cultos_ids!.add(cultoAlvo.id));
-            }
+        units.push({
+            members: membersList,
+            type,
+            sharedFreq,
+            surplusMember,
+            surplusFreq,
+            preferredShift: finalPref,
+            assignedShifts: {}
         });
     }
+
+    // Ordenar Unidades: 2x e 1x precisam de Smart Selection (Nível baixo primeiro)
+    // Para casais, usamos o MENOR nível da dupla
+    const getUnitLevel = (u: SchedulingUnit) => Math.min(...u.members.map(m => m.nivel_experiencia || 1));
+    const sortSmart = (a: SchedulingUnit, b: SchedulingUnit) => getUnitLevel(a) - getUnitLevel(b);
+
+    // Separar por Shared Frequency
+    const units3x = units.filter(u => u.sharedFreq >= 3);
+    const units2x = units.filter(u => u.sharedFreq === 2).sort(sortSmart);
+    const units1x = units.filter(u => u.sharedFreq === 1).sort(sortSmart);
+
+    console.log(`   👥 Unidades: 3x=${units3x.length}, 2x=${units2x.length}, 1x=${units1x.length}`);
+
+    // Helper: Atribuir Unidade a um Dia Específico
+    const assignToDay = (unit: SchedulingUnit, dataBase: string, forceShift?: 'manha' | 'noite') => {
+        if (!dataBase) return;
+        const dia = diasMap.get(dataBase);
+        if (!dia) return;
+
+        // Decidir turno
+        let turno: 'manha' | 'noite' = 'noite'; // default
+
+        if (forceShift) {
+            turno = forceShift;
+        } else if (unit.preferredShift !== 'qualquer') {
+            turno = unit.preferredShift;
+        } else {
+            // Balanceamento: Escolher turno com menos gente JÁ alocada neste dia
+            // (Simplificação: random ou fixo 'noite' se preferir)
+            // Vamos usar 'noite' como default para solteiros 'qualquer' para simplificar a consistencia
+            turno = 'noite';
+        }
+
+        const cultoAlvo = turno === 'manha' ? dia.manha : dia.noite;
+        if (cultoAlvo) {
+            unit.members.forEach(m => m.pool_cultos_ids!.add(cultoAlvo.id));
+            unit.assignedShifts[dataBase] = turno;
+        }
+    };
+
+    // ============================================
+    // PASSO A: 3x (D1, D2, D3)
+    // ============================================
+    for (const u of units3x) {
+        assignToDay(u, D1_Data);
+        assignToDay(u, D2_Data);
+        assignToDay(u, D3_Data);
+    }
+
+    // ============================================
+    // PASSO B: 2x Grupo A (D1 + D3) - Espelho
+    // ============================================
+    // Pegar 50% das unidades 2x
+    const metade = Math.ceil(units2x.length / 2);
+    const group2xA = units2x.splice(0, metade);
+
+    for (const u of group2xA) {
+        // D1
+        assignToDay(u, D1_Data);
+        // Ler turno que foi decidido em D1
+        const shiftD1 = u.assignedShifts[D1_Data];
+        // Forçar mesmo turno em D3
+        assignToDay(u, D3_Data, shiftD1);
+    }
+
+    // ============================================
+    // PASSO C: 2x Grupo B (D2 + D4, ou sobras)
+    // ============================================
+    const group2xB = units2x; // O restante
+    for (const u of group2xB) {
+        if (D2_Data && D4_Data) {
+            assignToDay(u, D2_Data);
+            const shiftD2 = u.assignedShifts[D2_Data];
+            assignToDay(u, D4_Data, shiftD2);
+        } else if (D2_Data) {
+            assignToDay(u, D2_Data);
+        }
+    }
+
+    // ============================================
+    // PASSO D: SURPLUS (Dias extras individuais)
+    // ============================================
+    // Logica: Tentar preencher buracos lógicos ou próximo espelho
+    // Simplificando: Se grupo A (D1, D3) e tem surplus, joga no D2. Se B (D2, D4), joga no D1 ou D5.
+    // Vamos usar uma abordagem de "Tapa Buraco Global" para o surplus
+    const surplusCandidates: { member: MembroComHistorico, count: number }[] = [];
+    units.forEach(u => {
+        if (u.surplusMember && u.surplusFreq && u.surplusFreq > 0) {
+            surplusCandidates.push({ member: u.surplusMember, count: u.surplusFreq });
+        }
+    });
+
+    // Função para contar ocupação por Culto ID
+    const getOccupancy = (cultoId: string) => {
+        let count = 0;
+        membros.forEach(m => {
+            if (m.pool_cultos_ids!.has(cultoId)) count++;
+        });
+        return count;
+    };
+
+    // Distribuir Surplus
+    for (const cand of surplusCandidates) {
+        for (let i = 0; i < cand.count; i++) {
+            // Achar culto com menor ocupação que o membro AINDA NÃO esteja
+            let bestCulto: Culto | null = null;
+            let minOcc = Infinity;
+
+            cultosDomingo.forEach(c => {
+                if (cand.member.pool_cultos_ids!.has(c.id)) return; // Já está lá
+                const occ = getOccupancy(c.id);
+                if (occ < minOcc) {
+                    minOcc = occ;
+                    bestCulto = c;
+                }
+            });
+
+            if (bestCulto) {
+                cand.member.pool_cultos_ids!.add((bestCulto as Culto).id);
+            }
+        }
+    }
+
+    // ============================================
+    // PASSO E: 1x (Global Balance)
+    // ============================================
+    for (const u of units1x) {
+        // Achar DATA/TURNO com menor ocupação média
+        // Simplificação: Iterar todos os cultos e jogar no menor
+        let bestCulto: Culto | null = null;
+        let minOcc = Infinity;
+
+        cultosDomingo.forEach(c => {
+            const occ = getOccupancy(c.id);
+            if (occ < minOcc) {
+                minOcc = occ;
+                bestCulto = c;
+            }
+        });
+
+        if (bestCulto) {
+            u.members.forEach(m => m.pool_cultos_ids!.add((bestCulto as Culto).id));
+        }
+    }
+
+    console.log(`   ✅ Domingos distribuídos com lógica de Espelho + Turnos`);
 }
 
 // ============================================

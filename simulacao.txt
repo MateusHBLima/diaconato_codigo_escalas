@@ -1,0 +1,50 @@
+🔍 SIMULAÇÃO DETALHADA DO POOL Q1
+==================================================
+
+📊 COMPOSIÇÃO DO POOL Q1 (32 membros):
+- N5: 4
+- 3x: 14
+- 2x: 14 (vagas: 14)
+
+🚪 ANÁLISE PARA HALL (Precisa: Homem | Nível <= 2)
+Candidatos Hall Nível <= 2: 8
+  - Antonio osni Cardoso (1★)
+  - Elvis correa (2★)
+  - Paulo Felipe (2★)
+  - Adilson Miranda Neto (2★)
+  - Anderson Rodrigues de Andrade (CASAL JB E MARISA) (1★)
+  - Dari Kruger (2★)
+  - Cícero Bezerra de Araújo (1★)
+  - José Carlos Cavalcante da Silva (2★)
+Candidatos Hall Nível <= 3: 12
+
+🤲 ANÁLISE PARA APOIO (Precisa: Mulher | Nível <= 3)
+Candidatos Apoio Nível <= 3: 9
+  - Josiane Massaneiro Stahlschmidt alves (3★)
+  - Denilce grabowski (3★)
+  - Dyeime Dayane Ferreira Abreu (3★)
+  - Amanda Carolina Mathias Macanhão (3★)
+  - Dulcilene de Nazaré Costa da Silva (2★)
+  - Janaína Rezendes NUnes (1★)
+  - Maria Del Valle May Cedeño (3★)
+  - Neiva Aguiar (1★)
+  - Marisa Aparecida Costa (3★)
+
+📋 VAGAS REAIS:
+- Hall: Requer ~0 vagas
+- Apoio: Requer ~0 vagas
+
+🔎 DIAGNÓSTICO FINAL:
+
+🚫 HOMENS N3+ (Bloqueados do Hall 2★): 11
+  - Gustavo Nardi (5★) -> Pode fazer Hall se aumentar para 3★?
+  - Érico Andrei Bueno (5★) -> Pode fazer Hall se aumentar para 3★?
+  - Adilson ferrari lopes  (4★) -> Pode fazer Hall se aumentar para 3★?
+  - Andre chagas (3★) -> Pode fazer Hall se aumentar para 3★?
+  - José Dalzotto (3★) -> Pode fazer Hall se aumentar para 3★?
+  - José de Arimateia da Silva Ribeiro Abreu (3★) -> Pode fazer Hall se aumentar para 3★?
+  - Gabriel Luiz Grabowski (4★) -> Pode fazer Hall se aumentar para 3★?
+  - Jose Duarte (4★) -> Pode fazer Hall se aumentar para 3★?
+  - Alexandre Anater (4★) -> Pode fazer Hall se aumentar para 3★?
+  - Claudio Spindler Junior (3★) -> Pode fazer Hall se aumentar para 3★?
+  - Giancarlo Brandalise (4★) -> Pode fazer Hall se aumentar para 3★?
