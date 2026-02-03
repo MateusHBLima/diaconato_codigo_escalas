@@ -106,12 +106,14 @@ function distribuirPresencaQuintas(
     console.log(`   👑 N5 (não contam no mínimo): ${membrosN5.length} membros`);
 
     // Separar grupos por frequência (EXCLUINDO N5)
+    // Ordenação SMART: Nível Ascendente (1->4) para priorizar operários nas funções básicas
+    // e Alfabetica para determinismo
+    const sortSmart = (a: MembroComHistorico, b: MembroComHistorico) =>
+        (a.nivel_experiencia || 1) - (b.nivel_experiencia || 1) || (a.nome_completo || '').localeCompare(b.nome_completo || '');
+
     const grupo3x = membrosSemN5.filter(m => m.limite_mes >= 3);
-    // Ordenar por nível (1->4) para priorizar "operários" (Level 1-3) nas funções básicas
-    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)]
-        .sort((a, b) => (a.nivel_experiencia || 1) - (b.nivel_experiencia || 1) || (a.nome_completo || '').localeCompare(b.nome_completo || ''));
-    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)]
-        .sort((a, b) => (a.nivel_experiencia || 1) - (b.nivel_experiencia || 1) || (a.nome_completo || '').localeCompare(b.nome_completo || ''));
+    const grupo2x = [...membrosSemN5.filter(m => m.limite_mes === 2)].sort(sortSmart);
+    const grupo1x = [...membrosSemN5.filter(m => m.limite_mes === 1)].sort(sortSmart);
 
     // Identificar quintas
     const Q1 = cultosOrdenados[0];
@@ -124,123 +126,94 @@ function distribuirPresencaQuintas(
     console.log(`   👥 Grupos (sem N5): 3x=${grupo3x.length}, 2x=${grupo2x.length}, 1x=${grupo1x.length}`);
 
     // ============================================
-    // NOVA LÓGICA: ESCALA ESPELHO
-    // Q1 = Q3 (mesmas pessoas)
-    // Q2 = Q4 (mesmas pessoas)
-    // Q5 = preencher com sobras
-    // ============================================
-
-    // Calcular quantos 2x precisamos para Q1/Q3
-    const vagasQ1 = MINIMO_MEMBROS - grupo3x.length;
-    const vagasQ2 = MINIMO_MEMBROS - grupo3x.length;
-
-    console.log(`   📊 Vagas a preencher: Q1/Q3=${vagasQ1}, Q2/Q4=${vagasQ2}`);
-
-    // ============================================
     // GRUPO N5: Líderes vão em TODAS as quintas disponíveis
     // ============================================
     for (const m of membrosN5) {
-        if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
-        if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
-        if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
-        if (Q4) { m.pool_cultos_ids!.add(Q4.id); ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1); }
-        if (Q5) { m.pool_cultos_ids!.add(Q5.id); ocupacao.set(Q5.id, (ocupacao.get(Q5.id) || 0) + 1); }
+        cultosOrdenados.forEach(c => {
+            m.pool_cultos_ids!.add(c.id);
+            ocupacao.set(c.id, (ocupacao.get(c.id) || 0) + 1);
+        });
     }
     console.log(`   ✅ N5: ${membrosN5.length} membros alocados em TODAS as quintas`);
 
     // ============================================
-    // GRUPO A: Membros 3x vão em Q1, Q2, Q3
+    // GRUPO A: Membros 3x (Rotação Balanceada)
+    // Antes: Q1, Q2, Q3 (Fixo) -> Q4 morria.
+    // Agora: 4 Padrões de Rotação para cobrir Q4 também.
     // ============================================
+    // Padrões (Indices 0..3):
+    // 0: [0, 1, 2] -> Q1, Q2, Q3
+    // 1: [0, 1, 3] -> Q1, Q2, Q4
+    // 2: [0, 2, 3] -> Q1, Q3, Q4
+    // 3: [1, 2, 3] -> Q2, Q3, Q4
+
+    const patterns3x = [
+        [0, 1, 2],
+        [0, 1, 3],
+        [0, 2, 3],
+        [1, 2, 3]
+    ];
+
     for (const m of grupo3x) {
-        if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
-        if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
-        if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
+        // Seleção Determinística do Padrão via Hash do Nome
+        // (Isso garante consistência se rodar de novo)
+        const idSum = m.nome_completo.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const patternIdx = idSum % 4;
+        const indices = patterns3x[patternIdx];
+
+        indices.forEach(idx => {
+            const culto = cultosOrdenados[idx]; // Q1..Q4
+            if (culto) {
+                m.pool_cultos_ids!.add(culto.id);
+                ocupacao.set(culto.id, (ocupacao.get(culto.id) || 0) + 1);
+            }
+        });
     }
-    console.log(`   ✅ 3x: ${grupo3x.length} membros em Q1, Q2, Q3`);
+    console.log(`   ✅ 3x: ${grupo3x.length} membros distribuídos (Rotação Balanceada 4 Padrões)`);
 
     // ============================================
-    // GRUPO B: Primeiros 2x vão em Q1 + Q3 (espelho)
-    // CORREÇÃO: Intercalar gêneros para garantir mulheres em Q1 (Apoio precisa)
+    // GRUPO B: 2x (Divisão Estrita 50/50 e Espelhada)
+    // Balanceia Bases de Q1/Q3 e Q2/Q4
     // ============================================
 
-    // ============================================
-    // GRUPO B: Primeiros 2x vão em Q1 + Q3 (espelho)
-    // CORREÇÃO: "Smart Selection" - Priorizar quem preenche lacunas (Homem p/ Hall, Mulher p/ Apoio)
-    // ============================================
-
-    // Separar 2x por gênero
+    // Separar 2x por gênero para manter proporção Hall(H)/Apoio(M)
     const mulheres2x = grupo2x.filter(m => m.sexo === 'MULHER');
     const homens2x = grupo2x.filter(m => m.sexo === 'HOMEM');
 
-    console.log(`   👥 2x disponíveis: ${mulheres2x.length} mulheres, ${homens2x.length} homens`);
-
-    // Calcular composição ideal do grupo 2x para Q1
-    // Sabendo que 3x já preenche parte, vamos garantir equilibrio no complemento
-    // Ideal: pegar metade dos 2x disponíveis, mas garantindo mínimos
-
-    // Calibrar Q1 (Balanceamento)
-    // Se usarmos TODOS os 2x em Q1, Q2 morre.
-    // Vamos definir um ALVO seguro para Q1 (ex: 45 pessoas ou Deficit do 3x + buffer)
-
-    // Total de 3x em Q1
-    const count3x = grupo3x.length;
-    // N5 já está lá
-    const countN5 = membrosN5.length;
-
-    // Meta Ideal Q1 = 45 (Hall Cheio + Apoio + Escala Completa)
-    const TARGET_Q1 = 45;
-    const currentQ1 = count3x + countN5;
-    const deficitQ1 = Math.max(0, TARGET_Q1 - currentQ1);
-
-    console.log(`   ⚖️ Balanceamento Q1: 3x+N5=${currentQ1}, Meta=${TARGET_Q1}, Deficit=${deficitQ1}`);
-
-    // Pegar apenas o necessário dos 2x para cobrir o deficit
-    // Manter proporção Homem/Mulher
-    const metaMulheres = Math.min(mulheres2x.length, Math.ceil(deficitQ1 / 2) + 2); // +2 Buffer
-    const metaHomens = Math.min(homens2x.length, Math.ceil(deficitQ1 / 2) + 2);     // +2 Buffer
-
-    // ... (rest of filtering logic) ...
-
     const grupo2x_Q1Q3: typeof grupo2x = [];
+    const grupo2x_Q2Q4: typeof grupo2x = [];
 
-    // Pegar mulheres (Prioridade: Nível baixo primeiro - já ordenado)
-    for (let i = 0; i < metaMulheres; i++) grupo2x_Q1Q3.push(mulheres2x.shift()!);
-    // Pegar homens
-    for (let i = 0; i < metaHomens; i++) grupo2x_Q1Q3.push(homens2x.shift()!);
+    // Distribuir Mulheres (Intercalado: A, B, A, B...)
+    mulheres2x.forEach((m, i) => {
+        if (i % 2 === 0) grupo2x_Q1Q3.push(m);
+        else grupo2x_Q2Q4.push(m);
+    });
 
-    // Completar até atingir deficit se sobrar gente e faltar numero
-    const sobras = [...mulheres2x, ...homens2x];
-    while (grupo2x_Q1Q3.length < deficitQ1 && sobras.length > 0) {
-        grupo2x_Q1Q3.push(sobras.shift()!);
-    }
+    // Distribuir Homens (Intercalado: A, B, A, B...)
+    homens2x.forEach((m, i) => {
+        if (i % 2 === 0) grupo2x_Q1Q3.push(m);
+        else grupo2x_Q2Q4.push(m);
+    });
 
-    const grupo2x_intercalado = sobras; // O restante VAI PARA Q2/Q4
+    console.log(`   ⚖️ Split 2x: A=${grupo2x_Q1Q3.length} vs B=${grupo2x_Q2Q4.length}`);
 
-    console.log(`   ✅ 2x Distribuídos: ${grupo2x_Q1Q3.length} para Q1/Q3, ${grupo2x_intercalado.length} para Q2/Q4`);
-
-    // Loop de alocação (Q1/Q3)
+    // ALOCAR Q1/Q3 (Grupo A - "Primeiras Quintas")
     for (const m of grupo2x_Q1Q3) {
         if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
         if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
     }
+    console.log(`   ✅ 2x (Q1=Q3): ${grupo2x_Q1Q3.length} membros`);
 
-    // ============================================
-    // GRUPO C: Próximos 2x vão em Q2 + Q4 (espelho)
-    // ============================================
-    // Se Q2/Q4 estiver muito vazio, 1x vai completar depois.
-    const grupo2x_Q2Q4 = grupo2x_intercalado; // PEGA TUDO QUE SOBROU DOS 2x
-
+    // ALOCAR Q2/Q4 (Grupo B - "Segundas Quintas")
     for (const m of grupo2x_Q2Q4) {
         if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
         if (Q4) { m.pool_cultos_ids!.add(Q4.id); ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1); }
     }
     console.log(`   ✅ 2x (Q2=Q4): ${grupo2x_Q2Q4.length} membros alocados`);
 
-    // ... (rest of logic 2x restante - not needed really if we took all) ...
-
     // ============================================
-    // GRUPO E: 1x vão para QUALQUER quinta abaixo do mínimo
-    // PRIORIZAR Q2/Q4/Q5 se estiverem vazios
+    // GRUPO E: 1x e Sobras (Global Balance)
+    // Vão para QUALQUER quinta abaixo da média
     // ============================================
     for (const m of grupo1x) {
         // Encontrar a quinta com MENOR ocupação
@@ -254,7 +227,6 @@ function distribuirPresencaQuintas(
                 targetCulto = c;
             }
         }
-
 
         if (targetCulto) {
             m.pool_cultos_ids!.add(targetCulto.id);
@@ -310,15 +282,6 @@ function distribuirPresencaDomingos(
     // 2. Construir Unidades de Agendamento (Casais e Solteiros)
     const units: SchedulingUnit[] = [];
     const processados = new Set<string>();
-
-    // Função para contar ocupação por Culto ID (Defined Early)
-    const getOccupancy = (cultoId: string) => {
-        let count = 0;
-        membros.forEach(m => {
-            if (m.pool_cultos_ids!.has(cultoId)) count++;
-        });
-        return count;
-    };
 
     for (const mPrincipal of membros) {
         if (processados.has(mPrincipal.id)) continue;
@@ -390,6 +353,15 @@ function distribuirPresencaDomingos(
 
     console.log(`   👥 Unidades: 3x=${units3x.length}, 2x=${units2x.length}, 1x=${units1x.length}`);
 
+    // Função para contar ocupação por Culto ID (Defined Early)
+    const getOccupancy = (cultoId: string) => {
+        let count = 0;
+        membros.forEach(m => {
+            if (m.pool_cultos_ids!.has(cultoId)) count++;
+        });
+        return count;
+    };
+
     // Helper: Atribuir Unidade a um Dia Específico
     const assignToDay = (unit: SchedulingUnit, dataBase: string, forceShift?: 'manha' | 'noite') => {
         if (!dataBase) return;
@@ -427,66 +399,70 @@ function distribuirPresencaDomingos(
     };
 
     // ============================================
-    // PASSO A: 3x (D1, D2, D3)
+    // PASSO A: 3x (Rotação Balanceada)
     // ============================================
-    // DICA: Sort por "Sobrenome" ou algo aleatório para não enviesar o balanceamento
-    // (Se ordenamos por ID, os primeiros sempre pegam Manhã se estiver vazio)
-    // Vamos manter como está por enquanto.
+    // MESMA LÓGICA DAS QUINTAS: Cobrir D4 também!
+    const patterns3x = [
+        [D1_Data, D2_Data, D3_Data],
+        [D1_Data, D2_Data, D4_Data],
+        [D1_Data, D3_Data, D4_Data],
+        [D2_Data, D3_Data, D4_Data]
+    ];
 
     for (const u of units3x) {
-        assignToDay(u, D1_Data);
-        assignToDay(u, D2_Data);
-        assignToDay(u, D3_Data);
+        // Determinismo via hash do primeiro membro
+        const idSum = u.members[0].nome_completo.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const patternIdx = idSum % 4;
+        const dates = patterns3x[patternIdx];
+
+        dates.forEach(d => {
+            if (d) assignToDay(u, d);
+        });
     }
-    console.log(`   ✅ 3x: ${units3x.length} unidades distribuídas`);
+    console.log(`   ✅ 3x: ${units3x.length} unidades distribuídas (Rotação D1..D4)`);
 
     // ============================================
-    // PASSO B: 2x Grupo A (D1 + D3) - Espelho
+    // PASSO B: 2x (Divisão Estrita 50/50 e Espelhada)
     // ============================================
-    // Pegar 50% das unidades 2x
-    const metade = Math.ceil(units2x.length / 2);
-    const group2xA = units2x.splice(0, metade);
 
-    for (const u of group2xA) {
-        // D1
+    const units2xA: SchedulingUnit[] = [];
+    const units2xB: SchedulingUnit[] = [];
+
+    // Divisão Estrita 50/50
+    units2x.forEach((u, i) => {
+        if (i % 2 === 0) units2xA.push(u);
+        else units2xB.push(u);
+    });
+
+    console.log(`   ⚖️ Split 2x (Domingo): A=${units2xA.length} vs B=${units2xB.length}`);
+
+    // GROUP A: D1 + D3
+    for (const u of units2xA) {
         assignToDay(u, D1_Data);
-        // Ler turno que foi decidido em D1
         const shiftD1 = u.assignedShifts[D1_Data];
-        // Forçar mesmo turno em D3
         assignToDay(u, D3_Data, shiftD1);
     }
-    console.log(`   ✅ 2x (Espelho A D1=D3): ${group2xA.length} unidades`);
+    console.log(`   ✅ 2x (Espelho A D1=D3): ${units2xA.length} unidades`);
 
-    // ============================================
-    // PASSO C: 2x Grupo B (D2 + D4, ou sobras)
-    // ============================================
-    const group2xB = units2x; // O restante
-    for (const u of group2xB) {
-        if (D2_Data && D4_Data) {
-            assignToDay(u, D2_Data);
+    // GROUP B: D2 + D4
+    for (const u of units2xB) {
+        if (D2_Data) assignToDay(u, D2_Data);
+        if (D4_Data) {
             const shiftD2 = u.assignedShifts[D2_Data];
             assignToDay(u, D4_Data, shiftD2);
-        } else if (D2_Data) {
-            assignToDay(u, D2_Data);
         }
     }
-    console.log(`   ✅ 2x (Espelho B D2=D4): ${group2xB.length} unidades`);
-
+    console.log(`   ✅ 2x (Espelho B D2=D4): ${units2xB.length} unidades`);
 
     // ============================================
     // PASSO D: SURPLUS (Dias extras individuais)
     // ============================================
-    // Logica: Tentar preencher buracos lógicos ou próximo espelho
-    // Simplificando: Se grupo A (D1, D3) e tem surplus, joga no D2. Se B (D2, D4), joga no D1 ou D5.
-    // Vamos usar uma abordagem de "Tapa Buraco Global" para o surplus
     const surplusCandidates: { member: MembroComHistorico, count: number }[] = [];
     units.forEach(u => {
         if (u.surplusMember && u.surplusFreq && u.surplusFreq > 0) {
             surplusCandidates.push({ member: u.surplusMember, count: u.surplusFreq });
         }
     });
-
-    // Função para contar ocupação por Culto ID (Defined Early - REMOVED from here)
 
     // Distribuir Surplus
     for (const cand of surplusCandidates) {
@@ -515,7 +491,6 @@ function distribuirPresencaDomingos(
     // ============================================
     for (const u of units1x) {
         // Achar DATA/TURNO com menor ocupação média
-        // Simplificação: Iterar todos os cultos e jogar no menor
         let bestCulto: Culto | null = null;
         let minOcc = Infinity;
 
