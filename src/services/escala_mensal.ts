@@ -422,24 +422,42 @@ function distribuirPresencaDomingos(
     console.log(`   ✅ 3x: ${units3x.length} unidades distribuídas (Rotação D1..D4)`);
 
     // ============================================
-    // PASSO B: 2x (Divisão Estrita 50/50 e Espelhada)
+    // PASSO B: 2x (Divisão Estrita 50/50 - BALANCEADA POR PREFERÊNCIA)
     // ============================================
+    // Problema Anterior: O split simples podia jogar todos os "Manhã" no Grupo A,
+    // deixando D1 Noite desfalcado.
+    // Solução: Dividir cada "Bucket" de preferência (Manhã, Noite, Qualquer) igualitariamente.
 
     const units2xA: SchedulingUnit[] = [];
     const units2xB: SchedulingUnit[] = [];
 
-    // Divisão Estrita 50/50
-    units2x.forEach((u, i) => {
-        if (i % 2 === 0) units2xA.push(u);
-        else units2xB.push(u);
-    });
+    // Buckets
+    const bucketManha = units2x.filter(u => u.preferredShift === 'manha');
+    const bucketNoite = units2x.filter(u => u.preferredShift === 'noite');
+    const bucketQualquer = units2x.filter(u => u.preferredShift === 'qualquer');
 
-    console.log(`   ⚖️ Split 2x (Domingo): A=${units2xA.length} vs B=${units2xB.length}`);
+    // Distribuidor Helper
+    const distributeBucket = (bucket: SchedulingUnit[]) => {
+        bucket.forEach((u, i) => {
+            if (i % 2 === 0) units2xA.push(u);
+            else units2xB.push(u);
+        });
+    };
+
+    distributeBucket(bucketManha);
+    distributeBucket(bucketNoite);
+    distributeBucket(bucketQualquer);
+
+    console.log(`   ⚖️ Split 2x (Domingo - Balanced Prefs):`);
+    console.log(`      Group A (D1/D3): ${units2xA.length} total`);
+    console.log(`      Group B (D2/D4): ${units2xB.length} total`);
 
     // GROUP A: D1 + D3
     for (const u of units2xA) {
         assignToDay(u, D1_Data);
+        // Ler turno que foi decidido em D1
         const shiftD1 = u.assignedShifts[D1_Data];
+        // Forçar mesmo turno em D3
         assignToDay(u, D3_Data, shiftD1);
     }
     console.log(`   ✅ 2x (Espelho A D1=D3): ${units2xA.length} unidades`);
@@ -447,7 +465,8 @@ function distribuirPresencaDomingos(
     // GROUP B: D2 + D4
     for (const u of units2xB) {
         if (D2_Data) assignToDay(u, D2_Data);
-        if (D4_Data) {
+        if (D4_Data) { // Só aplica D4 se existir
+            // Ler turno que foi decidido em D2 (se existir)
             const shiftD2 = u.assignedShifts[D2_Data];
             assignToDay(u, D4_Data, shiftD2);
         }

@@ -24,7 +24,11 @@ async function run() {
     console.log('--- ESTATÍSTICAS DE DOMINGO ---');
     console.log('Data | Periodo | Alocados | Vazios');
 
-    for (const c of cultos) {
+
+    // Limit to first 2 cultos (D1 Morning/Night)
+    const d1Cultos = cultos.slice(0, 2);
+
+    for (const c of d1Cultos) {
         const { data: aloc } = await supabase
             .from('escalas_alocacoes')
             .select('status')
