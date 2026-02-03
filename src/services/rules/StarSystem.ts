@@ -38,8 +38,8 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
  * Membros Nível 3+ serão BLOQUEADOS dessas funções.
  */
 export const STAR_MAX_LIMITS: Record<string, number> = {
-    'Hall': 3, // Alterado de 2 para 3 - permite nível 3★ também
-    'Apoio': 3, // Alterado de 2 para 3 - permite nível 3★ também
+    'Hall': 4, // Alterado de 3 para 4 - permite nível 4★ (Púlpito/Mesa) ajudar no básico
+    'Apoio': 4, // Alterado de 3 para 4 - permite nível 4★ ajudar no básico
 };
 
 type MinStarRule = {
@@ -92,9 +92,6 @@ export function podeExecutarFuncao(
         return false;
     }
 
-    // Verificação de Teto (MAX_STARS)
-    // ...
-
     // REGRA DE PRIORIDADE:
     // Quem tem "Prioridade Mesa" só deve fazer Mesa (para não ser roubado por outras funções processadas antes)
     if (membro.aptidoes?.includes('Prioridade Mesa')) {
@@ -109,16 +106,9 @@ export function podeExecutarFuncao(
     for (const [chave, maxEstrelas] of Object.entries(STAR_MAX_LIMITS)) {
         if (nomeFuncao.includes(chave)) {
             // EXCEÇÃO IMPORTANTE: "Apoio" também tem em "Responsável e apoio" e "Apoio - Oferta"
-            // "Responsável e apoio" é nível 3. Precisamos garantir que não bloqueie se for Responsável.
             if (chave === 'Apoio' && nomeFuncao.toLowerCase().includes('responsável')) {
                 continue; // Ignora o teto de Apoio se for Responsável
             }
-            // EXCEÇÃO OFERTA: Funções de Oferta (que contém 'Apoio' no nome ou setor)
-            // Se for do setor OFERTA, permite níveis mais altos (geralmente apoio da oferta pode ser qualquer um)
-            // Mas o pedido foi para bloquear "Apoio" (geral). Vamos assumir Apoio de recepção/setores.
-            // Para não bloquear oferta, vamos verificar se NÃO é oferta.
-
-            // Mas cuidado: Apoio Oferta Geralmente é Nível 1.
 
             if (estrelas > maxEstrelas) {
                 // console.log(`   🚫 Bloqueio MaxStars: ${membro.nome_completo} (${estrelas}★) > ${nomeFuncao} (Max ${maxEstrelas})`);
@@ -146,14 +136,31 @@ export function podeExecutarFuncao(
             }
 
             if (estrelas < regra.minStars) {
-                // console.log(`   🚫 Bloqueio MinStars: ${membro.nome_completo} (${estrelas}★) < ${nomeFuncao} (Min ${regra.minStars})`);
-                return false;
+                // NOVA REGRA (STRETCH): Se for Nível 2 tentando função Nível 3, PERMITIR se a regra exigir Min 3?
+                // O pedido foi "Talvez os de 2 poderem servir em 3".
+                // Se a função exige Nível 3 (ex: Corrente não tem regra explicita aqui, mas cai no loop cumulativo abaixo).
+                // As regras de MIN_LIMITS aqui são 'hard blocks' para setores específicos (ex: Apoio Corrente).
+                // Se o membro é 2 e exige 2, ok.
+                const isStretchAllowed = (estrelas === 2 && regra.minStars === 3);
+                if (!isStretchAllowed) {
+                    return false;
+                }
             }
         }
     }
 
     // Para níveis 1-4, lógica cumulativa normal
-    for (let nivel = 1; nivel <= estrelas; nivel++) {
+    // NOVA REGRA: Stretch (Esticada)
+    // - Nível 4 tem acesso total (1, 2, 3, 4)
+    // - Nível 2 PODE fazer funções de Nível 3 (ex: Salvas, Corrente, Responsável)
+
+    let nivelEfetivo = estrelas;
+    // Se for Nível 2, consideramos que pode alcançar funções de Nível 3
+    if (estrelas === 2) {
+        nivelEfetivo = 3;
+    }
+
+    for (let nivel = 1; nivel <= nivelEfetivo; nivel++) {
         const funcoesPermitidas = STAR_REQUIREMENTS[nivel] || [];
         if (funcoesPermitidas.some(f => nomeFuncao.includes(f))) {
             return true;
