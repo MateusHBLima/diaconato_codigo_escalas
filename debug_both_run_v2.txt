@@ -1,0 +1,456 @@
+✅ Cliente Supabase inicializado
+--- TESTE: GERAÇÃO MISTA (POOL + ESCALA) ---
+Fevereiro 2026 (gerarSomentePool = false)
+
+🚀 INICIANDO GERAÇÃO (FASE 1 = Custom | FASE 2 = Strict Clone): 2/2026
+
+🧹 Fase 0: Limpeza...
+
+🌊 Fase 1: Distribuição de Presença
+   👑 N5 (não contam no mínimo): 4 membros
+   📅 Quintas do mês: 4
+   👥 Grupos (sem N5): 3x=14, 2x=32, 1x=19
+   ✅ N5: 4 membros alocados em TODAS as quintas
+   ✅ 3x: 14 membros distribuídos (Rotação Balanceada 4 Padrões)
+   ⚖️ Split 2x: A=17 vs B=15
+   ✅ 2x (Q1=Q3): 17 membros
+   ✅ 2x (Q2=Q4): 15 membros alocados
+   ✅ 1x: 19 membros distribuídos (balanceamento global)
+   📊 Ocupação final das quintas:
+      Quinta 1 (2026-02-05): 36 membros
+      Quinta 2 (2026-02-12): 35 membros
+      Quinta 3 (2026-02-19): 35 membros
+      Quinta 4 (2026-02-26): 35 membros
+   📅 Domingos detectados: 4
+   👥 Unidades: 3x=16, 2x=41, 1x=13
+   ✅ 3x: 16 unidades distribuídas (Rotação D1..D4)
+   ⚖️ Split 2x (Domingo - Balanced Prefs):
+      Group A (D1/D3): 21 total
+      Group B (D2/D4): 20 total
+   ✅ 2x (Espelho A D1=D3): 21 unidades
+   ✅ 2x (Espelho B D2=D4): 20 unidades
+   ✅ Domingos distribuídos com lógica de Espelho + Turnos
+   👑 Forçando Líderes N5 em TODOS os cultos...
+      ✅ Andreia de Cassia Juchem Bueno (N5) forçado em 4 cultos
+      ✅ Érico Andrei Bueno (cônjuge) forçado em 4 cultos
+      ✅ Gustavo Nardi (N5) forçado em 4 cultos
+      ✅ Luciane mendes (cônjuge) forçado em 4 cultos
+      ✅ Luciane mendes (N5) forçado em 4 cultos
+      ✅ Gustavo Nardi (cônjuge) forçado em 4 cultos
+      ✅ Érico Andrei Bueno (N5) forçado em 4 cultos
+      ✅ Andreia de Cassia Juchem Bueno (cônjuge) forçado em 4 cultos
+   👑 Forçando Líderes N5 em TODOS os cultos...
+      ✅ Andreia de Cassia Juchem Bueno (N5) forçado em 8 cultos
+      ✅ Érico Andrei Bueno (cônjuge) forçado em 8 cultos
+      ✅ Gustavo Nardi (N5) forçado em 8 cultos
+      ✅ Luciane mendes (cônjuge) forçado em 8 cultos
+      ✅ Luciane mendes (N5) forçado em 8 cultos
+      ✅ Gustavo Nardi (cônjuge) forçado em 8 cultos
+      ✅ Érico Andrei Bueno (N5) forçado em 8 cultos
+      ✅ Andreia de Cassia Juchem Bueno (cônjuge) forçado em 8 cultos
+   🍽️ Forçando membros com Prioridade Mesa em TODOS os cultos...
+      ✅ Jose Duarte (Prioridade Mesa) forçado em 4 cultos
+   🍽️ Forçando membros com Prioridade Mesa em TODOS os cultos...
+      ✅ Jose Duarte (Prioridade Mesa) forçado em 8 cultos
+
+🛑 SALVANDO POOL (Membros disponíveis antes da alocação)...
+      ✅ 29 membros no Pool de 2026-02-01T13:00:00.826+00:00.
+      ✅ 26 membros no Pool de 2026-02-01T21:00:00.826+00:00.
+      ✅ 36 membros no Pool de 2026-02-05T22:30:00.826+00:00.
+      ✅ 29 membros no Pool de 2026-02-08T13:00:00.826+00:00.
+      ✅ 27 membros no Pool de 2026-02-08T21:00:00.826+00:00.
+      ✅ 36 membros no Pool de 2026-02-12T22:30:00.826+00:00.
+      ✅ 28 membros no Pool de 2026-02-15T13:00:00.826+00:00.
+      ✅ 28 membros no Pool de 2026-02-15T21:00:00.826+00:00.
+      ✅ 35 membros no Pool de 2026-02-19T22:30:00.826+00:00.
+      ✅ 28 membros no Pool de 2026-02-22T13:00:00.826+00:00.
+      ✅ 23 membros no Pool de 2026-02-22T21:00:00.826+00:00.
+      ✅ 35 membros no Pool de 2026-02-26T22:30:00.826+00:00.
+
+🧩 Fase 3: Alocação Tática (Via Clone Diário)
+
+📋 Gerando escala para culto 92de7aa5-b12e-4d97-99da-b613e87f5078 (Via Pool Custom)
+   📅 Culto da Família (Manhã) - domingo_manha
+   🍞 Santa Ceia: Sim
+   👥 Membros no Pool: 29
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 29
+   👑 Líderes Nível 5 disponíveis: 2
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 1
+   👑 CASAL RESPONSÁVEL GERAL (Semana 1, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 7 ← Responsável e apoio|SETOR LARANJA[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 4 membros não alocados
+      Andreia, Gustavo, Luciane, Érico
+
+📋 Gerando escala para culto d615aec4-8458-4649-9d79-3a150761b107 (Via Pool Custom)
+   📅 Culto da Família (Noite) - domingo_noite
+   🍞 Santa Ceia: Sim
+   👥 Membros no Pool: 26
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 26
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 1, Alternância): Andreia de Cassia Juchem Bueno + Érico Andrei Bueno
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   ⚠️ Repetição falhou: Púlpito vaga 0 - fonte "Corrente entre verde e azul" (qualquer) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 7 - fonte "Responsável e apoio" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 5 membros não alocados
+      Adilson, Andreia, Gustavo, Luciane, Érico
+
+📋 Gerando escala para culto bfefa862-dcb4-4b49-b188-1070399bd8f7 (Via Pool Custom)
+   📅 Culto da Vitória - quinta
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 36
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 36
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 1, Alternância): Andreia de Cassia Juchem Bueno + Érico Andrei Bueno
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 5 ← Apoio|SETOR LARANJA[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 7 ← Responsável e apoio|SETOR LARANJA[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 8 membros não alocados
+      Andreia, Gustavo, Luciane, José, Érico, Pedro, João, Márcia
+
+📋 Gerando escala para culto 12bff019-7e47-46c0-9a06-f22173e26a6c (Via Pool Custom)
+   📅 Culto da Família (Manhã) - domingo_manha
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 29
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 29
+   👑 Líderes Nível 5 disponíveis: 2
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 1
+   👑 CASAL RESPONSÁVEL GERAL (Semana 2, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 7 ← Responsável e apoio|SETOR LARANJA[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 5 membros não alocados
+      Andreia, Gustavo, Luciane, Josiel, Érico
+
+📋 Gerando escala para culto e2ba1502-7b3f-4e28-908d-b0952d4e8d69 (Via Pool Custom)
+   📅 Culto da Família (Noite) - domingo_noite
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 27
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 27
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 2, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 4 - fonte "^Apoio$" (SETOR VERDE) não encontrada ou bloqueada
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 7 - fonte "Responsável e apoio" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   ⚠️ Repetição falhou: Feminino vaga 1 - fonte "^Apoio$" (SETOR VERDE) não encontrada ou bloqueada
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 7 membros não alocados
+      Andreia, David, Gustavo, Luciane, Rogério, Érico, Pedro
+
+📋 Gerando escala para culto 8747c0c2-1d11-4e36-bfd8-04755c27b6a4 (Via Pool Custom)
+   📅 Culto da Vitória - quinta
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 36
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 36
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 2, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 5 ← Apoio|SETOR LARANJA[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 7 ← Responsável e apoio|SETOR LARANJA[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 8 membros não alocados
+      Adilson, Andreia, Gustavo, Luciane, Gabriel, Érico, Flavio, Alexandre
+
+📋 Gerando escala para culto f73ad9b3-d39a-421b-87fa-c916fd3f9745 (Via Pool Custom)
+   📅 Culto da Família (Manhã) - domingo_manha
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 28
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 28
+   👑 Líderes Nível 5 disponíveis: 2
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 1
+   👑 CASAL RESPONSÁVEL GERAL (Semana 3, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 7 - fonte "Responsável e apoio" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 4 membros não alocados
+      Andreia, Gustavo, Luciane, Érico
+
+📋 Gerando escala para culto c2744633-be39-4641-900e-6a75dfa92059 (Via Pool Custom)
+   📅 Culto da Família (Noite) - domingo_noite
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 28
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 25
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 3, Alternância): Andreia de Cassia Juchem Bueno + Érico Andrei Bueno
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 7 - fonte "Responsável e apoio" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 5 membros não alocados
+      Adilson, Andreia, Gustavo, Luciane, Érico
+
+📋 Gerando escala para culto b173dae2-8204-498f-bce7-3c6c94c87061 (Via Pool Custom)
+   📅 Culto da Vitória - quinta
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 35
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 35
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 3, Alternância): Andreia de Cassia Juchem Bueno + Érico Andrei Bueno
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 5 ← Apoio|SETOR LARANJA[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 7 ← Responsável e apoio|SETOR LARANJA[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 7 membros não alocados
+      Adilson, Andreia, Gustavo, Luciane, Érico, Alexandre, Jean
+
+📋 Gerando escala para culto 5b87e4be-5721-43e1-8cb4-d16da95aafbe (Via Pool Custom)
+   📅 Culto da Família (Manhã) - domingo_manha
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 28
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 28
+   👑 Líderes Nível 5 disponíveis: 2
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 1
+   👑 CASAL RESPONSÁVEL GERAL (Semana 4, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 7 - fonte "Responsável e apoio" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 6 membros não alocados
+      Andreia, Bruna, Gustavo, JEFERSON, Luciane, Érico
+
+📋 Gerando escala para culto e827ce6e-79b6-4f3f-995d-e2084d869bd3 (Via Pool Custom)
+   📅 Culto da Família (Noite) - domingo_noite
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 23
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 22
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 4, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 4 - fonte "^Apoio$" (SETOR VERDE) não encontrada ou bloqueada
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   ⚠️ Repetição falhou: Lado bateria (16 máquinas) vaga 7 - fonte "Responsável e apoio" (SETOR LARANJA) não encontrada ou bloqueada
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   ⚠️ Repetição falhou: Feminino vaga 1 - fonte "^Apoio$" (SETOR VERDE) não encontrada ou bloqueada
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 4 membros não alocados
+      Andreia, Gustavo, Luciane, Érico
+
+📋 Gerando escala para culto c996c215-1d67-421e-b151-5e7bac3d4a66 (Via Pool Custom)
+   📅 Culto da Vitória - quinta
+   🍞 Santa Ceia: Não
+   👥 Membros no Pool: 35
+   🎯 Funções ativas: 32
+   📊 Usando ordem customizada de processamento
+   ⚖️ Com vagas disponíveis: 35
+   👑 Líderes Nível 5 disponíveis: 4
+   👑 Casais válidos (Líder N5 + Cônjuge disponível): 2
+   👑 CASAL RESPONSÁVEL GERAL (Semana 4, Alternância): Gustavo Nardi + Luciane mendes
+   🎁 Oferta vaga 0: Responsável Geral 1
+   🎁 Oferta vaga 1: Responsável Geral 2
+   🎁 Oferta vaga 2: Responsável Ala Verde
+   🔄 Púlpito: Corrente Verde/Azul - vaga 0 ← Corrente entre verde e azul/Púlpito|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 0 ← Interno|PORTA - A2[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 1 ← Interno|PORTA Nova - A3[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 2 ← Interno|PORTA - A1 Parede[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 3 ← Apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 4 ← Apoio|SETOR VERDE[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 5 ← Apoio|SETOR LARANJA[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 6 ← Responsável e apoio|SETOR AZUL[0]
+   🔄 Máquinas: Internos + Apoios + Responsáveis Ala - vaga 7 ← Responsável e apoio|SETOR LARANJA[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ← Hall|PORTA - A2[0]
+   🔄 Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ← Hall|PORTA Nova - A3[0]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ← Apoio|SETOR AZUL[1]
+   🔄 Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ← Apoio|SETOR VERDE[1]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 0 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[0]
+   🔄 Finalização: Máquinas 1 e 2 - vaga 1 ← Lado bateria (16 máquinas)|MÁQUINAS (16 ao total)[1]
+   🔄 Salvas: Interno A4 - vaga 0 ← Interno|PORTA Nova - A4[0]
+   🪑 Banco de Reserva: 7 membros não alocados
+      Andreia, Gustavo, Jose, Idalamar, Luciane, Gabriel, Érico
+
+💾 Salvando 564 alocações finais...

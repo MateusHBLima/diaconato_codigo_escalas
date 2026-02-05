@@ -1,0 +1,70 @@
+﻿Ô£à Cliente Supabase inicializado
+--- GERADOR DE POOL MENSAL ---
+Fevereiro 2026 (Modo Somente Pool)
+
+­ƒÜÇ INICIANDO GERA├ç├âO (FASE 1 = Custom | FASE 2 = Strict Clone): 2/2026
+
+­ƒº╣ Fase 0: Limpeza...
+
+­ƒîè Fase 1: Distribui├º├úo de Presen├ºa
+   ­ƒææ N5 (n├úo contam no m├¡nimo): 4 membros
+   ­ƒôà Quintas do m├¬s: 4
+   ­ƒæÑ Grupos (sem N5): 3x=14, 2x=32, 1x=19
+   Ô£à N5: 4 membros alocados em TODAS as quintas
+   Ô£à 3x: 14 membros distribu├¡dos (Rota├º├úo Balanceada 4 Padr├Áes)
+   ÔÜû´©Å Split 2x: A=17 vs B=15
+   Ô£à 2x (Q1=Q3): 17 membros
+   Ô£à 2x (Q2=Q4): 15 membros alocados
+   Ô£à 1x: 19 membros distribu├¡dos (balanceamento global)
+   ­ƒôè Ocupa├º├úo final das quintas:
+      Quinta 1 (2026-02-05): 36 membros
+      Quinta 2 (2026-02-12): 35 membros
+      Quinta 3 (2026-02-19): 35 membros
+      Quinta 4 (2026-02-26): 35 membros
+   ­ƒôà Domingos detectados: 4
+   ­ƒæÑ Unidades: 3x=16, 2x=41, 1x=13
+   Ô£à 3x: 16 unidades distribu├¡das (Rota├º├úo D1..D4)
+   ÔÜû´©Å Split 2x (Domingo - Balanced Prefs):
+      Group A (D1/D3): 21 total
+      Group B (D2/D4): 20 total
+   Ô£à 2x (Espelho A D1=D3): 21 unidades
+   Ô£à 2x (Espelho B D2=D4): 20 unidades
+   Ô£à Domingos distribu├¡dos com l├│gica de Espelho + Turnos
+   ­ƒææ For├ºando L├¡deres N5 em TODOS os cultos...
+      Ô£à Andreia de Cassia Juchem Bueno (N5) for├ºado em 4 cultos
+      Ô£à ├ërico Andrei Bueno (c├┤njuge) for├ºado em 4 cultos
+      Ô£à Gustavo Nardi (N5) for├ºado em 4 cultos
+      Ô£à Luciane mendes (c├┤njuge) for├ºado em 4 cultos
+      Ô£à Luciane mendes (N5) for├ºado em 4 cultos
+      Ô£à Gustavo Nardi (c├┤njuge) for├ºado em 4 cultos
+      Ô£à ├ërico Andrei Bueno (N5) for├ºado em 4 cultos
+      Ô£à Andreia de Cassia Juchem Bueno (c├┤njuge) for├ºado em 4 cultos
+   ­ƒææ For├ºando L├¡deres N5 em TODOS os cultos...
+      Ô£à Andreia de Cassia Juchem Bueno (N5) for├ºado em 8 cultos
+      Ô£à ├ërico Andrei Bueno (c├┤njuge) for├ºado em 8 cultos
+      Ô£à Gustavo Nardi (N5) for├ºado em 8 cultos
+      Ô£à Luciane mendes (c├┤njuge) for├ºado em 8 cultos
+      Ô£à Luciane mendes (N5) for├ºado em 8 cultos
+      Ô£à Gustavo Nardi (c├┤njuge) for├ºado em 8 cultos
+      Ô£à ├ërico Andrei Bueno (N5) for├ºado em 8 cultos
+      Ô£à Andreia de Cassia Juchem Bueno (c├┤njuge) for├ºado em 8 cultos
+   ­ƒì¢´©Å For├ºando membros com Prioridade Mesa em TODOS os cultos...
+      Ô£à Jose Duarte (Prioridade Mesa) for├ºado em 4 cultos
+   ­ƒì¢´©Å For├ºando membros com Prioridade Mesa em TODOS os cultos...
+      Ô£à Jose Duarte (Prioridade Mesa) for├ºado em 8 cultos
+
+­ƒøæ MODO POOL ATIVADO: Salvando distribui├º├úo sem alocar fun├º├Áes...
+   ­ƒôØ Salvando Pool para 2026-02-01T13:00:00.726+00:00 (domingo_manha)...
+   ­ƒôØ Salvando Pool para 2026-02-01T21:00:00.726+00:00 (domingo_noite)...
+   ­ƒôØ Salvando Pool para 2026-02-05T22:30:00.726+00:00 (quinta)...
+   ­ƒôØ Salvando Pool para 2026-02-08T13:00:00.726+00:00 (domingo_manha)...
+   ­ƒôØ Salvando Pool para 2026-02-08T21:00:00.726+00:00 (domingo_noite)...
+   ­ƒôØ Salvando Pool para 2026-02-12T22:30:00.726+00:00 (quinta)...
+   ­ƒôØ Salvando Pool para 2026-02-15T13:00:00.726+00:00 (domingo_manha)...
+   ­ƒôØ Salvando Pool para 2026-02-15T21:00:00.726+00:00 (domingo_noite)...
+   ­ƒôØ Salvando Pool para 2026-02-19T22:30:00.726+00:00 (quinta)...
+   ­ƒôØ Salvando Pool para 2026-02-22T13:00:00.726+00:00 (domingo_manha)...
+   ­ƒôØ Salvando Pool para 2026-02-22T21:00:00.726+00:00 (domingo_noite)...
+   ­ƒôØ Salvando Pool para 2026-02-26T22:30:00.726+00:00 (quinta)...
+
+Ô£à Gera├º├úo de Pool Mensal Conclu├¡da!

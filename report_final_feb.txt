@@ -1,0 +1,19 @@
+﻿
+--- RELAT├ôRIO: FEVEREIRO 2026 ---
+DIA        | PERIODO        | ALOCADOS
+-----------|----------------|---------
+01         | Dom manha      | 0
+01         | Dom noite      | 0
+05         | Qui Noite      | 0
+08         | Dom manha      | 0
+08         | Dom noite      | 0
+12         | Qui Noite      | 0
+15         | Dom manha      | 0
+15         | Dom noite      | 0
+19         | Qui Noite      | 0
+22         | Dom manha      | 0
+22         | Dom noite      | 0
+26         | Qui Noite      | 0
+----------------------------------
+TOTAL DE ESCALADOS: 0 pessoas ├║nicas
+MEDIA POR CULTO: 0.0

@@ -49,14 +49,21 @@ async function buscarFuncoesAtivas(isSantaCeia: boolean): Promise<Funcao[]> {
     return data || [];
 }
 
+// ID da função "Pool Diário" (Mesmo do escala_mensal.ts)
+const POOL_DIARIO_ID = 'd4b4adb8-07e3-4f66-880c-46737b76874a';
+
 async function limparAlocacoesAnteriores(cultoId: string): Promise<void> {
     const { error } = await supabase
         .from('escalas_alocacoes')
         .delete()
-        .eq('culto_id', cultoId);
+        .eq('culto_id', cultoId)
+        .neq('funcao_id', POOL_DIARIO_ID); // 🔥 IMPORTANTE: NÃO DELETA O POOL!
+
+    console.log(`      🧹 [DEBUG] Limpando alocações EXCETO POOL (${cultoId.substring(0, 8)}...) ignorando ID: ${POOL_DIARIO_ID}`);
+
 
     if (error) {
-        console.error(`Erro ao limpar alocações: ${error.message}`);
+        console.error(`Erro ao limpar alocações (exceto Pool): ${error.message}`);
     }
 }
 
@@ -150,6 +157,7 @@ function encontrarCandidato(
             if (ehFuncaoMesa) {
                 const temPrioridadeMesa = membro.aptidoes?.includes('Prioridade Mesa');
                 if (!temPrioridadeMesa) {
+                    // console.log(`      ❌ ${membro.nome_completo} rejeitado para ${funcao.nome} (Semaptidão Prioridade Mesa)`);
                     return false; // Função Mesa EXIGE ter a aptidão
                 }
                 // Se tem a aptidão, IGNORA verificação de estrelas para Mesa
@@ -167,6 +175,7 @@ function encontrarCandidato(
                 if (ehCorrente && ehSetorAzulOuLaranja) {
                     // Permitido - IGNORA verificação de estrelas
                 } else {
+                    // console.log(`      ❌ ${membro.nome_completo} rejeitado para ${funcao.nome} (NECESSIDADE SENTADO em função inválida)`);
                     return false; // Função não permitida
                 }
             }
@@ -174,6 +183,7 @@ function encontrarCandidato(
             // 3. DEMAIS CASOS - Usa sistema de estrelas normalmente
             else {
                 if (!podeExecutarFuncao(membro, funcao.nome, funcao.especificidade_sexo, funcao.setor_pai, numeroVaga)) {
+                    // console.log(`      ❌ ${membro.nome_completo} rejeitado para ${funcao.nome} (podeExecutarFuncao retornou false)`);
                     return false;
                 }
             }
@@ -206,7 +216,10 @@ function encontrarCandidato(
             if (!disponivel) return false;
 
             // Período (manhã/noite)
-            if (!atendePeriodo(membro.melhor_periodo_domingo, culto.periodo)) return false;
+            if (!atendePeriodo(membro.melhor_periodo_domingo, culto.periodo)) {
+                // console.log(`      ❌ ${membro.nome_completo} rejeitado para ${funcao.nome} (Periodo ${membro.melhor_periodo_domingo} incompatível com ${culto.periodo})`);
+                return false;
+            }
 
             return true;
         });
@@ -296,7 +309,7 @@ export async function gerarEscalaComPool(
     console.log(`   ⚖️ Com vagas disponíveis: ${disponiveis}`);
 
     // Limpar alocações anteriores
-    // await limparAlocacoesAnteriores(cultoId); // JÁ FEITO NA FASE 0 DO MENSAL
+    await limparAlocacoesAnteriores(culto.id); // 🔥 ATIVADO PARA GARANTIR LIMPEZA (EXCETO POOL)
 
     // Gerar alocações
     const alocacoes: Omit<Alocacao, 'id'>[] = [];

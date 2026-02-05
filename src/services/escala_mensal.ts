@@ -328,7 +328,7 @@ function distribuirPresencaDomingos(
 
         if (prefs.some(p => p.includes('noite'))) finalPref = 'noite';
         else if (prefs.some(p => p.includes('manhã'))) finalPref = 'manha';
-        // else mantem 'qualquer'
+        else finalPref = 'noite'; // Default "Qualquer" -> Strictly Night (Regra de Negócio para cobrir falta)
 
         units.push({
             members: membersList,
@@ -436,16 +436,29 @@ function distribuirPresencaDomingos(
     const bucketNoite = units2x.filter(u => u.preferredShift === 'noite');
     const bucketQualquer = units2x.filter(u => u.preferredShift === 'qualquer');
 
-    // Distribuidor Helper
+    // Distribuidor Helper Balanceado
     const distributeBucket = (bucket: SchedulingUnit[]) => {
-        bucket.forEach((u, i) => {
-            if (i % 2 === 0) units2xA.push(u);
-            else units2xB.push(u);
+        bucket.forEach((u) => {
+            // Joga no grupo menor para equilibrar totais
+            if (units2xA.length <= units2xB.length) {
+                units2xA.push(u);
+            } else {
+                units2xB.push(u);
+            }
         });
     };
 
-    distributeBucket(bucketManha);
+    // Ordenar a distribuição para maximizar equilíbrio
+    // Prioridade: Noite (Raro) -> Manhã (Frequente) -> Qualquer (Flexível)
+    // Assim os grupos enchem com os 'fixos' primeiro e 'qualquer' balanceia no final?
+    // Não, 'Qualquer' deve ser distribuído para onde precisa?
+    // Aqui estamos dividindo QUEM vai em QUAL DATA (D1/D3 vs D2/D4).
+
+    // Distribuir 'Qualquer' PRIMEIRO pode ser melhor se quisermos garantir que eles sejam os 'fillers'?
+    // Não, distribuir por buckets é seguro. O importante é o check de length acima.
+
     distributeBucket(bucketNoite);
+    distributeBucket(bucketManha);
     distributeBucket(bucketQualquer);
 
     console.log(`   ⚖️ Split 2x (Domingo - Balanced Prefs):`);
@@ -603,7 +616,14 @@ function sincronizarMembrosMesa(
 // ORQUESTRADOR PRINCIPAL
 // ============================================
 
-export async function gerarEscalaMensal(mes: number, ano: number) {
+// ID da função "Pool Diário"
+const POOL_DIARIO_ID = 'd4b4adb8-07e3-4f66-880c-46737b76874a';
+
+export async function gerarEscalaMensal(
+    mes: number,
+    ano: number,
+    gerarSomentePool: boolean = false
+): Promise<any> {
     console.log(`\n🚀 INICIANDO GERAÇÃO (FASE 1 = Custom | FASE 2 = Strict Clone): ${mes}/${ano}`);
 
     // FASE 0: LIMPEZA
@@ -637,7 +657,51 @@ export async function gerarEscalaMensal(mes: number, ano: number) {
     sincronizarMembrosMesa(membrosDomingo, domingos);
 
     // FASE 2: ALOCAÇÃO TÁTICA (DELEGADA AO CLONE DIÁRIO)
-    console.log(`\n🧩 Fase 2: Alocação Tática (Via Clone Diário)`);
+    // ============================================
+    // FASE 2: GERAÇÃO TÁTICA OU MODO POOL
+    // ============================================
+    // ============================================
+    // FASE 2: SALVAR POOL (SEMPRE)
+    // ============================================
+    // Salva a lista de disponíveis antes de alocar.
+    // Isso garante que o frontend possa mostrar "Quem estava no banco" mesmo com alocação feita.
+
+    console.log(`\n🛑 SALVANDO POOL (Membros disponíveis antes da alocação)...`);
+
+    for (const culto of cultos) {
+        // 1. Identificar membros no pool deste culto
+        const listSet = culto.periodo === 'quinta' ? membrosQuinta : membrosDomingo;
+        const membrosNoPool = listSet.filter(m => m.pool_cultos_ids!.has(culto.id));
+
+        if (membrosNoPool.length === 0) continue;
+
+        // 2. Limpar APENAS o Pool anterior (para evitar duplicatas de pool)
+        // OBS: limparAlocacoesAnteriores (na fase 3) NÃO deleta o pool.
+        await supabase
+            .from('escalas_alocacoes')
+            .delete()
+            .eq('culto_id', culto.id)
+            .eq('funcao_id', POOL_DIARIO_ID);
+
+        // 3. Salvar como "Pool Diário"
+        const inserts = membrosNoPool.map(m => ({
+            culto_id: culto.id,
+            membro_id: m.id,
+            funcao_id: POOL_DIARIO_ID
+        }));
+
+        const { error: errIns } = await supabase.from('escalas_alocacoes').insert(inserts);
+
+        if (errIns) console.error(`      ❌ Erro ao salvar pool ${culto.data_culto}: ${errIns.message}`);
+        else console.log(`      ✅ ${inserts.length} membros no Pool de ${culto.data_culto}.`);
+    }
+
+    if (gerarSomentePool) {
+        console.log(`\n✅ Geração SOMENTE POOL Concluída!`);
+        return { success: true, mes, ano, resultados: [] };
+    }
+
+    console.log(`\n🧩 Fase 3: Alocação Tática (Via Clone Diário)`);
 
     const alocacoesTotais: Omit<Alocacao, 'id'>[] = [];
     const resultadosPorCulto: ResultadoEscala[] = [];

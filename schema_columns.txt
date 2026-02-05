@@ -1,0 +1,1 @@
+﻿[{"id":"9d4c2173-8c62-43a7-9c8c-a1d9af127bd8","culto_id":"f8b7e571-7d47-4306-9dcf-7c72d1921d87","membro_id":"ebd03d49-17b6-4437-bcf0-bd4a89e2057e","funcao_id":"66a29ea0-e200-4d91-8c29-2a24a2785b7d","motivo_falha":"null","status":"ALOCADO"}]

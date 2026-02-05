@@ -1,0 +1,112 @@
+[
+  {
+    "nome": "Responsável e apoio",
+    "setor_pai": "SETOR AZUL",
+    "ordem_exibicao": 11
+  },
+  {
+    "nome": "Corrente 1",
+    "setor_pai": "SETOR AZUL",
+    "ordem_exibicao": 12
+  },
+  {
+    "nome": "Corrente 2",
+    "setor_pai": "SETOR AZUL",
+    "ordem_exibicao": 13
+  },
+  {
+    "nome": "Apoio",
+    "setor_pai": "SETOR AZUL",
+    "ordem_exibicao": 14
+  },
+  {
+    "nome": "Responsável e apoio",
+    "setor_pai": "SETOR VERDE",
+    "ordem_exibicao": 15
+  },
+  {
+    "nome": "Corrente entre verde e azul/Púlpito",
+    "setor_pai": "SETOR VERDE",
+    "ordem_exibicao": 16
+  },
+  {
+    "nome": "Corrente atrás do Pastor",
+    "setor_pai": "SETOR VERDE",
+    "ordem_exibicao": 17
+  },
+  {
+    "nome": "Corrente corredor da mídia",
+    "setor_pai": "SETOR VERDE",
+    "ordem_exibicao": 18
+  },
+  {
+    "nome": "Corrente entre verde e laranja",
+    "setor_pai": "SETOR VERDE",
+    "ordem_exibicao": 19
+  },
+  {
+    "nome": "Apoio",
+    "setor_pai": "SETOR VERDE",
+    "ordem_exibicao": 20
+  },
+  {
+    "nome": "Responsável e apoio",
+    "setor_pai": "SETOR LARANJA",
+    "ordem_exibicao": 21
+  },
+  {
+    "nome": "Corrente 1",
+    "setor_pai": "SETOR LARANJA",
+    "ordem_exibicao": 22
+  },
+  {
+    "nome": "Corrente 2",
+    "setor_pai": "SETOR LARANJA",
+    "ordem_exibicao": 23
+  },
+  {
+    "nome": "Apoio",
+    "setor_pai": "SETOR LARANJA",
+    "ordem_exibicao": 24
+  },
+  {
+    "nome": "Apoio",
+    "setor_pai": "OFERTA",
+    "ordem_exibicao": 27
+  },
+  {
+    "nome": "Lado Bateria (09 salvas)",
+    "setor_pai": "SALVAS",
+    "ordem_exibicao": 28
+  },
+  {
+    "nome": "Lado bateria (16 máquinas)",
+    "setor_pai": "MÁQUINAS (16 ao total)",
+    "ordem_exibicao": 29
+  },
+  {
+    "nome": "Lado Bateria (4 salvas)",
+    "setor_pai": "SALVAS",
+    "ordem_exibicao": 31
+  },
+  {
+    "nome": "Apoio Geral",
+    "setor_pai": "GERAL",
+    "ordem_exibicao": 60
+  },
+  {
+    "nome": "Apoio Ala Verde",
+    "setor_pai": "ALAS E CORRENTES",
+    "ordem_exibicao": null
+  },
+  {
+    "nome": "Apoio Ala Azul",
+    "setor_pai": "ALAS E CORRENTES",
+    "ordem_exibicao": null
+  },
+  {
+    "nome": "Apoio Ala Laranja",
+    "setor_pai": "ALAS E CORRENTES",
+    "ordem_exibicao": null
+  }
+]

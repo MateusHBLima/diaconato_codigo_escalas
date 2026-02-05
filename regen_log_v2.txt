@@ -1,0 +1,445 @@
+﻿Ô£à Cliente Supabase inicializado
+
+­ƒöä Regenerando escala 2/2026 com nova l├│gica...
+
+
+­ƒÜÇ INICIANDO GERA├ç├âO (FASE 1 = Custom | FASE 2 = Strict Clone): 2/2026
+
+­ƒº╣ Fase 0: Limpeza...
+
+­ƒîè Fase 1: Distribui├º├úo de Presen├ºa
+   ­ƒææ N5 (n├úo contam no m├¡nimo): 4 membros
+   ­ƒôà Quintas do m├¬s: 4
+   ­ƒæÑ Grupos (sem N5): 3x=14, 2x=32, 1x=19
+   Ô£à N5: 4 membros alocados em TODAS as quintas
+   Ô£à 3x: 14 membros distribu├¡dos (Rota├º├úo Balanceada 4 Padr├Áes)
+   ÔÜû´©Å Split 2x: A=17 vs B=15
+   Ô£à 2x (Q1=Q3): 17 membros
+   Ô£à 2x (Q2=Q4): 15 membros alocados
+   Ô£à 1x: 19 membros distribu├¡dos (balanceamento global)
+   ­ƒôè Ocupa├º├úo final das quintas:
+      Quinta 1 (2026-02-05): 36 membros
+      Quinta 2 (2026-02-12): 35 membros
+      Quinta 3 (2026-02-19): 35 membros
+      Quinta 4 (2026-02-26): 35 membros
+   ­ƒôà Domingos detectados: 4
+   ­ƒæÑ Unidades: 3x=16, 2x=41, 1x=13
+   Ô£à 3x: 16 unidades distribu├¡das (Rota├º├úo D1..D4)
+   ÔÜû´©Å Split 2x (Domingo - Balanced Prefs):
+      Group A (D1/D3): 22 total
+      Group B (D2/D4): 19 total
+   Ô£à 2x (Espelho A D1=D3): 22 unidades
+   Ô£à 2x (Espelho B D2=D4): 19 unidades
+   Ô£à Domingos distribu├¡dos com l├│gica de Espelho + Turnos
+   ­ƒææ For├ºando L├¡deres N5 em TODOS os cultos...
+      Ô£à Andreia de Cassia Juchem Bueno (N5) for├ºado em 4 cultos
+      Ô£à ├ërico Andrei Bueno (c├┤njuge) for├ºado em 4 cultos
+      Ô£à Gustavo Nardi (N5) for├ºado em 4 cultos
+      Ô£à Luciane mendes (c├┤njuge) for├ºado em 4 cultos
+      Ô£à Luciane mendes (N5) for├ºado em 4 cultos
+      Ô£à Gustavo Nardi (c├┤njuge) for├ºado em 4 cultos
+      Ô£à ├ërico Andrei Bueno (N5) for├ºado em 4 cultos
+      Ô£à Andreia de Cassia Juchem Bueno (c├┤njuge) for├ºado em 4 cultos
+   ­ƒææ For├ºando L├¡deres N5 em TODOS os cultos...
+      Ô£à Andreia de Cassia Juchem Bueno (N5) for├ºado em 8 cultos
+      Ô£à ├ërico Andrei Bueno (c├┤njuge) for├ºado em 8 cultos
+      Ô£à Gustavo Nardi (N5) for├ºado em 8 cultos
+      Ô£à Luciane mendes (c├┤njuge) for├ºado em 8 cultos
+      Ô£à Luciane mendes (N5) for├ºado em 8 cultos
+      Ô£à Gustavo Nardi (c├┤njuge) for├ºado em 8 cultos
+      Ô£à ├ërico Andrei Bueno (N5) for├ºado em 8 cultos
+      Ô£à Andreia de Cassia Juchem Bueno (c├┤njuge) for├ºado em 8 cultos
+   ­ƒì¢´©Å For├ºando membros com Prioridade Mesa em TODOS os cultos...
+      Ô£à Jose Duarte (Prioridade Mesa) for├ºado em 4 cultos
+   ­ƒì¢´©Å For├ºando membros com Prioridade Mesa em TODOS os cultos...
+      Ô£à Jose Duarte (Prioridade Mesa) for├ºado em 8 cultos
+
+­ƒº® Fase 2: Aloca├º├úo T├ítica (Via Clone Di├írio)
+
+­ƒôï Gerando escala para culto 8c30d6f4-a8ce-469a-8dfb-a3fceaf1d941 (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Manh├ú) - domingo_manha
+   ­ƒì× Santa Ceia: Sim
+   ­ƒæÑ Membros no Pool: 29
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 29
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 2
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 1
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 1, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 7 ÔåÉ Respons├ível e apoio|SETOR LARANJA[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 4 membros n├úo alocados
+      Andreia, Gustavo, Luciane, ├ërico
+
+­ƒôï Gerando escala para culto fcb3e8d4-9b70-4d69-bd8c-89f7f3dee085 (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Noite) - domingo_noite
+   ­ƒì× Santa Ceia: Sim
+   ­ƒæÑ Membros no Pool: 26
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 26
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 1, Altern├óncia): Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 4 - fonte "^Apoio$" (SETOR VERDE) n├úo encontrada ou bloqueada
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 7 - fonte "Respons├ível e apoio" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ÔÜá´©Å Repeti├º├úo falhou: Feminino vaga 1 - fonte "^Apoio$" (SETOR VERDE) n├úo encontrada ou bloqueada
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 5 membros n├úo alocados
+      Andreia, Gustavo, Luciane, ├ërico, Pedro
+
+­ƒôï Gerando escala para culto f4ab8a77-4ce9-48be-a4de-c35e1216fb85 (Via Pool Custom)
+   ­ƒôà Culto da Vit├│ria - quinta
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 36
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 36
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 1, Altern├óncia): Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 5 ÔåÉ Apoio|SETOR LARANJA[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 7 ÔåÉ Respons├ível e apoio|SETOR LARANJA[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 10 membros n├úo alocados
+      Adilson, Andreia, Gustavo, Luciane, Jos├®, Valdecir, ├ërico, Pedro, Jo├úo, M├írcia
+
+­ƒôï Gerando escala para culto 6cccdfa6-648f-4666-8972-b5a2d5f05464 (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Manh├ú) - domingo_manha
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 28
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 28
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 2
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 1
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 2, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 7 ÔåÉ Respons├ível e apoio|SETOR LARANJA[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 5 membros n├úo alocados
+      Andreia, Bruna, Gustavo, Luciane, ├ërico
+
+­ƒôï Gerando escala para culto 067073e4-14a8-4e62-9513-7f6f5833a9ab (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Noite) - domingo_noite
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 26
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 26
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 2, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 4 - fonte "^Apoio$" (SETOR VERDE) n├úo encontrada ou bloqueada
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 7 - fonte "Respons├ível e apoio" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ÔÜá´©Å Repeti├º├úo falhou: Feminino vaga 1 - fonte "^Apoio$" (SETOR VERDE) n├úo encontrada ou bloqueada
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 7 membros n├úo alocados
+      Adilson, Andreia, Gustavo, Jana├¡na, Luciane, Rodrigo, ├ërico
+
+­ƒôï Gerando escala para culto 8a238a60-fc1e-48df-b2ad-52636d5485e4 (Via Pool Custom)
+   ­ƒôà Culto da Vit├│ria - quinta
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 36
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 36
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 2, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 5 ÔåÉ Apoio|SETOR LARANJA[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 7 ÔåÉ Respons├ível e apoio|SETOR LARANJA[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 10 membros n├úo alocados
+      Adilson, Andreia, Gustavo, Giancarlo, Jose, Luciane, Gabriel, ├ërico, Flavio, Alexandre
+
+­ƒôï Gerando escala para culto 7ab9a6ca-8890-4840-8987-3e8f83125e7a (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Manh├ú) - domingo_manha
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 27
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 27
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 2
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 1
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 3, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 7 - fonte "Respons├ível e apoio" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ÔÜá´©Å Repeti├º├úo falhou: Feminino vaga 1 - fonte "^Apoio$" (SETOR VERDE) n├úo encontrada ou bloqueada
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 4 membros n├úo alocados
+      Andreia, Gustavo, Luciane, ├ërico
+
+­ƒôï Gerando escala para culto a4c945fd-c887-4b8e-b22d-2f52391aebc0 (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Noite) - domingo_noite
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 28
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 27
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 3, Altern├óncia): Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[1]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 7 - fonte "Respons├ível e apoio" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 4 membros n├úo alocados
+      Andreia, Gustavo, Luciane, ├ërico
+
+­ƒôï Gerando escala para culto 09a045e3-24a0-49ff-915c-a4aeda312194 (Via Pool Custom)
+   ­ƒôà Culto da Vit├│ria - quinta
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 35
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 35
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 3, Altern├óncia): Andreia de Cassia Juchem Bueno + ├ërico Andrei Bueno
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 5 ÔåÉ Apoio|SETOR LARANJA[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 7 ÔåÉ Respons├ível e apoio|SETOR LARANJA[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 9 membros n├úo alocados
+      Andreia, Gustavo, Luciane, Jos├®, Gabriel, ├ërico, Jo├úo, Alexandre, Jean
+
+­ƒôï Gerando escala para culto e4ec9496-b6fa-4267-82f6-1724e92b87e2 (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Manh├ú) - domingo_manha
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 27
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 26
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 2
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 1
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 4, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 7 ÔåÉ Respons├ível e apoio|SETOR LARANJA[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 4 membros n├úo alocados
+      Andreia, Gustavo, Luciane, ├ërico
+
+­ƒôï Gerando escala para culto 3a1f2815-6ed6-422d-a2c1-3d74c93d896b (Via Pool Custom)
+   ­ƒôà Culto da Fam├¡lia (Noite) - domingo_noite
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 25
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 24
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 4, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 4 - fonte "^Apoio$" (SETOR VERDE) n├úo encontrada ou bloqueada
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 5 - fonte "^Apoio$" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ÔÜá´©Å Repeti├º├úo falhou: Lado bateria (16 m├íquinas) vaga 7 - fonte "Respons├ível e apoio" (SETOR LARANJA) n├úo encontrada ou bloqueada
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ÔÜá´©Å Repeti├º├úo falhou: Feminino vaga 1 - fonte "^Apoio$" (SETOR VERDE) n├úo encontrada ou bloqueada
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 8 membros n├úo alocados
+      Adilson, Andreia, Anildo, Gustavo, Luciane, Nadi, ├ërico, Wesley
+
+­ƒôï Gerando escala para culto 66dbfcda-060c-4d1d-af1d-6af93e6e625a (Via Pool Custom)
+   ­ƒôà Culto da Vit├│ria - quinta
+   ­ƒì× Santa Ceia: N├úo
+   ­ƒæÑ Membros no Pool: 35
+   ­ƒÄ» Fun├º├Áes ativas: 30
+   ­ƒôè Usando ordem customizada de processamento
+   ÔÜû´©Å Com vagas dispon├¡veis: 35
+   ­ƒææ L├¡deres N├¡vel 5 dispon├¡veis: 4
+   ­ƒææ Casais v├ílidos (L├¡der N5 + C├┤njuge dispon├¡vel): 2
+   ­ƒææ CASAL RESPONS├üVEL GERAL (Semana 4, Altern├óncia): Gustavo Nardi + Luciane mendes
+   ­ƒÄü Oferta vaga 0: Respons├ível Geral 1
+   ­ƒÄü Oferta vaga 1: Respons├ível Geral 2
+   ­ƒÄü Oferta vaga 2: Respons├ível Ala Verde
+   ­ƒöä P├║lpito: Corrente Verde/Azul - vaga 0 ÔåÉ Corrente entre verde e azul/P├║lpito|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 0 ÔåÉ Interno|PORTA - A2[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 1 ÔåÉ Interno|PORTA Nova - A3[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 2 ÔåÉ Interno|PORTA - A1 Parede[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 3 ÔåÉ Apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 4 ÔåÉ Apoio|SETOR VERDE[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 5 ÔåÉ Apoio|SETOR LARANJA[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 6 ÔåÉ Respons├ível e apoio|SETOR AZUL[0]
+   ­ƒöä M├íquinas: Internos + Apoios + Respons├íveis Ala - vaga 7 ÔåÉ Respons├ível e apoio|SETOR LARANJA[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 0 ÔåÉ Hall|PORTA - A2[0]
+   ­ƒöä Banheiro Masculino: Hall A2 (antigo) + A3 (novo) - vaga 1 ÔåÉ Hall|PORTA Nova - A3[0]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 0 ÔåÉ Apoio|SETOR AZUL[1]
+   ­ƒöä Banheiro Feminino: Apoio 2 Azul (antigo) + Verde (novo) - vaga 1 ÔåÉ Apoio|SETOR VERDE[1]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 0 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[0]
+   ­ƒöä Finaliza├º├úo: M├íquinas 1 e 2 - vaga 1 ÔåÉ Lado bateria (16 m├íquinas)|M├üQUINAS (16 ao total)[1]
+   ­ƒöä Salvas: Interno A4 - vaga 0 ÔåÉ Interno|PORTA Nova - A4[0]
+   ­ƒ¬æ Banco de Reserva: 9 membros n├úo alocados
+      Andreia, Gustavo, Giancarlo, Jose, Idalamar, Luciane, Gabriel, ├ërico, Alexandre
+
+­ƒÆ¥ Salvando 540 aloca├º├Áes finais...
+
+Ô£à Escala 2/2026 regenerada com sucesso!

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "4bc68e77-70ac-49b1-843a-605ea00ae034",
+    "nome": "Responsável e apoio",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "SETOR AZUL"
+  },
+  {
+    "id": "3c466e85-4e0d-47ba-8841-fdea19b2480b",
+    "nome": "Apoio",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "SETOR AZUL"
+  },
+  {
+    "id": "e4b24661-b946-4d95-bfd2-e0c097a2a560",
+    "nome": "Responsável e apoio",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "SETOR VERDE"
+  },
+  {
+    "id": "ca900e9b-4e5a-4a03-9700-0aafd05c4921",
+    "nome": "Apoio",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "SETOR VERDE"
+  },
+  {
+    "id": "9f7a25e9-2a30-410c-8380-0f80127156f5",
+    "nome": "Responsável e apoio",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "SETOR LARANJA"
+  },
+  {
+    "id": "dacdbd7b-075e-493f-961e-2c7d2045ef1d",
+    "nome": "Apoio",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "SETOR LARANJA"
+  },
+  {
+    "id": "4bf7abc0-6239-4662-970f-938c526d8241",
+    "nome": "Apoio",
+    "especificidade_sexo": "Unissex",
+    "setor_pai": "OFERTA"
+  },
+  {
+    "id": "e30105d7-d0da-4c7e-99d7-81822d26814c",
+    "nome": "Apoio Ala Verde",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "ALAS E CORRENTES"
+  },
+  {
+    "id": "cf4fff47-b680-4b22-9758-7fd9649263ed",
+    "nome": "Apoio Ala Azul",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "ALAS E CORRENTES"
+  },
+  {
+    "id": "fdcee062-b136-4f18-b2d4-a8b3dfe0bdb1",
+    "nome": "Apoio Ala Laranja",
+    "especificidade_sexo": "Mulher",
+    "setor_pai": "ALAS E CORRENTES"
+  },
+  {
+    "id": "27e172cc-022a-4f18-b56c-4e83bac5c34f",
+    "nome": "Apoio Geral",
+    "especificidade_sexo": "Unissex",
+    "setor_pai": "GERAL"
+  }
+]

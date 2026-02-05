@@ -1,0 +1,12 @@
+﻿=== DEBUG STAR SYSTEM ===
+Checking Member: Adilson ferrari lopes (LVL 4, HOMEM)
+Fun├º├úo: "Apoio" (Setor: N/A, Sexo: Unissex) -> Ô£à PASS
+Fun├º├úo: "Apoio" (Setor: SETOR AZUL, Sexo: Unissex) -> Ô£à PASS
+Fun├º├úo: "Apoio - Setor Azul" (Setor: SETOR AZUL, Sexo: Unissex) -> Ô£à PASS
+Fun├º├úo: "Lado bateria (16 m├íquinas)" (Setor: M├üQUINAS, Sexo: Unissex) -> Ô£à PASS
+Fun├º├úo: "Respons├ível e apoio" (Setor: SETOR AZUL, Sexo: Mulher) -> ÔØî FAIL
+
+=== INTERNAL LOGIC CHECK ===
+Level 4 Requirements: [ 'P├║lpito', 'Mesa' ]
+Level 1 Requirements: [ 'Hall', 'Apoio' ]
+STAR_MIN_LIMITS['Apoio']: { minStars: 2, setores: [ 'Verde', 'Azul', 'Laranja' ], vagaIndex: 0 }

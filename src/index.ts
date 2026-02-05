@@ -144,21 +144,27 @@ app.post('/api/gerar-escala', async (req, res) => {
  */
 app.post('/api/gerar-escala-mes', async (req, res) => {
     try {
-        const { mes, ano } = req.body;
+        const { mes, ano, gerarSomentePool } = req.body;
 
         if (!mes || !ano) {
             return res.status(400).json({ error: 'mes e ano são obrigatórios' });
         }
 
-        console.log(`\n🗓️ Gerando escalas para ${mes}/${ano} (NOVO FLUXO MENSAL)`);
+        const tipoExecucao = gerarSomentePool
+            ? 'SOMENTE POOL (Separação)'
+            : 'ESCALA COMPLETA';
+
+        console.log(`\n🗓️ Gerando escalas para ${mes}/${ano} (${tipoExecucao})`);
 
         // Import dinâmico do novo serviço para garantir isolamento
         const { gerarEscalaMensal } = await import('./services/escala_mensal.js');
 
-        const resultado = await gerarEscalaMensal(mes, ano);
+        // Passando a flag gerarSomentePool (default false se undefined)
+        const resultado = await gerarEscalaMensal(mes, ano, !!gerarSomentePool);
 
         res.json({
             success: true,
+            modo: tipoExecucao,
             ...resultado
         });
     } catch (error: any) {

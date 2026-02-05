@@ -1,0 +1,19 @@
+﻿
+--- RELAT├ôRIO: FEVEREIRO 2026 ---
+DIA        | PERIODO        | ALOCADOS
+-----------|----------------|---------
+01         | Dom manha      | 45
+01         | Dom noite      | 45
+05         | Qui Noite      | 45
+08         | Dom manha      | 45
+08         | Dom noite      | 45
+12         | Qui Noite      | 45
+15         | Dom manha      | 45
+15         | Dom noite      | 45
+19         | Qui Noite      | 45
+22         | Dom manha      | 45
+22         | Dom noite      | 45
+26         | Qui Noite      | 45
+----------------------------------
+TOTAL DE ESCALADOS: 102 pessoas ├║nicas
+MEDIA POR CULTO: 45.0

@@ -1,0 +1,82 @@
+✅ Cliente Supabase inicializado
+--- GERADOR DE POOL MENSAL ---
+Fevereiro 2026 (Modo Somente Pool)
+
+🚀 INICIANDO GERAÇÃO (FASE 1 = Custom | FASE 2 = Strict Clone): 2/2026
+
+🧹 Fase 0: Limpeza...
+
+🌊 Fase 1: Distribuição de Presença
+   👑 N5 (não contam no mínimo): 4 membros
+   📅 Quintas do mês: 4
+   👥 Grupos (sem N5): 3x=14, 2x=32, 1x=19
+   ✅ N5: 4 membros alocados em TODAS as quintas
+   ✅ 3x: 14 membros distribuídos (Rotação Balanceada 4 Padrões)
+   ⚖️ Split 2x: A=17 vs B=15
+   ✅ 2x (Q1=Q3): 17 membros
+   ✅ 2x (Q2=Q4): 15 membros alocados
+   ✅ 1x: 19 membros distribuídos (balanceamento global)
+   📊 Ocupação final das quintas:
+      Quinta 1 (2026-02-05): 36 membros
+      Quinta 2 (2026-02-12): 35 membros
+      Quinta 3 (2026-02-19): 35 membros
+      Quinta 4 (2026-02-26): 35 membros
+   📅 Domingos detectados: 4
+   👥 Unidades: 3x=16, 2x=41, 1x=13
+   ✅ 3x: 16 unidades distribuídas (Rotação D1..D4)
+   ⚖️ Split 2x (Domingo - Balanced Prefs):
+      Group A (D1/D3): 21 total
+      Group B (D2/D4): 20 total
+   ✅ 2x (Espelho A D1=D3): 21 unidades
+   ✅ 2x (Espelho B D2=D4): 20 unidades
+   ✅ Domingos distribuídos com lógica de Espelho + Turnos
+   👑 Forçando Líderes N5 em TODOS os cultos...
+      ✅ Andreia de Cassia Juchem Bueno (N5) forçado em 4 cultos
+      ✅ Érico Andrei Bueno (cônjuge) forçado em 4 cultos
+      ✅ Gustavo Nardi (N5) forçado em 4 cultos
+      ✅ Luciane mendes (cônjuge) forçado em 4 cultos
+      ✅ Luciane mendes (N5) forçado em 4 cultos
+      ✅ Gustavo Nardi (cônjuge) forçado em 4 cultos
+      ✅ Érico Andrei Bueno (N5) forçado em 4 cultos
+      ✅ Andreia de Cassia Juchem Bueno (cônjuge) forçado em 4 cultos
+   👑 Forçando Líderes N5 em TODOS os cultos...
+      ✅ Andreia de Cassia Juchem Bueno (N5) forçado em 8 cultos
+      ✅ Érico Andrei Bueno (cônjuge) forçado em 8 cultos
+      ✅ Gustavo Nardi (N5) forçado em 8 cultos
+      ✅ Luciane mendes (cônjuge) forçado em 8 cultos
+      ✅ Luciane mendes (N5) forçado em 8 cultos
+      ✅ Gustavo Nardi (cônjuge) forçado em 8 cultos
+      ✅ Érico Andrei Bueno (N5) forçado em 8 cultos
+      ✅ Andreia de Cassia Juchem Bueno (cônjuge) forçado em 8 cultos
+   🍽️ Forçando membros com Prioridade Mesa em TODOS os cultos...
+      ✅ Jose Duarte (Prioridade Mesa) forçado em 4 cultos
+   🍽️ Forçando membros com Prioridade Mesa em TODOS os cultos...
+      ✅ Jose Duarte (Prioridade Mesa) forçado em 8 cultos
+
+🛑 MODO POOL ATIVADO: Salvando distribuição sem alocar funções...
+   📝 Salvando Pool para 2026-02-01T13:00:00.601+00:00 (domingo_manha)...
+      ✅ 29 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-01T21:00:00.601+00:00 (domingo_noite)...
+      ✅ 26 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-05T22:30:00.601+00:00 (quinta)...
+      ✅ 36 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-08T13:00:00.601+00:00 (domingo_manha)...
+      ✅ 29 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-08T21:00:00.601+00:00 (domingo_noite)...
+      ✅ 27 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-12T22:30:00.601+00:00 (quinta)...
+      ✅ 36 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-15T13:00:00.601+00:00 (domingo_manha)...
+      ✅ 28 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-15T21:00:00.601+00:00 (domingo_noite)...
+      ✅ 28 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-19T22:30:00.601+00:00 (quinta)...
+      ✅ 35 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-22T13:00:00.601+00:00 (domingo_manha)...
+      ✅ 28 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-22T21:00:00.601+00:00 (domingo_noite)...
+      ✅ 23 membros salvos no Pool.
+   📝 Salvando Pool para 2026-02-26T22:30:00.601+00:00 (quinta)...
+      ✅ 35 membros salvos no Pool.
+
+✅ Geração de Pool Mensal Concluída!
