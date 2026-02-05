@@ -426,12 +426,14 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     const quemEstaOnde = new Map<string, string[]>();
 
     // ============================================
-    // ENCONTRAR RESPONSÁVEIS GERAIS (NÍVEL 5)
-    // São salvos diretamente em datas_cultos, não alocados via função
     // ============================================
-    let responsavelGeral1Id: string | null = null;
-    let responsavelGeral2Id: string | null = null;
+    // ENCONTRAR RESPONSÁVEIS GERAIS (NÍVEL 5)
+    // ============================================
+    // DESATIVADO: Usuário solicitou remover "Geral" da escala automática.
+    const responsavelGeral1Id: string | null = null;
+    const responsavelGeral2Id: string | null = null;
 
+    /* LÓGICA ANTIGA (DESATIVADA)
     // Buscar membros Nível 5 disponíveis para este período
     const lideresDisponiveis = membros.filter(m => {
         if (m.nivel_experiencia !== 5) return false;
@@ -498,28 +500,35 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
 
     if (casaisDisponiveis.length > 0) {
         // Ordenar casais por quem serviu MENOS vezes (balanceamento)
+        // Soma das escalas dos dois
         casaisDisponiveis.sort((a, b) => {
-            const totalA = a.lider.escalas_no_mes + a.conjuge.escalas_no_mes;
-            const totalB = b.lider.escalas_no_mes + b.conjuge.escalas_no_mes;
-            return totalA - totalB; // Quem serviu menos vem primeiro
+            const escalasA = a.lider.escalas_no_mes + a.conjuge.escalas_no_mes;
+            const escalasB = b.lider.escalas_no_mes + b.conjuge.escalas_no_mes;
+            return escalasA - escalasB;
         });
 
-        // Selecionar o casal que serviu menos
         const casalEscolhido = casaisDisponiveis[0];
+        console.log(`   ✅ Responsáveis Gerais escolhidos: ${casalEscolhido.lider.nome_completo} & ${casalEscolhido.conjuge.nome_completo}`);
+        
         responsavelGeral1Id = casalEscolhido.lider.id;
         responsavelGeral2Id = casalEscolhido.conjuge.id;
-        console.log(`   👑 Casal selecionado (menor uso): ${casalEscolhido.lider.nome_completo} + ${casalEscolhido.conjuge.nome_completo}`);
-    }
 
+        // Marcar como usados
+        membrosUsados.add(responsavelGeral1Id!);
+        membrosUsados.add(responsavelGeral2Id!);
+        
+        // Incrementar contadores
+        casalEscolhido.lider.escalas_no_mes++;
+        casalEscolhido.conjuge.escalas_no_mes++;
+    } else {
+         console.log(`   ⚠️ Nenhum casal Nível 5 disponível para Responsáveis Gerais!`);
+    }
+    */
+    // Se não encontrou casal, logar aviso
     // Se não encontrou casal, logar aviso
     if (!responsavelGeral1Id || !responsavelGeral2Id) {
-        console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto`);
-        // Fallback: usar os dois primeiros disponíveis (não ideal)
-        if (lideresDisponiveis.length >= 2) {
-            responsavelGeral1Id = lideresDisponiveis[0].id;
-            responsavelGeral2Id = lideresDisponiveis[1].id;
-            console.log(`   👑 Fallback: ${lideresDisponiveis[0].nome_completo} + ${lideresDisponiveis[1].nome_completo}`);
-        }
+        // console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto`);
+        // Fallback DESATIVADO
     }
 
     let vagasPreenchidas = 0;
