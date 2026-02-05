@@ -427,13 +427,13 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
 
     // ============================================
     // ============================================
-    // ENCONTRAR RESPONSÁVEIS GERAIS (NÍVEL 5)
     // ============================================
-    // DESATIVADO: Usuário solicitou remover "Geral" da escala automática.
-    const responsavelGeral1Id: string | null = null;
-    const responsavelGeral2Id: string | null = null;
+    // ENCONTRAR RESPONSÁVEIS GERAIS (NÍVEL 5)
+    // São salvos diretamente em datas_cultos, não alocados via função
+    // ============================================
+    let responsavelGeral1Id: string | null = null;
+    let responsavelGeral2Id: string | null = null;
 
-    /* LÓGICA ANTIGA (DESATIVADA)
     // Buscar membros Nível 5 disponíveis para este período
     const lideresDisponiveis = membros.filter(m => {
         if (m.nivel_experiencia !== 5) return false;
@@ -509,26 +509,30 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
 
         const casalEscolhido = casaisDisponiveis[0];
         console.log(`   ✅ Responsáveis Gerais escolhidos: ${casalEscolhido.lider.nome_completo} & ${casalEscolhido.conjuge.nome_completo}`);
-        
+
         responsavelGeral1Id = casalEscolhido.lider.id;
         responsavelGeral2Id = casalEscolhido.conjuge.id;
 
         // Marcar como usados
         membrosUsados.add(responsavelGeral1Id!);
         membrosUsados.add(responsavelGeral2Id!);
-        
+
         // Incrementar contadores
         casalEscolhido.lider.escalas_no_mes++;
         casalEscolhido.conjuge.escalas_no_mes++;
     } else {
-         console.log(`   ⚠️ Nenhum casal Nível 5 disponível para Responsáveis Gerais!`);
+        console.log(`   ⚠️ Nenhum casal Nível 5 disponível para Responsáveis Gerais!`);
     }
-    */
-    // Se não encontrou casal, logar aviso
+
     // Se não encontrou casal, logar aviso
     if (!responsavelGeral1Id || !responsavelGeral2Id) {
-        // console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto`);
-        // Fallback DESATIVADO
+        console.log(`   ⚠️ Nenhum casal Nível 5 disponível para este culto`);
+        // Fallback: usar os dois primeiros disponíveis (não ideal)
+        if (lideresDisponiveis.length >= 2) {
+            responsavelGeral1Id = lideresDisponiveis[0].id;
+            responsavelGeral2Id = lideresDisponiveis[1].id;
+            console.log(`   👑 Fallback: ${lideresDisponiveis[0].nome_completo} + ${lideresDisponiveis[1].nome_completo}`);
+        }
     }
 
     let vagasPreenchidas = 0;
