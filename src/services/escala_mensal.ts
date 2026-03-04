@@ -257,6 +257,7 @@ function distribuirPresencaDomingos(
     membros: MembroComHistorico[],
     cultosDomingo: Culto[]
 ): void {
+    const MAXIMO_MEMBROS_POR_CULTO = 30; // Cap máximo por culto de domingo
     // 1. Agrupar cultos por Data Lógica (YYYY-MM-DD)
     const diasMap = new Map<string, { manha?: Culto, noite?: Culto }>();
     cultosDomingo.forEach(c => {
@@ -393,6 +394,12 @@ function distribuirPresencaDomingos(
 
         const cultoAlvo = turno === 'manha' ? dia.manha : dia.noite;
         if (cultoAlvo) {
+            // Verificar cap antes de adicionar
+            const ocupacaoAtual = getOccupancy(cultoAlvo.id);
+            const membrosNaUnidade = unit.members.length;
+            if (ocupacaoAtual + membrosNaUnidade > MAXIMO_MEMBROS_POR_CULTO) {
+                return; // Cap atingido, não adiciona
+            }
             unit.members.forEach(m => m.pool_cultos_ids!.add(cultoAlvo.id));
             unit.assignedShifts[dataBase] = turno;
         }
@@ -506,7 +513,7 @@ function distribuirPresencaDomingos(
             cultosDomingo.forEach(c => {
                 if (cand.member.pool_cultos_ids!.has(c.id)) return; // Já está lá
                 const occ = getOccupancy(c.id);
-                if (occ < minOcc) {
+                if (occ < MAXIMO_MEMBROS_POR_CULTO && occ < minOcc) {
                     minOcc = occ;
                     bestCulto = c;
                 }
@@ -522,13 +529,13 @@ function distribuirPresencaDomingos(
     // PASSO E: 1x (Global Balance)
     // ============================================
     for (const u of units1x) {
-        // Achar DATA/TURNO com menor ocupação média
+        // Achar DATA/TURNO com menor ocupação que respeite o cap
         let bestCulto: Culto | null = null;
         let minOcc = Infinity;
 
         cultosDomingo.forEach(c => {
             const occ = getOccupancy(c.id);
-            if (occ < minOcc) {
+            if (occ < MAXIMO_MEMBROS_POR_CULTO && occ < minOcc) {
                 minOcc = occ;
                 bestCulto = c;
             }
@@ -539,7 +546,12 @@ function distribuirPresencaDomingos(
         }
     }
 
-    console.log(`   ✅ Domingos distribuídos com lógica de Espelho + Turnos`);
+    // Log final de ocupação
+    console.log(`   📊 Ocupação final dos domingos:`);
+    cultosDomingo.forEach(c => {
+        console.log(`      ${c.periodo} (${c.data_culto.split('T')[0]}): ${getOccupancy(c.id)} membros`);
+    });
+    console.log(`   ✅ Domingos distribuídos com lógica de Espelho + Turnos + Cap ${MAXIMO_MEMBROS_POR_CULTO}`);
 }
 
 // ============================================
