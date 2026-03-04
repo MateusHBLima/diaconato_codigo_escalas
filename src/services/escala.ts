@@ -12,6 +12,13 @@ import { buscarRegraDetalhada, DETAILED_RULES, type PositionRule } from './rules
 import { ordenarFuncoesPorProcessamento } from './rules/ProcessingOrder.js';
 
 // ============================================
+// CONSTANTES
+// ============================================
+
+// ID da função "Pool Diário" — usado para identificar entradas de pool no banco
+const POOL_DIARIO_ID = 'd4b4adb8-07e3-4f66-880c-46737b76874a';
+
+// ============================================
 // TIPOS INTERNOS
 // ============================================
 
@@ -150,13 +157,14 @@ async function buscarFuncoesAtivas(isSantaCeia: boolean): Promise<Funcao[]> {
 }
 
 /**
- * Limpa alocações anteriores de um culto
+ * Limpa alocações anteriores de um culto (PRESERVA o Pool Diário)
  */
 async function limparAlocacoesAnteriores(cultoId: string): Promise<void> {
     const { error } = await supabase
         .from('escalas_alocacoes')
         .delete()
-        .eq('culto_id', cultoId);
+        .eq('culto_id', cultoId)
+        .neq('funcao_id', POOL_DIARIO_ID); // Preserva entradas do Pool
 
     if (error) {
         console.error(`Erro ao limpar alocações: ${error.message}`);
@@ -388,7 +396,6 @@ function encontrarCandidato(
  * Gera a escala completa para um culto COM BALANCEAMENTO
  */
 export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEscala> {
-    process.stdout.write(`\nDEBUG: Entered gerarEscalaParaCulto with ${cultoId}\n`);
     console.log(`\n📋 Gerando escala para culto ${cultoId}`);
 
     // Buscar culto
@@ -400,11 +407,34 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     console.log(`   📅 ${culto.nome_culto} - ${culto.periodo}`);
     console.log(`   🍞 Santa Ceia: ${culto.is_santa_ceia ? 'Sim' : 'Não'}`);
 
-    // Buscar membros COM HISTÓRICO
-    const membros = await buscarMembrosComHistorico(culto.mes, culto.ano, culto.periodo);
+    // ============================================
+    // BUSCAR MEMBROS: Priorizar Pool salvo no banco
+    // ============================================
+    let todosMembros = await buscarMembrosComHistorico(culto.mes, culto.ano, culto.periodo);
+
+    // Verificar se existe Pool salvo para este culto
+    const { data: poolEntries } = await supabase
+        .from('escalas_alocacoes')
+        .select('membro_id')
+        .eq('culto_id', cultoId)
+        .eq('funcao_id', POOL_DIARIO_ID);
+
+    let membros: MembroComHistorico[];
+
+    if (poolEntries && poolEntries.length > 0) {
+        // Pool existe → usar APENAS membros do pool
+        const poolMemberIds = new Set(poolEntries.map(e => e.membro_id).filter(Boolean));
+        membros = todosMembros.filter(m => poolMemberIds.has(m.id));
+        console.log(`   🌊 Pool encontrado: ${poolEntries.length} entradas → ${membros.length} membros válidos`);
+    } else {
+        // Sem pool → fallback para todos os membros ativos
+        membros = todosMembros;
+        console.log(`   ⚠️ Sem pool salvo, usando todos os membros ativos: ${membros.length}`);
+    }
+
     const funcoes = await buscarFuncoesAtivas(culto.is_santa_ceia);
 
-    console.log(`   👥 Membros ativos: ${membros.length}`);
+    console.log(`   👥 Membros para alocação: ${membros.length}`);
     console.log(`   🎯 Funções ativas: ${funcoes.length}`);
 
     // Aplicar ordenação customizada: Portas → Setores → Oferta → Máquinas → Banheiros → etc.

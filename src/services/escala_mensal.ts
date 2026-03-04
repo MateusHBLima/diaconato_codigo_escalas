@@ -5,9 +5,8 @@ import {
     atendePeriodo,
     atendeGenero
 } from './parser.js';
-import type { Membro, Funcao, Culto, Alocacao, ResultadoEscala } from '../types/index.js';
+import type { Membro, Funcao, Culto, Alocacao } from '../types/index.js';
 import { gerarCultosDoMes, salvarCultos, buscarCultosDoMes } from './cultos.js';
-import { gerarEscalaComPool } from './escala_diaria_custom.js';
 
 // ============================================
 // TIPOS INTERNOS
@@ -89,6 +88,7 @@ function distribuirPresencaQuintas(
     cultos: Culto[]
 ): void {
     const MINIMO_MEMBROS = 28;
+    const MAXIMO_MEMBROS = 30; // Cap máximo por quinta (exclui N5)
 
     // Ordenar cultos cronologicamente
     const cultosOrdenados = [...cultos].sort((a, b) => a.data_culto.localeCompare(b.data_culto));
@@ -163,7 +163,7 @@ function distribuirPresencaQuintas(
 
         indices.forEach(idx => {
             const culto = cultosOrdenados[idx]; // Q1..Q4
-            if (culto) {
+            if (culto && (ocupacao.get(culto.id) || 0) < MAXIMO_MEMBROS) {
                 m.pool_cultos_ids!.add(culto.id);
                 ocupacao.set(culto.id, (ocupacao.get(culto.id) || 0) + 1);
             }
@@ -199,15 +199,15 @@ function distribuirPresencaQuintas(
 
     // ALOCAR Q1/Q3 (Grupo A - "Primeiras Quintas")
     for (const m of grupo2x_Q1Q3) {
-        if (Q1) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
-        if (Q3) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
+        if (Q1 && (ocupacao.get(Q1.id) || 0) < MAXIMO_MEMBROS) { m.pool_cultos_ids!.add(Q1.id); ocupacao.set(Q1.id, (ocupacao.get(Q1.id) || 0) + 1); }
+        if (Q3 && (ocupacao.get(Q3.id) || 0) < MAXIMO_MEMBROS) { m.pool_cultos_ids!.add(Q3.id); ocupacao.set(Q3.id, (ocupacao.get(Q3.id) || 0) + 1); }
     }
     console.log(`   ✅ 2x (Q1=Q3): ${grupo2x_Q1Q3.length} membros`);
 
     // ALOCAR Q2/Q4 (Grupo B - "Segundas Quintas")
     for (const m of grupo2x_Q2Q4) {
-        if (Q2) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
-        if (Q4) { m.pool_cultos_ids!.add(Q4.id); ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1); }
+        if (Q2 && (ocupacao.get(Q2.id) || 0) < MAXIMO_MEMBROS) { m.pool_cultos_ids!.add(Q2.id); ocupacao.set(Q2.id, (ocupacao.get(Q2.id) || 0) + 1); }
+        if (Q4 && (ocupacao.get(Q4.id) || 0) < MAXIMO_MEMBROS) { m.pool_cultos_ids!.add(Q4.id); ocupacao.set(Q4.id, (ocupacao.get(Q4.id) || 0) + 1); }
     }
     console.log(`   ✅ 2x (Q2=Q4): ${grupo2x_Q2Q4.length} membros alocados`);
 
@@ -216,13 +216,13 @@ function distribuirPresencaQuintas(
     // Vão para QUALQUER quinta abaixo da média
     // ============================================
     for (const m of grupo1x) {
-        // Encontrar a quinta com MENOR ocupação
+        // Encontrar a quinta com MENOR ocupação que ainda não atingiu o máximo
         let targetCulto: Culto | null = null;
         let menorCount = Infinity;
 
         for (const c of cultosOrdenados) {
             const count = ocupacao.get(c.id) || 0;
-            if (count < menorCount) {
+            if (count < MAXIMO_MEMBROS && count < menorCount) {
                 menorCount = count;
                 targetCulto = c;
             }
@@ -621,8 +621,7 @@ const POOL_DIARIO_ID = 'd4b4adb8-07e3-4f66-880c-46737b76874a';
 
 export async function gerarEscalaMensal(
     mes: number,
-    ano: number,
-    gerarSomentePool: boolean = false
+    ano: number
 ): Promise<any> {
     console.log(`\n🚀 INICIANDO GERAÇÃO (FASE 1 = Custom | FASE 2 = Strict Clone): ${mes}/${ano}`);
 
@@ -696,56 +695,6 @@ export async function gerarEscalaMensal(
         else console.log(`      ✅ ${inserts.length} membros no Pool de ${culto.data_culto}.`);
     }
 
-    if (gerarSomentePool) {
-        console.log(`\n✅ Geração SOMENTE POOL Concluída!`);
-        return { success: true, mes, ano, resultados: [] };
-    }
-
-    console.log(`\n🧩 Fase 3: Alocação Tática (Via Clone Diário)`);
-
-    const alocacoesTotais: Omit<Alocacao, 'id'>[] = [];
-    const resultadosPorCulto: ResultadoEscala[] = [];
-
-    // Processar TODOS os cultos
-    for (const culto of cultos) {
-
-        // 1. Definir Pool do Dia
-        // ATENÇÃO: Aqui passamos o Pool JÁ filtrado pela Fase 1
-        const listSet = culto.periodo === 'quinta' ? membrosQuinta : membrosDomingo;
-        const poolDoDia = listSet.filter(m => m.pool_cultos_ids!.has(culto.id));
-
-        if (poolDoDia.length === 0) {
-            console.log(`   ⚠️ Pool vazio para ${culto.nome_culto} (${culto.data_culto})`);
-            continue;
-        }
-
-        // 2. Chamar o Clone Diário
-        // Ele vai alocar funções, responsáveis, validar regras, etc.
-        const resultadoCulto = await gerarEscalaComPool(culto, poolDoDia);
-
-        // Acumular alocações
-        // IMPORTANTE: gerarEscalaComPool retorna alocacoes com IDs e tudo mais.
-        // Precisamos garantir que não salve duas vezes se o clone salvar.
-        // O clone atual NÃO salva alocações no DB (eu comentei/pus return).
-
-        // Vamos extrair as alocacoes retornadas pelo clone e acumular para salvar em batch.
-        // O meu código do clone retornava { alocacoes: ... }
-        // Se eu modifiquei o clone para retornar, aqui eu pego.
-        if (resultadoCulto.alocacoes) {
-            alocacoesTotais.push(...resultadoCulto.alocacoes);
-        }
-
-        resultadosPorCulto.push(resultadoCulto);
-    }
-
-    // SALVAR EM BATCH (Mais eficiente que salvar culto a culto)
-    console.log(`\n💾 Salvando ${alocacoesTotais.length} alocações finais...`);
-    await salvarAlocacoes(alocacoesTotais);
-
-    return {
-        success: true,
-        mes,
-        ano,
-        resultados: resultadosPorCulto
-    };
+    console.log(`\n✅ Geração do Pool Mensal Concluída!`);
+    return { success: true, mes, ano };
 }
