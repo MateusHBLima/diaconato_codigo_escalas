@@ -707,6 +707,32 @@ export async function gerarEscalaMensal(
         else console.log(`      ✅ ${inserts.length} membros no Pool de ${culto.data_culto}.`);
     }
 
-    console.log(`\n✅ Geração do Pool Mensal Concluída!`);
-    return { success: true, mes, ano };
+    console.log(`\n✅ Pool Mensal salvo!`);
+
+    // ============================================
+    // FASE 3: GERAR ESCALAS DIÁRIAS AUTOMATICAMENTE
+    // ============================================
+    // Agora que o Pool de cada culto está salvo no banco,
+    // chamamos gerarEscalaParaCulto que detecta o Pool e
+    // usa APENAS os membros do pool para alocar nas funções.
+    console.log(`\n📋 Fase 3: Gerando escalas diárias automáticas com o Pool...`);
+
+    const { gerarEscalaParaCulto } = await import('./escala.js');
+
+    let escalasGeradas = 0;
+    let escalasComErro = 0;
+
+    for (const culto of cultos) {
+        try {
+            const resultado = await gerarEscalaParaCulto(culto.id);
+            console.log(`      ✅ ${culto.data_culto} (${culto.periodo}): ${resultado.vagas_preenchidas} preenchidas, ${resultado.vagas_vazias} vazias`);
+            escalasGeradas++;
+        } catch (err: any) {
+            console.error(`      ❌ Erro em ${culto.data_culto}: ${err.message}`);
+            escalasComErro++;
+        }
+    }
+
+    console.log(`\n✅ Geração Mensal Completa! ${escalasGeradas} escalas geradas, ${escalasComErro} erros.`);
+    return { success: true, mes, ano, escalas_geradas: escalasGeradas, escalas_com_erro: escalasComErro };
 }
