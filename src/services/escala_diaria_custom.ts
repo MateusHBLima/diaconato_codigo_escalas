@@ -141,7 +141,7 @@ function encontrarCandidato(
         return membro;
     }
 
-    const ehFuncaoRepetivel = funcao.regras === 'REPETIR_PESSOA';
+    const ehFuncaoRepetivel = funcao.regras?.includes('REPETIR_PESSOA') ?? false;
 
     // Função auxiliar para filtrar candidatos
     const filtrarCandidatos = (ignorarLimite: boolean) => {

@@ -110,7 +110,7 @@ export function atendePermissao(
 
     // REPETIR_PESSOA não é uma permissão, é um flag de comportamento
     // Significa que a pessoa nessa função PODE ser repetida em outra
-    if (regraFuncao === 'REPETIR_PESSOA') return true;
+    if (regraFuncao.includes('REPETIR_PESSOA')) return true;
 
     // Verificar se membro tem a aptidão
     return aptidoesMembro.includes(regraFuncao);

@@ -38,8 +38,10 @@ export const STAR_REQUIREMENTS: Record<number, string[]> = {
  * Membros Nível 3+ serão BLOQUEADOS dessas funções.
  */
 export const STAR_MAX_LIMITS: Record<string, number> = {
-    'Hall': 4, // Alterado de 3 para 4 - permite nível 4★ (Púlpito/Mesa) ajudar no básico
-    'Apoio': 4, // Alterado de 3 para 4 - permite nível 4★ ajudar no básico
+    'Hall': 2,    // Apenas 1★ e 2★ podem fazer Hall
+    'Apoio': 2,   // Apenas 1★ e 2★ podem fazer Apoio (exceto "Responsável e apoio" que é 3★)
+    'Interno': 3, // Apenas 2★ e 3★ podem fazer Interno
+    'Corrente': 3, // Apenas 2-3★ podem fazer Corrente
 };
 
 type MinStarRule = {
@@ -150,15 +152,10 @@ export function podeExecutarFuncao(
     }
 
     // Para níveis 1-4, lógica cumulativa normal
-    // NOVA REGRA: Stretch (Esticada)
-    // - Nível 4 tem acesso total (1, 2, 3, 4)
-    // - Nível 2 PODE fazer funções de Nível 3 (ex: Salvas, Corrente, Responsável)
+    // REGRA ESTRITA: Cada nível só faz as funções do seu nível e abaixo
+    // Nível 2 NÃO pode fazer funções de nível 3 (sem stretch)
 
     let nivelEfetivo = estrelas;
-    // Se for Nível 2, consideramos que pode alcançar funções de Nível 3
-    if (estrelas === 2) {
-        nivelEfetivo = 3;
-    }
 
     for (let nivel = 1; nivel <= nivelEfetivo; nivel++) {
         const funcoesPermitidas = STAR_REQUIREMENTS[nivel] || [];
