@@ -53,8 +53,9 @@ async function buscarHistoricoMes(
             culto:datas_cultos!inner(data_culto, periodo, mes, ano)
         `)
         .eq('status', 'ALOCADO')
-        .not('membro_id', 'is', null);
-
+        .not('membro_id', 'is', null)
+        .neq('funcao_id', POOL_DIARIO_ID); // Ignora entradas do Pool Diário
+    
     if (error) {
         console.error('Erro ao buscar histórico:', error.message);
         return new Map();
