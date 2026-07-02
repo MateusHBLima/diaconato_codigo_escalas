@@ -751,6 +751,124 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
         quemEstaOnde.set(chaveComposta, [...existente, ...ocupantesDestaFuncao]);
     }
 
+    // ============================================
+    // REGRA DE CONJUGES: CASAIS DEVEM SERVIR JUNTOS
+    // ============================================
+    console.log(`   ⚖️ Validando regra de cônjuges...`);
+
+    // 1. Identificar casais ativos que estão no pool
+    const casaisNoCulto: Array<{ m1: MembroComHistorico, m2: MembroComHistorico }> = [];
+    const casaisProcessados = new Set<string>();
+
+    for (const m of membros) {
+        if (casaisProcessados.has(m.id)) continue;
+        if (!m.nome_conjuge || !(m as any).conjuge_serve_junto) continue;
+
+        const nomeConjugeClean = m.nome_conjuge.trim().toLowerCase();
+        const conjuge = membros.find(other => {
+            if (other.id === m.id) return false;
+            const match1 = other.nome_completo.toLowerCase().includes(nomeConjugeClean);
+            const mNomeConjugeClean = other.nome_conjuge ? other.nome_conjuge.trim().toLowerCase() : '';
+            const match2 = mNomeConjugeClean && m.nome_completo.toLowerCase().includes(mNomeConjugeClean);
+            return match1 || match2;
+        });
+
+        if (conjuge && (conjuge as any).conjuge_serve_junto) {
+            casaisNoCulto.push({ m1: m, m2: conjuge });
+            casaisProcessados.add(m.id);
+            casaisProcessados.add(conjuge.id);
+        }
+    }
+
+    // 2. Garantir que cônjuge de membro alocado também seja alocado (ou desalocar ambos se não puder)
+    for (const m of membros) {
+        if (!m.nome_conjuge || !(m as any).conjuge_serve_junto) continue;
+
+        const nomeConjugeClean = m.nome_conjuge.trim().toLowerCase();
+        const conjugeNoPool = membros.find(other => {
+            if (other.id === m.id) return false;
+            const match1 = other.nome_completo.toLowerCase().includes(nomeConjugeClean);
+            const mNomeConjugeClean = other.nome_conjuge ? other.nome_conjuge.trim().toLowerCase() : '';
+            const match2 = mNomeConjugeClean && m.nome_completo.toLowerCase().includes(mNomeConjugeClean);
+            return match1 || match2;
+        });
+
+        const mAlocado = alocacoes.find(a => a.membro_id === m.id);
+
+        if (!conjugeNoPool) {
+            // Se o cônjuge não está no pool, este membro não pode trabalhar sozinho!
+            if (mAlocado) {
+                console.log(`      💔 Desalocando ${m.nome_completo} pois cônjuge não está no pool.`);
+                mAlocado.membro_id = null;
+                mAlocado.status = 'SEM_CANDIDATO';
+                mAlocado.motivo_falha = 'Cônjuge ausente do pool';
+                m.escalas_no_mes = Math.max(0, m.escalas_no_mes - 1);
+                vagasPreenchidas = Math.max(0, vagasPreenchidas - 1);
+                vagasVazias++;
+            }
+        }
+    }
+
+    for (const casal of casaisNoCulto) {
+        const { m1, m2 } = casal;
+
+        const a1 = alocacoes.find(a => a.membro_id === m1.id);
+        const a2 = alocacoes.find(a => a.membro_id === m2.id);
+
+        if (a1 && a2) {
+            // Ambos alocados: perfeito!
+            continue;
+        }
+
+        if (!a1 && !a2) {
+            // Nenhum alocado: perfeito!
+            continue;
+        }
+
+        // Apenas um alocado
+        const alocado = a1 ? a1 : a2;
+        const alocadoMembro = a1 ? m1 : m2;
+        const naoAlocadoMembro = a1 ? m2 : m1;
+
+        console.log(`      ⚖️ Desbalanceamento: ${alocadoMembro.nome_completo} está alocado, mas cônjuge ${naoAlocadoMembro.nome_completo} não.`);
+
+        // Tentar alocar o cônjuge em alguma vaga vazia
+        let alocadoSucesso = false;
+        const vagasVaziasNoCulto = alocacoes.filter(a => !a.membro_id);
+
+        for (const vaga of vagasVaziasNoCulto) {
+            const func = funcoesOrdenadas.find(f => f.id === vaga.funcao_id);
+            if (!func) continue;
+
+            if (podeExecutarFuncao(naoAlocadoMembro, func.nome, func.especificidade_sexo, func.setor_pai, 0)) {
+                // Alocar cônjuge!
+                vaga.membro_id = naoAlocadoMembro.id;
+                vaga.status = 'ALOCADO';
+                vaga.motivo_falha = null;
+                naoAlocadoMembro.escalas_no_mes++;
+                alocadoSucesso = true;
+                vagasPreenchidas++;
+                vagasVazias = Math.max(0, vagasVazias - 1);
+                console.log(`         🟢 Alocado cônjuge ${naoAlocadoMembro.nome_completo} na vaga de ${func.nome} (${func.setor_pai})`);
+                break;
+            }
+        }
+
+        if (!alocadoSucesso) {
+            // Desalocar o cônjuge que estava trabalhando
+            const alocMembroToClear = alocacoes.find(a => a.membro_id === alocadoMembro.id);
+            if (alocMembroToClear) {
+                console.log(`         🔴 Desalocando ${alocadoMembro.nome_completo} pois cônjuge ${naoAlocadoMembro.nome_completo} não pôde ser alocado.`);
+                alocMembroToClear.membro_id = null;
+                alocMembroToClear.status = 'SEM_CANDIDATO';
+                alocMembroToClear.motivo_falha = 'Cônjuge não alocado';
+                alocadoMembro.escalas_no_mes = Math.max(0, alocadoMembro.escalas_no_mes - 1);
+                vagasPreenchidas = Math.max(0, vagasPreenchidas - 1);
+                vagasVazias++;
+            }
+        }
+    }
+
     // Salvar no banco
     await salvarAlocacoes(alocacoes);
     await marcarEscalaCriada(cultoId);
