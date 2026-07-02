@@ -296,10 +296,13 @@ function distribuirPresencaDomingos(
         // Tentar achar cônjuge
         if (mPrincipal.nome_conjuge) {
             const nomeConjugeClean = mPrincipal.nome_conjuge.trim().toLowerCase();
-            const conjuge = membros.find(m =>
-                m.id !== mPrincipal.id &&
-                m.nome_completo.toLowerCase().includes(nomeConjugeClean)
-            );
+            const conjuge = membros.find(m => {
+                if (m.id === mPrincipal.id) return false;
+                const match1 = m.nome_completo.toLowerCase().includes(nomeConjugeClean);
+                const mNomeConjugeClean = m.nome_conjuge ? m.nome_conjuge.trim().toLowerCase() : '';
+                const match2 = mNomeConjugeClean && mPrincipal.nome_completo.toLowerCase().includes(mNomeConjugeClean);
+                return match1 && match2;
+            });
             if (conjuge) {
                 membersList.push(conjuge);
                 type = 'casal';
@@ -606,7 +609,7 @@ function sincronizarCasaisLideres(
 // José Duarte e outros com "Prioridade Mesa" devem estar em TODOS os cultos
 // ============================================
 
-function sincronizarMembrosMesa(
+export function sincronizarMembrosMesa(
     membros: MembroComHistorico[],
     todosCultos: Culto[]
 ): void {
@@ -621,6 +624,70 @@ function sincronizarMembrosMesa(
             membro.pool_cultos_ids!.add(culto.id);
         }
         console.log(`      ✅ ${membro.nome_completo} (Prioridade Mesa) forçado em ${todosCultos.length} cultos`);
+    }
+}
+
+/**
+ * Ajusta o tamanho dos pools de cada culto para garantir que fique entre minLimit e maxLimit.
+ */
+export function ajustarTamanhoPools(
+    membros: MembroComHistorico[],
+    cultos: Culto[],
+    minLimit: number,
+    maxLimit: number
+): void {
+    console.log(`   ⚖️ Ajustando tamanho dos pools para Min: ${minLimit}, Max: ${maxLimit}...`);
+
+    for (const culto of cultos) {
+        // Obter apenas membros comuns no pool (exclui N5)
+        let poolMembers = membros.filter(m => m.pool_cultos_ids!.has(culto.id) && m.nivel_experiencia !== 5);
+
+        if (poolMembers.length > maxLimit) {
+            // Ordenar de forma que possamos remover primeiro quem serve mais no mês
+            // e quem NÃO é líder N5 ou Mesa Priority
+            const candidatosRemocao = poolMembers.filter(m => 
+                m.nivel_experiencia !== 5 && 
+                !m.aptidoes?.includes('Prioridade Mesa')
+            );
+
+            candidatosRemocao.sort((a, b) => b.pool_cultos_ids!.size - a.pool_cultos_ids!.size);
+
+            const aRemover = poolMembers.length - maxLimit;
+            let removidos = 0;
+
+            for (const m of candidatosRemocao) {
+                if (removidos >= aRemover) break;
+                m.pool_cultos_ids!.delete(culto.id);
+                removidos++;
+            }
+            console.log(`      🔴 Culto ${culto.data_culto.split('T')[0]}: Removidos ${removidos} membros comuns. Novo total: ${poolMembers.length - removidos}`);
+        } else if (poolMembers.length < minLimit) {
+            // Adicionar membros ativos e disponíveis (exclui N5)
+            const candidatosAdicao = membros.filter(m => {
+                if (m.nivel_experiencia === 5) return false;
+                if (m.pool_cultos_ids!.has(culto.id)) return false;
+
+                const dispText = culto.periodo === 'quinta' ? m.disponibilidade_quinta : m.disponibilidade_domingo;
+                const { disponivel } = parseDisponibilidade(dispText);
+                if (!disponivel) return false;
+
+                if (!atendePeriodo(m.melhor_periodo_domingo, culto.periodo)) return false;
+
+                return true;
+            });
+
+            candidatosAdicao.sort((a, b) => a.pool_cultos_ids!.size - b.pool_cultos_ids!.size);
+
+            const aAdicionar = minLimit - poolMembers.length;
+            let adicionados = 0;
+
+            for (const m of candidatosAdicao) {
+                if (adicionados >= aAdicionar) break;
+                m.pool_cultos_ids!.add(culto.id);
+                adicionados++;
+            }
+            console.log(`      🟢 Culto ${culto.data_culto.split('T')[0]}: Adicionados ${adicionados} membros comuns. Novo total: ${poolMembers.length + adicionados}`);
+        }
     }
 }
 
@@ -667,11 +734,10 @@ export async function gerarEscalaMensal(
     sincronizarMembrosMesa(membrosQuinta, quintas);
     sincronizarMembrosMesa(membrosDomingo, domingos);
 
-    // FASE 2: ALOCAÇÃO TÁTICA (DELEGADA AO CLONE DIÁRIO)
-    // ============================================
-    // FASE 2: GERAÇÃO TÁTICA OU MODO POOL
-    // ============================================
-    // ============================================
+    // FASE 1.7: AJUSTE DO TAMANHO DO POOL (MÍNIMO 20, MÁXIMO 30)
+    ajustarTamanhoPools(membrosQuinta, quintas, 20, 30);
+    ajustarTamanhoPools(membrosDomingo, domingos, 20, 30);
+
     // FASE 2: SALVAR POOL (SEMPRE)
     // ============================================
     // Salva a lista de disponíveis antes de alocar.
@@ -680,9 +746,9 @@ export async function gerarEscalaMensal(
     console.log(`\n🛑 SALVANDO POOL (Membros disponíveis antes da alocação)...`);
 
     for (const culto of cultos) {
-        // 1. Identificar membros no pool deste culto
+        // 1. Identificar membros no pool deste culto (exclui N5)
         const listSet = culto.periodo === 'quinta' ? membrosQuinta : membrosDomingo;
-        const membrosNoPool = listSet.filter(m => m.pool_cultos_ids!.has(culto.id));
+        const membrosNoPool = listSet.filter(m => m.pool_cultos_ids!.has(culto.id) && m.nivel_experiencia !== 5);
 
         if (membrosNoPool.length === 0) continue;
 

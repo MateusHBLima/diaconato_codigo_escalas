@@ -224,7 +224,8 @@ function encontrarCandidato(
     culto: Culto,
     membrosUsados: Set<string>,
     membroObrigatorioId?: string | null,
-    numeroVaga: number = 0
+    numeroVaga: number = 0,
+    todosMembros?: MembroComHistorico[]
 ): MembroComHistorico | null {
 
     const nomeFuncaoLower = funcao.nome.toLowerCase();
@@ -248,7 +249,10 @@ function encontrarCandidato(
     };
 
     if (membroObrigatorioId) {
-        const membro = membros.find(m => m.id === membroObrigatorioId);
+        let membro = membros.find(m => m.id === membroObrigatorioId);
+        if (!membro && todosMembros) {
+            membro = todosMembros.find(m => m.id === membroObrigatorioId);
+        }
         if (!membro) return null;
 
         // Verificar se o membro pode executar esta função
@@ -466,7 +470,7 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
     let responsavelGeral2Id: string | null = null;
 
     // Buscar membros Nível 5 disponíveis para este período
-    const lideresDisponiveis = membros.filter(m => {
+    const lideresDisponiveis = todosMembros.filter(m => {
         if (m.nivel_experiencia !== 5) return false;
 
         // Verificar disponibilidade
@@ -703,7 +707,7 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 }
             }
 
-            const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId, i);
+            const candidato = encontrarCandidato(membros, funcao, culto, membrosUsados, membroObrigatorioId, i, todosMembros);
 
             // NOTA: Responsáveis Gerais (Nível 5) são detectados no início da função,
             // não através da alocação de funções. A captura abaixo foi removida.

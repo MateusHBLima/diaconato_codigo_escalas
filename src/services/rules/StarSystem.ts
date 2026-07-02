@@ -1,47 +1,46 @@
-
 import { Funcao, Membro } from '../../types';
 
 export const STAR_REQUIREMENTS: Record<number, string[]> = {
-    // 1 Estrela (Básico)
+    // 1 Estrela (Nível 1)
     1: [
-        'Hall', // Cobre Hall A1, A2...
-        'Apoio' // Cobre Apoio Geral, Setores
+        'Hall', // Hall da porta
+        'Interno', // Interno da porta
+        'Corrente 1',
+        'Corrente 2',
+        'Corrente corredor da mídia',
+        'Corrente entre verde e laranja'
     ],
-    // 2 Estrelas
+    // 2 Estrelas (Nível 2)
     2: [
-        'Interno', // Cobre Interno A1...
-        'Máquinas', 'Cartão'
+        'Máquinas', 'Cartão', 'Finalização', // Máquina (oferta)
+        'Apoio' // Apoio
     ],
-    // 3 Estrelas (Responsáveis de Ala e Correntes)
+    // 3 Estrelas (Nível 3)
     3: [
-        'Salvas',
-        'Corrente', // Cobre Corrente 1, 2, Mídia, Pastor
-        'Feminino entre', // Correntes específicas
-        'Masculino entre', // Correntes específicas
-        'Responsável' // Responsável e apoio (Ala) - SÓ MULHERES pelo banco
+        'atrás do Pastor', // Atrás pastor
+        'Salvas', // Salva
+        'Responsável' // Responsável do setor (Responsável e apoio)
     ],
-    // 4 Estrelas (Especialista)
+    // 4 Estrelas (Nível 4)
     4: [
         'Púlpito',
-        'Mesa', // Cobre Mesa água/mic e Mesa Santa Ceia
+        'Mesa' // Mesa (Mesa, água e microfone)
     ],
     // 5 Estrelas (Liderança Geral)
-    // NOTA: Líderes Nível 5 NÃO são alocados via função normal.
-    // Eles são salvos diretamente em datas_cultos.responsavel_geral_1_id / _2_id
-    // O Nível 5 fica vazio para que líderes não sejam escalados em funções normais.
     5: []
 };
 
 /**
  * Define o LIMITE MÁXIMO de estrelas para certas funções.
- * Isso garante que funções básicas (Hall, Apoio) sejam feitas APENAS por quem é Nível 1 ou 2.
- * Membros Nível 3+ serão BLOQUEADOS dessas funções.
  */
 export const STAR_MAX_LIMITS: Record<string, number> = {
-    'Hall': 2,    // Apenas 1★ e 2★ podem fazer Hall
-    'Apoio': 2,   // Apenas 1★ e 2★ podem fazer Apoio (exceto "Responsável e apoio" que é 3★)
-    'Interno': 3, // Apenas 2★ e 3★ podem fazer Interno
-    'Corrente': 3, // Apenas 2-3★ podem fazer Corrente
+    'Hall': 2,
+    'Interno': 2,
+    'Apoio': 2,
+    'Corrente 1': 2,
+    'Corrente 2': 2,
+    'Corrente corredor da mídia': 2,
+    'Corrente entre verde e laranja': 2,
 };
 
 type MinStarRule = {
@@ -83,19 +82,37 @@ export function podeExecutarFuncao(
 ): boolean {
     const estrelas = membro.nivel_experiencia || 1; // Default para 1 estrela se não definido
 
-    // Verifica sexo
+    // ---------------------------------------------------
+    // REGRA DE GÊNERO (DATABASE & PROGRAMÁTICA)
+    // ---------------------------------------------------
     if (membro.sexo === 'HOMEM' && especificidadeSexoFuncao === 'Mulher') return false;
     if (membro.sexo === 'MULHER' && especificidadeSexoFuncao === 'Homem') return false;
 
+    const nomeLower = nomeFuncao.toLowerCase();
+    
+    // 1. Porta (Hall e Interno) -> apenas homens
+    if ((nomeLower.includes('hall') || nomeLower.includes('interno')) && membro.sexo !== 'HOMEM') {
+        return false;
+    }
+    // 2. Apoio (exceto Responsável e apoio) -> apenas mulheres
+    if (nomeLower.includes('apoio') && !nomeLower.includes('responsável') && membro.sexo !== 'MULHER') {
+        return false;
+    }
+    // 3. Púlpito -> apenas homens
+    if (nomeLower.includes('púlpito') && membro.sexo !== 'HOMEM') {
+        return false;
+    }
+    // 4. Mesa Santa Ceia -> apenas mulheres
+    if (nomeLower.includes('mesa') && membro.sexo !== 'MULHER') {
+        return false;
+    }
+
     // REGRA ESPECIAL: Líderes (Nível 5) NÃO são alocados via função.
-    // Eles são salvos diretamente em datas_cultos.responsavel_geral_1_id / _2_id
-    // Portanto, bloquear de TODAS as funções normais.
     if (estrelas === 5) {
         return false;
     }
 
     // REGRA DE PRIORIDADE:
-    // Quem tem "Prioridade Mesa" só deve fazer Mesa (para não ser roubado por outras funções processadas antes)
     if (membro.aptidoes?.includes('Prioridade Mesa')) {
         if (!nomeFuncao.toLowerCase().includes('mesa')) {
             return false;
@@ -113,7 +130,6 @@ export function podeExecutarFuncao(
             }
 
             if (estrelas > maxEstrelas) {
-                // console.log(`   🚫 Bloqueio MaxStars: ${membro.nome_completo} (${estrelas}★) > ${nomeFuncao} (Max ${maxEstrelas})`);
                 return false;
             }
         }
@@ -124,25 +140,18 @@ export function podeExecutarFuncao(
     // ===============================================
     for (const [chave, regra] of Object.entries(STAR_MIN_LIMITS)) {
         if (nomeFuncao.includes(chave)) {
-            // Verifica Setor
             if (regra.setores && setorPai) {
                 const setorPermitido = regra.setores.some(s => setorPai.toLowerCase().includes(s.toLowerCase()));
                 if (!setorPermitido) continue;
             } else if (regra.setores && !setorPai) {
-                continue; // Se requer setor e não foi passado, ignora (ou assume seguro não bloquear)
+                continue;
             }
 
-            // Verifica Vaga
             if (regra.vagaIndex !== undefined && numeroVaga !== undefined) {
                 if (numeroVaga !== regra.vagaIndex) continue;
             }
 
             if (estrelas < regra.minStars) {
-                // NOVA REGRA (STRETCH): Se for Nível 2 tentando função Nível 3, PERMITIR se a regra exigir Min 3?
-                // O pedido foi "Talvez os de 2 poderem servir em 3".
-                // Se a função exige Nível 3 (ex: Corrente não tem regra explicita aqui, mas cai no loop cumulativo abaixo).
-                // As regras de MIN_LIMITS aqui são 'hard blocks' para setores específicos (ex: Apoio Corrente).
-                // Se o membro é 2 e exige 2, ok.
                 const isStretchAllowed = (estrelas === 2 && regra.minStars === 3);
                 if (!isStretchAllowed) {
                     return false;
@@ -152,25 +161,26 @@ export function podeExecutarFuncao(
     }
 
     // Para níveis 1-4, lógica cumulativa normal
-    // REGRA ESTRITA: Cada nível só faz as funções do seu nível e abaixo
-    // Nível 2 NÃO pode fazer funções de nível 3 (sem stretch)
-
     let nivelEfetivo = estrelas;
 
     for (let nivel = 1; nivel <= nivelEfetivo; nivel++) {
         const funcoesPermitidas = STAR_REQUIREMENTS[nivel] || [];
-        if (funcoesPermitidas.some(f => nomeFuncao.includes(f))) {
-            return true;
+        for (const f of funcoesPermitidas) {
+            if (nomeFuncao.includes(f)) {
+                // Se for Apoio, mas for Responsável e apoio, só permite se for nível >= 3
+                if (f === 'Apoio' && nomeFuncao.toLowerCase().includes('responsável')) {
+                    continue;
+                }
+                return true;
+            }
         }
     }
 
     // FALLBACK: Se a função não está mapeada em nenhum nível, permitir qualquer membro com estrelas >= 1
-    // Isso garante que não fiquem vagas vazias por falta de mapeamento
     const todasFuncoesConhecidas = Object.values(STAR_REQUIREMENTS).flat();
     const funcaoConhecida = todasFuncoesConhecidas.some(f => nomeFuncao.includes(f));
 
     if (!funcaoConhecida) {
-        // Função não mapeada - permite qualquer um exceto líderes (que são restritos)
         return true;
     }
 
