@@ -128,7 +128,7 @@ export function podeExecutarFuncao(
     // VERIFICAÇÃO DE TETO (MAX_STARS)
     // ===============================================
     for (const [chave, maxEstrelas] of Object.entries(STAR_MAX_LIMITS)) {
-        if (nomeFuncao.includes(chave)) {
+        if (nomeFuncao.toLowerCase().includes(chave.toLowerCase())) {
             // EXCEÇÃO IMPORTANTE: "Apoio" também tem em "Responsável e apoio" e "Apoio - Oferta"
             if (chave === 'Apoio' && nomeFuncao.toLowerCase().includes('responsável')) {
                 continue; // Ignora o teto de Apoio se for Responsável
@@ -144,7 +144,7 @@ export function podeExecutarFuncao(
     // VERIFICAÇÃO DE PISO (MIN_STARS)
     // ===============================================
     for (const [chave, regra] of Object.entries(STAR_MIN_LIMITS)) {
-        if (nomeFuncao.includes(chave)) {
+        if (nomeFuncao.toLowerCase().includes(chave.toLowerCase())) {
             if (regra.setores && setorPai) {
                 const setorPermitido = regra.setores.some(s => setorPai.toLowerCase().includes(s.toLowerCase()));
                 if (!setorPermitido) continue;
@@ -171,7 +171,7 @@ export function podeExecutarFuncao(
     for (let nivel = 1; nivel <= nivelEfetivo; nivel++) {
         const funcoesPermitidas = STAR_REQUIREMENTS[nivel] || [];
         for (const f of funcoesPermitidas) {
-            if (nomeFuncao.includes(f)) {
+            if (nomeFuncao.toLowerCase().includes(f.toLowerCase())) {
                 // Se for Apoio, mas for Responsável e apoio, só permite se for nível >= 3
                 if (f === 'Apoio' && nomeFuncao.toLowerCase().includes('responsável')) {
                     continue;
@@ -183,7 +183,7 @@ export function podeExecutarFuncao(
 
     // FALLBACK: Se a função não está mapeada em nenhum nível, permitir qualquer membro com estrelas >= 1
     const todasFuncoesConhecidas = Object.values(STAR_REQUIREMENTS).flat();
-    const funcaoConhecida = todasFuncoesConhecidas.some(f => nomeFuncao.includes(f));
+    const funcaoConhecida = todasFuncoesConhecidas.some(f => nomeFuncao.toLowerCase().includes(f.toLowerCase()));
 
     if (!funcaoConhecida) {
         return true;
