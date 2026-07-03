@@ -86,11 +86,17 @@ export function podeExecutarFuncao(
     // ---------------------------------------------------
     // REGRA DE GÊNERO (DATABASE & PROGRAMÁTICA)
     // ---------------------------------------------------
-    if (membro.sexo === 'HOMEM' && especificidadeSexoFuncao === 'Mulher') return false;
+    const nomeLower = nomeFuncao.toLowerCase();
+    const isMesaFunction = nomeLower.includes('mesa');
+    const hasPrioridadeMesa = membro.aptidoes?.includes('Prioridade Mesa');
+
+    if (membro.sexo === 'HOMEM' && especificidadeSexoFuncao === 'Mulher') {
+        if (!(isMesaFunction && hasPrioridadeMesa)) {
+            return false;
+        }
+    }
     if (membro.sexo === 'MULHER' && especificidadeSexoFuncao === 'Homem') return false;
 
-    const nomeLower = nomeFuncao.toLowerCase();
-    
     // 1. Porta (Hall e Interno) -> apenas homens
     if ((nomeLower.includes('hall') || nomeLower.includes('interno')) && membro.sexo !== 'HOMEM') {
         return false;
@@ -104,7 +110,7 @@ export function podeExecutarFuncao(
         return false;
     }
     // 4. Mesa Santa Ceia -> apenas mulheres
-    if (nomeLower.includes('mesa') && membro.sexo !== 'MULHER') {
+    if (nomeLower.includes('mesa') && membro.sexo !== 'MULHER' && !hasPrioridadeMesa) {
         return false;
     }
     // 5. Salvas -> apenas homens

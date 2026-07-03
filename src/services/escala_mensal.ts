@@ -345,160 +345,152 @@ function distribuirPresencaDomingos(
         });
     }
 
-    // Ordenar Unidades: 2x e 1x precisam de Smart Selection (Nível baixo primeiro)
-    // Para casais, usamos o MENOR nível da dupla
+    // Rastrear as estatísticas por data e turno
+    const poolStats = new Map<string, {
+        manha: { count: number, men: number, women: number, mesa: number, n3men: number },
+        noite: { count: number, men: number, women: number, mesa: number, n3men: number }
+    }>();
+
+    for (const d of datasOrdenadas) {
+        poolStats.set(d, {
+            manha: { count: 0, men: 0, women: 0, mesa: 0, n3men: 0 },
+            noite: { count: 0, men: 0, women: 0, mesa: 0, n3men: 0 }
+        });
+    }
+
+    // Função de Pontuação
+    const calculateShiftScore = (
+        unit: SchedulingUnit,
+        date: string,
+        shift: 'manha' | 'noite'
+    ): number => {
+        const stats = poolStats.get(date);
+        if (!stats) return -999;
+        const shiftStats = stats[shift];
+
+        // Verificar o cap máximo do culto
+        const numNewMembers = unit.members.length;
+        if (shiftStats.count + numNewMembers > MAXIMO_MEMBROS_POR_CULTO) {
+            return -999; // Cap excedido, descarte absoluto
+        }
+
+        let score = 0;
+
+        const numNewMen = unit.members.filter(m => m.sexo === 'HOMEM').length;
+        const numNewWomen = unit.members.filter(m => m.sexo === 'MULHER').length;
+        const numNewMesa = unit.members.filter(m => m.aptidoes?.includes('Prioridade Mesa')).length;
+        const numNewN3Men = unit.members.filter(m => m.sexo === 'HOMEM' && m.nivel_experiencia === 3).length;
+
+        // 1. Equilíbrio de Gênero (Meta: 6 homens, 4 mulheres por turno)
+        if (shiftStats.men < 6 && numNewMen > 0) {
+            score += numNewMen * 20;
+        }
+        if (shiftStats.women < 4 && numNewWomen > 0) {
+            score += numNewWomen * 20;
+        }
+
+        // 2. Homens Nível 3 para Salvas (Meta: 1 por turno)
+        if (shiftStats.n3men < 1 && numNewN3Men > 0) {
+            score += numNewN3Men * 30;
+        }
+
+        // 3. Controle de Mesa (Meta: no máximo 1 por turno para evitar acúmulos)
+        if (numNewMesa > 0) {
+            if (shiftStats.mesa >= 1) {
+                score -= 100;
+            } else {
+                score += 50;
+            }
+        }
+
+        // 4. Balanço Geral de Ocupação (manter entre 10 e 15 membros comuns por turno)
+        if (shiftStats.count < 10) {
+            score += numNewMembers * 5;
+        } else if (shiftStats.count > 13) {
+            score -= numNewMembers * 15;
+        }
+
+        return score;
+    };
+
+    const assignUnitToDateShift = (unit: SchedulingUnit, date: string, shift: 'manha' | 'noite') => {
+        const stats = poolStats.get(date)!;
+        const shiftStats = stats[shift];
+
+        const numNewMen = unit.members.filter(m => m.sexo === 'HOMEM').length;
+        const numNewWomen = unit.members.filter(m => m.sexo === 'MULHER').length;
+        const numNewMesa = unit.members.filter(m => m.aptidoes?.includes('Prioridade Mesa')).length;
+        const numNewN3Men = unit.members.filter(m => m.sexo === 'HOMEM' && m.nivel_experiencia === 3).length;
+
+        // Atualizar estatísticas locais
+        shiftStats.count += unit.members.length;
+        shiftStats.men += numNewMen;
+        shiftStats.women += numNewWomen;
+        shiftStats.mesa += numNewMesa;
+        shiftStats.n3men += numNewN3Men;
+
+        const dia = diasMap.get(date)!;
+        const cultoAlvo = shift === 'manha' ? dia.manha : dia.noite;
+        if (cultoAlvo) {
+            unit.members.forEach(m => m.pool_cultos_ids!.add(cultoAlvo.id));
+            unit.assignedShifts[date] = shift;
+        }
+    };
+
+    // Ordenar Unidades: mais restritas primeiro
+    const getUnitPriority = (u: SchedulingUnit): number => {
+        const hasMesa = u.members.some(m => m.aptidoes?.includes('Prioridade Mesa'));
+        if (hasMesa) return 1;
+        if (u.sharedFreq === 1) return 2;
+        if (u.sharedFreq === 2) return 3;
+        return 4;
+    };
+
     const getUnitLevel = (u: SchedulingUnit) => Math.min(...u.members.map(m => m.nivel_experiencia || 1));
     const sortSmart = (a: SchedulingUnit, b: SchedulingUnit) => getUnitLevel(a) - getUnitLevel(b);
 
-    // Separar por Shared Frequency
-    const units3x = units.filter(u => u.sharedFreq >= 3);
-    const units2x = units.filter(u => u.sharedFreq === 2).sort(sortSmart);
-    const units1x = units.filter(u => u.sharedFreq === 1).sort(sortSmart);
+    const sortedUnits = [...units].sort((a, b) => {
+        const prioA = getUnitPriority(a);
+        const prioB = getUnitPriority(b);
+        if (prioA !== prioB) return prioA - prioB;
+        return sortSmart(a, b);
+    });
 
-    console.log(`   👥 Unidades: 3x=${units3x.length}, 2x=${units2x.length}, 1x=${units1x.length}`);
+    console.log(`   👥 Unidades ordenadas para alocação inteligente.`);
 
-    // Função para contar ocupação por Culto ID (Defined Early)
-    const getOccupancy = (cultoId: string) => {
-        let count = 0;
-        membros.forEach(m => {
-            if (m.pool_cultos_ids!.has(cultoId)) count++;
-        });
-        return count;
-    };
+    // Loop de Alocação
+    for (const u of sortedUnits) {
+        const numRequiredSundays = u.sharedFreq;
+        const sundayScores: { date: string, shift: 'manha' | 'noite', score: number }[] = [];
 
-    // Helper: Atribuir Unidade a um Dia Específico
-    const assignToDay = (unit: SchedulingUnit, dataBase: string, forceShift?: 'manha' | 'noite') => {
-        if (!dataBase) return;
-        const dia = diasMap.get(dataBase);
-        if (!dia) return;
-
-        // Decidir turno
-        let turno: 'manha' | 'noite' = 'noite'; // default
-
-        // Se forçado, obedece
-        if (forceShift) {
-            turno = forceShift;
-        }
-        // Se tem preferência explicita (não 'qualquer'), obedece
-        else if (unit.preferredShift !== 'qualquer') {
-            turno = unit.preferredShift;
-        }
-        // Se 'qualquer', faz balanceamento de carga
-        else {
-            const countManha = dia.manha ? getOccupancy(dia.manha.id) : Infinity;
-            const countNoite = dia.noite ? getOccupancy(dia.noite.id) : Infinity;
-
-            if (countManha <= countNoite && dia.manha) {
-                turno = 'manha';
+        for (const date of datasOrdenadas) {
+            if (u.preferredShift === 'qualquer') {
+                const scoreManha = calculateShiftScore(u, date, 'manha');
+                const scoreNoite = calculateShiftScore(u, date, 'noite');
+                if (scoreManha > -900) sundayScores.push({ date, shift: 'manha', score: scoreManha });
+                if (scoreNoite > -900) sundayScores.push({ date, shift: 'noite', score: scoreNoite });
             } else {
-                turno = 'noite';
+                const score = calculateShiftScore(u, date, u.preferredShift);
+                if (score > -900) sundayScores.push({ date, shift: u.preferredShift, score });
             }
         }
 
-        const cultoAlvo = turno === 'manha' ? dia.manha : dia.noite;
-        if (cultoAlvo) {
-            // Verificar cap antes de adicionar
-            const ocupacaoAtual = getOccupancy(cultoAlvo.id);
-            const membrosNaUnidade = unit.members.length;
-            if (ocupacaoAtual + membrosNaUnidade > MAXIMO_MEMBROS_POR_CULTO) {
-                return; // Cap atingido, não adiciona
-            }
-            unit.members.forEach(m => m.pool_cultos_ids!.add(cultoAlvo.id));
-            unit.assignedShifts[dataBase] = turno;
-        }
-    };
+        sundayScores.sort((a, b) => b.score - a.score);
 
-    // ============================================
-    // PASSO A: 3x (Rotação Balanceada)
-    // ============================================
-    // MESMA LÓGICA DAS QUINTAS: Cobrir D4 também!
-    const patterns3x = [
-        [D1_Data, D2_Data, D3_Data],
-        [D1_Data, D2_Data, D4_Data],
-        [D1_Data, D3_Data, D4_Data],
-        [D2_Data, D3_Data, D4_Data]
-    ];
+        const chosenDays = new Set<string>();
+        let allocatedCount = 0;
 
-    for (const u of units3x) {
-        // Determinismo via hash do primeiro membro
-        const idSum = u.members[0].nome_completo.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const patternIdx = idSum % 4;
-        const dates = patterns3x[patternIdx];
+        for (const option of sundayScores) {
+            if (allocatedCount >= numRequiredSundays) break;
+            if (chosenDays.has(option.date)) continue;
 
-        dates.forEach(d => {
-            if (d) assignToDay(u, d);
-        });
-    }
-    console.log(`   ✅ 3x: ${units3x.length} unidades distribuídas (Rotação D1..D4)`);
-
-    // ============================================
-    // PASSO B: 2x (Divisão Estrita 50/50 - BALANCEADA POR PREFERÊNCIA)
-    // ============================================
-    // Problema Anterior: O split simples podia jogar todos os "Manhã" no Grupo A,
-    // deixando D1 Noite desfalcado.
-    // Solução: Dividir cada "Bucket" de preferência (Manhã, Noite, Qualquer) igualitariamente.
-
-    const units2xA: SchedulingUnit[] = [];
-    const units2xB: SchedulingUnit[] = [];
-
-    // Buckets
-    const bucketManha = units2x.filter(u => u.preferredShift === 'manha');
-    const bucketNoite = units2x.filter(u => u.preferredShift === 'noite');
-    const bucketQualquer = units2x.filter(u => u.preferredShift === 'qualquer');
-
-    // Distribuidor Helper Balanceado
-    const distributeBucket = (bucket: SchedulingUnit[]) => {
-        bucket.forEach((u) => {
-            // Joga no grupo menor para equilibrar totais
-            if (units2xA.length <= units2xB.length) {
-                units2xA.push(u);
-            } else {
-                units2xB.push(u);
-            }
-        });
-    };
-
-    // Ordenar a distribuição para maximizar equilíbrio
-    // Prioridade: Noite (Raro) -> Manhã (Frequente) -> Qualquer (Flexível)
-    // Assim os grupos enchem com os 'fixos' primeiro e 'qualquer' balanceia no final?
-    // Não, 'Qualquer' deve ser distribuído para onde precisa?
-    // Aqui estamos dividindo QUEM vai em QUAL DATA (D1/D3 vs D2/D4).
-
-    // Distribuir 'Qualquer' PRIMEIRO pode ser melhor se quisermos garantir que eles sejam os 'fillers'?
-    // Não, distribuir por buckets é seguro. O importante é o check de length acima.
-
-    distributeBucket(bucketNoite);
-    distributeBucket(bucketManha);
-    distributeBucket(bucketQualquer);
-
-    console.log(`   ⚖️ Split 2x (Domingo - Balanced Prefs):`);
-    console.log(`      Group A (D1/D3): ${units2xA.length} total`);
-    console.log(`      Group B (D2/D4): ${units2xB.length} total`);
-
-    // GROUP A: D1 + D3
-    for (const u of units2xA) {
-        assignToDay(u, D1_Data);
-        // Ler turno que foi decidido em D1
-        const shiftD1 = u.assignedShifts[D1_Data];
-        // Forçar mesmo turno em D3
-        assignToDay(u, D3_Data, shiftD1);
-    }
-    console.log(`   ✅ 2x (Espelho A D1=D3): ${units2xA.length} unidades`);
-
-    // GROUP B: D2 + D4
-    for (const u of units2xB) {
-        if (D2_Data) assignToDay(u, D2_Data);
-        if (D4_Data) { // Só aplica D4 se existir
-            // Ler turno que foi decidido em D2 (se existir)
-            const shiftD2 = u.assignedShifts[D2_Data];
-            assignToDay(u, D4_Data, shiftD2);
+            assignUnitToDateShift(u, option.date, option.shift);
+            chosenDays.add(option.date);
+            allocatedCount++;
         }
     }
-    console.log(`   ✅ 2x (Espelho B D2=D4): ${units2xB.length} unidades`);
 
-    // ============================================
-    // PASSO D: SURPLUS (Dias extras individuais)
-    // ============================================
+    // Distribuir Surplus (Dias extras individuais)
     const surplusCandidates: { member: MembroComHistorico, count: number }[] = [];
     units.forEach(u => {
         if (u.surplusMember && u.surplusFreq && u.surplusFreq > 0) {
@@ -506,56 +498,48 @@ function distribuirPresencaDomingos(
         }
     });
 
-    // Distribuir Surplus
     for (const cand of surplusCandidates) {
         for (let i = 0; i < cand.count; i++) {
-            // Achar culto com menor ocupação que o membro AINDA NÃO esteja
-            let bestCulto: Culto | null = null;
-            let minOcc = Infinity;
+            const tempUnit: SchedulingUnit = {
+                members: [cand.member],
+                type: 'solteiro',
+                sharedFreq: 1,
+                preferredShift: cand.member.melhor_periodo_domingo?.toLowerCase().includes('manhã') ? 'manha' : (cand.member.melhor_periodo_domingo?.toLowerCase().includes('noite') ? 'noite' : 'qualquer'),
+                assignedShifts: {}
+            };
 
-            cultosDomingo.forEach(c => {
-                if (cand.member.pool_cultos_ids!.has(c.id)) return; // Já está lá
-                const occ = getOccupancy(c.id);
-                if (occ < MAXIMO_MEMBROS_POR_CULTO && occ < minOcc) {
-                    minOcc = occ;
-                    bestCulto = c;
+            const sundayScores: { date: string, shift: 'manha' | 'noite', score: number }[] = [];
+            for (const date of datasOrdenadas) {
+                const alreadyOnDate = cand.member.pool_cultos_ids!.has(diasMap.get(date)?.manha?.id || '') || 
+                                      cand.member.pool_cultos_ids!.has(diasMap.get(date)?.noite?.id || '');
+                if (alreadyOnDate) continue;
+
+                if (tempUnit.preferredShift === 'qualquer') {
+                    const scoreManha = calculateShiftScore(tempUnit, date, 'manha');
+                    const scoreNoite = calculateShiftScore(tempUnit, date, 'noite');
+                    if (scoreManha > -900) sundayScores.push({ date, shift: 'manha', score: scoreManha });
+                    if (scoreNoite > -900) sundayScores.push({ date, shift: 'noite', score: scoreNoite });
+                } else {
+                    const score = calculateShiftScore(tempUnit, date, tempUnit.preferredShift);
+                    if (score > -900) sundayScores.push({ date, shift: tempUnit.preferredShift, score });
                 }
-            });
-
-            if (bestCulto) {
-                cand.member.pool_cultos_ids!.add((bestCulto as Culto).id);
             }
-        }
-    }
 
-    // ============================================
-    // PASSO E: 1x (Global Balance)
-    // ============================================
-    for (const u of units1x) {
-        // Achar DATA/TURNO com menor ocupação que respeite o cap
-        let bestCulto: Culto | null = null;
-        let minOcc = Infinity;
-
-        cultosDomingo.forEach(c => {
-            const occ = getOccupancy(c.id);
-            if (occ < MAXIMO_MEMBROS_POR_CULTO && occ < minOcc) {
-                minOcc = occ;
-                bestCulto = c;
+            sundayScores.sort((a, b) => b.score - a.score);
+            if (sundayScores.length > 0) {
+                assignUnitToDateShift(tempUnit, sundayScores[0].date, sundayScores[0].shift);
             }
-        });
-
-        if (bestCulto) {
-            u.members.forEach(m => m.pool_cultos_ids!.add((bestCulto as Culto).id));
         }
     }
 
     // Log final de ocupação
     console.log(`   📊 Ocupação final dos domingos:`);
-    cultosDomingo.forEach(c => {
-        console.log(`      ${c.periodo} (${c.data_culto.split('T')[0]}): ${getOccupancy(c.id)} membros`);
+    datasOrdenadas.forEach(d => {
+        const stats = poolStats.get(d)!;
+        console.log(`      ${d}: Manhã=${stats.manha.count} (H:${stats.manha.men}, M:${stats.manha.women}, Mesa:${stats.manha.mesa}) | Noite=${stats.noite.count} (H:${stats.noite.men}, M:${stats.noite.women}, Mesa:${stats.noite.mesa})`);
     });
-    console.log(`   ✅ Domingos distribuídos com lógica de Espelho + Turnos + Cap ${MAXIMO_MEMBROS_POR_CULTO}`);
 }
+
 
 // ============================================
 // FASE 1.5: LÍDERES N5 SEMPRE PRESENTES + SINCRONIZAÇÃO DE CASAIS
@@ -630,63 +614,126 @@ export function sincronizarMembrosMesa(
 /**
  * Ajusta o tamanho dos pools de cada culto para garantir que fique entre minLimit e maxLimit.
  */
+interface AdjustUnit {
+    members: MembroComHistorico[];
+    type: 'casal' | 'solteiro';
+}
+
+function getAdjustUnits(membros: MembroComHistorico[]): AdjustUnit[] {
+    const units: AdjustUnit[] = [];
+    const processados = new Set<string>();
+
+    for (const mPrincipal of membros) {
+        if (processados.has(mPrincipal.id)) continue;
+
+        let membersList = [mPrincipal];
+        let type: 'casal' | 'solteiro' = 'solteiro';
+
+        if (mPrincipal.nome_conjuge) {
+            const nomeConjugeClean = mPrincipal.nome_conjuge.trim().toLowerCase();
+            const conjuge = membros.find(m => {
+                if (m.id === mPrincipal.id) return false;
+                const match1 = m.nome_completo.toLowerCase().includes(nomeConjugeClean);
+                const mNomeConjugeClean = m.nome_conjuge ? m.nome_conjuge.trim().toLowerCase() : '';
+                const match2 = mNomeConjugeClean && mPrincipal.nome_completo.toLowerCase().includes(mNomeConjugeClean);
+                return match1 && match2;
+            });
+            if (conjuge) {
+                membersList.push(conjuge);
+                type = 'casal';
+                processados.add(conjuge.id);
+            }
+        }
+        processados.add(mPrincipal.id);
+
+        units.push({
+            members: membersList,
+            type
+        });
+    }
+    return units;
+}
+
+/**
+ * Ajusta o tamanho dos pools de cada culto para garantir que fique entre minLimit e maxLimit.
+ * Opera em unidades de agendamento (casais/solteiros) para evitar separar casais.
+ */
 export function ajustarTamanhoPools(
     membros: MembroComHistorico[],
     cultos: Culto[],
     minLimit: number,
     maxLimit: number
 ): void {
-    console.log(`   ⚖️ Ajustando tamanho dos pools para Min: ${minLimit}, Max: ${maxLimit}...`);
+    console.log(`   ⚖️ Ajustando tamanho dos pools por Unidade para Min: ${minLimit}, Max: ${maxLimit}...`);
+
+    const units = getAdjustUnits(membros);
 
     for (const culto of cultos) {
-        // Obter apenas membros comuns no pool (exclui N5)
-        let poolMembers = membros.filter(m => m.pool_cultos_ids!.has(culto.id) && m.nivel_experiencia !== 5);
+        // Obter tamanho atual do pool (membros comuns)
+        let getPoolCount = () => membros.filter(m => m.pool_cultos_ids!.has(culto.id) && m.nivel_experiencia !== 5).length;
 
-        if (poolMembers.length > maxLimit) {
-            // Ordenar de forma que possamos remover primeiro quem serve mais no mês
-            // e quem NÃO é líder N5 ou Mesa Priority
-            const candidatosRemocao = poolMembers.filter(m => 
-                m.nivel_experiencia !== 5 && 
-                !m.aptidoes?.includes('Prioridade Mesa')
-            );
+        let currentCount = getPoolCount();
 
-            candidatosRemocao.sort((a, b) => b.pool_cultos_ids!.size - a.pool_cultos_ids!.size);
+        if (currentCount > maxLimit) {
+            // Filtrar unidades que estão neste pool e podem ser removidas (sem N5, sem Mesa)
+            const candidatosRemocao = units.filter(u => {
+                const noPool = u.members.every(m => m.pool_cultos_ids!.has(culto.id));
+                if (!noPool) return false;
 
-            const aRemover = poolMembers.length - maxLimit;
-            let removidos = 0;
-
-            for (const m of candidatosRemocao) {
-                if (removidos >= aRemover) break;
-                m.pool_cultos_ids!.delete(culto.id);
-                removidos++;
-            }
-            console.log(`      🔴 Culto ${culto.data_culto.split('T')[0]}: Removidos ${removidos} membros comuns. Novo total: ${poolMembers.length - removidos}`);
-        } else if (poolMembers.length < minLimit) {
-            // Adicionar membros ativos e disponíveis (exclui N5)
-            const candidatosAdicao = membros.filter(m => {
-                if (m.nivel_experiencia === 5) return false;
-                if (m.pool_cultos_ids!.has(culto.id)) return false;
-
-                const dispText = culto.periodo === 'quinta' ? m.disponibilidade_quinta : m.disponibilidade_domingo;
-                const { disponivel } = parseDisponibilidade(dispText);
-                if (!disponivel) return false;
-
-                if (!atendePeriodo(m.melhor_periodo_domingo, culto.periodo)) return false;
-
-                return true;
+                const hasN5 = u.members.some(m => m.nivel_experiencia === 5);
+                const hasMesa = u.members.some(m => m.aptidoes?.includes('Prioridade Mesa'));
+                return !hasN5 && !hasMesa;
             });
 
-            candidatosAdicao.sort((a, b) => a.pool_cultos_ids!.size - b.pool_cultos_ids!.size);
+            // Ordenar por unidades que servem mais no mês
+            candidatosRemocao.sort((a, b) => {
+                const sizeA = Math.max(...a.members.map(m => m.pool_cultos_ids!.size));
+                const sizeB = Math.max(...b.members.map(m => m.pool_cultos_ids!.size));
+                return sizeB - sizeA;
+            });
 
-            const aAdicionar = minLimit - poolMembers.length;
-            let adicionados = 0;
-
-            for (const m of candidatosAdicao) {
-                if (adicionados >= aAdicionar) break;
-                m.pool_cultos_ids!.add(culto.id);
-                adicionados++;
+            let removidos = 0;
+            for (const u of candidatosRemocao) {
+                if (getPoolCount() <= maxLimit) break;
+                u.members.forEach(m => m.pool_cultos_ids!.delete(culto.id));
+                removidos += u.members.length;
             }
-            console.log(`      🟢 Culto ${culto.data_culto.split('T')[0]}: Adicionados ${adicionados} membros comuns. Novo total: ${poolMembers.length + adicionados}`);
+            console.log(`      🔴 Culto ${culto.data_culto.split('T')[0]}: Removidos ${removidos} membros comuns. Novo total: ${getPoolCount()}`);
+        } else if (currentCount < minLimit) {
+            // Filtrar unidades que NÃO estão neste pool e podem ser adicionadas (sem N5)
+            const candidatosAdicao = units.filter(u => {
+                const hasN5 = u.members.some(m => m.nivel_experiencia === 5);
+                if (hasN5) return false;
+
+                const alreadyInPool = u.members.some(m => m.pool_cultos_ids!.has(culto.id));
+                if (alreadyInPool) return false;
+
+                // Todos os membros da unidade devem estar disponíveis para este dia
+                const dispOk = u.members.every(m => {
+                    const dispText = culto.periodo === 'quinta' ? m.disponibilidade_quinta : m.disponibilidade_domingo;
+                    const { disponivel } = parseDisponibilidade(dispText);
+                    if (!disponivel) return false;
+                    if (culto.periodo.startsWith('domingo') && !atendePeriodo(m.melhor_periodo_domingo, culto.periodo)) return false;
+                    return true;
+                });
+
+                return dispOk;
+            });
+
+            // Ordenar por unidades que servem menos no mês
+            candidatosAdicao.sort((a, b) => {
+                const sizeA = Math.min(...a.members.map(m => m.pool_cultos_ids!.size));
+                const sizeB = Math.min(...b.members.map(m => m.pool_cultos_ids!.size));
+                return sizeA - sizeB;
+            });
+
+            let adicionados = 0;
+            for (const u of candidatosAdicao) {
+                if (getPoolCount() >= minLimit) break;
+                u.members.forEach(m => m.pool_cultos_ids!.add(culto.id));
+                adicionados += u.members.length;
+            }
+            console.log(`      🟢 Culto ${culto.data_culto.split('T')[0]}: Adicionados ${adicionados} membros comuns. Novo total: ${getPoolCount()}`);
         }
     }
 }
@@ -729,10 +776,7 @@ export async function gerarEscalaMensal(
     sincronizarCasaisLideres(membrosQuinta, quintas);
     sincronizarCasaisLideres(membrosDomingo, domingos);
 
-    // FASE 1.6: MEMBROS COM PRIORIDADE MESA SEMPRE PRESENTES
-    // José Duarte e outros com aptidão "Prioridade Mesa" devem estar em TODOS os cultos
-    sincronizarMembrosMesa(membrosQuinta, quintas);
-    sincronizarMembrosMesa(membrosDomingo, domingos);
+
 
     // FASE 1.7: AJUSTE DO TAMANHO DO POOL (MÍNIMO 20, MÁXIMO 30)
     ajustarTamanhoPools(membrosQuinta, quintas, 20, 30);
