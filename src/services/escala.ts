@@ -263,8 +263,8 @@ function encontrarCandidato(
         return membro;
     }
 
-    // REGRA DE PRIORIDADE DO USUÁRIO: José de Arimateia no Púlpito
-    if (funcao.nome.toLowerCase().includes('púlpito')) {
+    // REGRA DE PRIORIDADE DO USUÁRIO: José de Arimateia na Mesa
+    if (funcao.nome.toLowerCase().includes('mesa')) {
         const joseArimateiaId = '3447aba4-0c2e-4ccc-9468-62fce2dac20f';
         const joseArimateia = membros.find(m => m.id === joseArimateiaId && !membrosUsados.has(m.id));
         if (joseArimateia) {

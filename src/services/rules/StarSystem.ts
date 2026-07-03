@@ -91,7 +91,7 @@ export function podeExecutarFuncao(
     const hasPrioridadeMesa = membro.aptidoes?.includes('Prioridade Mesa');
 
     if (membro.sexo === 'HOMEM' && especificidadeSexoFuncao === 'Mulher') {
-        if (!(isMesaFunction && hasPrioridadeMesa)) {
+        if (!isMesaFunction) {
             return false;
         }
     }
@@ -109,10 +109,7 @@ export function podeExecutarFuncao(
     if (nomeLower.includes('púlpito') && membro.sexo !== 'HOMEM') {
         return false;
     }
-    // 4. Mesa Santa Ceia -> apenas mulheres
-    if (nomeLower.includes('mesa') && membro.sexo !== 'MULHER' && !hasPrioridadeMesa) {
-        return false;
-    }
+    // 4. Mesa Santa Ceia -> permitida para homens e mulheres (sem restrição de gênero)
     // 5. Salvas -> apenas homens
     if (nomeLower.includes('salvas') && membro.sexo !== 'HOMEM') {
         return false;
@@ -131,20 +128,8 @@ export function podeExecutarFuncao(
     }
 
     // ===============================================
-    // VERIFICAÇÃO DE TETO (MAX_STARS)
+    // VERIFICAÇÃO DE TETO (MAX_STARS) - DESATIVADA POR SOLICITAÇÃO DO USUÁRIO
     // ===============================================
-    for (const [chave, maxEstrelas] of Object.entries(STAR_MAX_LIMITS)) {
-        if (nomeFuncao.toLowerCase().includes(chave.toLowerCase())) {
-            // EXCEÇÃO IMPORTANTE: "Apoio" também tem em "Responsável e apoio" e "Apoio - Oferta"
-            if (chave === 'Apoio' && nomeFuncao.toLowerCase().includes('responsável')) {
-                continue; // Ignora o teto de Apoio se for Responsável
-            }
-
-            if (estrelas > maxEstrelas) {
-                return false;
-            }
-        }
-    }
 
     // ===============================================
     // VERIFICAÇÃO DE PISO (MIN_STARS)
