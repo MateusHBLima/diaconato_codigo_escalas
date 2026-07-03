@@ -697,12 +697,27 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                     membroObrigatorioId = responsavelGeral2Id;
                     console.log(`   🎁 Oferta vaga 1: Responsável Geral 2`);
                 } else if (i === 2) {
-                    // Vaga 2: Responsável de Ala Verde (mais experiente)
-                    const chaveRespVerde = 'Responsável e apoio|SETOR VERDE';
-                    const ocupantesVerde = quemEstaOnde.get(chaveRespVerde);
-                    if (ocupantesVerde && ocupantesVerde.length > 0 && ocupantesVerde[0] !== 'VAZIO') {
-                        membroObrigatorioId = ocupantesVerde[0];
-                        console.log(`   🎁 Oferta vaga 2: Responsável Ala Verde`);
+                    // Vaga 2: Outro líder Nível 5 disponível
+                    const outrosLideres = lideresDisponiveis.filter(m => 
+                        m.id !== responsavelGeral1Id && 
+                        m.id !== responsavelGeral2Id &&
+                        !membrosUsados.has(m.id)
+                    );
+
+                    if (outrosLideres.length > 0) {
+                        // Ordenar por escalas_no_mes
+                        outrosLideres.sort((a, b) => a.escalas_no_mes - b.escalas_no_mes);
+                        const liderEscolhido = outrosLideres[0];
+                        membroObrigatorioId = liderEscolhido.id;
+                        console.log(`   🎁 Oferta vaga 2: Líder Nível 5 (${liderEscolhido.nome_completo})`);
+                    } else {
+                        // Fallback: Responsável de Ala Verde (mais experiente)
+                        const chaveRespVerde = 'Responsável e apoio|SETOR VERDE';
+                        const ocupantesVerde = quemEstaOnde.get(chaveRespVerde);
+                        if (ocupantesVerde && ocupantesVerde.length > 0 && ocupantesVerde[0] !== 'VAZIO') {
+                            membroObrigatorioId = ocupantesVerde[0];
+                            console.log(`   🎁 Oferta vaga 2 (Fallback): Responsável Ala Verde`);
+                        }
                     }
                 }
             }
@@ -718,6 +733,12 @@ export async function gerarEscalaParaCulto(cultoId: string): Promise<ResultadoEs
                 if (!membroObrigatorioId) {
                     membrosUsados.add(candidato.id);
                     candidato.escalas_no_mes++;
+                } else if (funcao.setor_pai?.toLowerCase().includes('oferta') && i === 2) {
+                    // Terceiro líder da oferta: marcar como usado se ainda não estava alocado em outro local
+                    if (!membrosUsados.has(candidato.id)) {
+                        membrosUsados.add(candidato.id);
+                        candidato.escalas_no_mes++;
+                    }
                 }
 
                 vagasPreenchidas++;
