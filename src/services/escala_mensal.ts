@@ -294,7 +294,7 @@ function distribuirPresencaDomingos(
         let surplusFreq = 0;
 
         // Tentar achar cônjuge
-        if (mPrincipal.nome_conjuge) {
+        if (mPrincipal.nome_conjuge && (mPrincipal as any).conjuge_serve_junto) {
             const nomeConjugeClean = mPrincipal.nome_conjuge.trim().toLowerCase();
             const conjuge = membros.find(m => {
                 if (m.id === mPrincipal.id) return false;
@@ -303,7 +303,7 @@ function distribuirPresencaDomingos(
                 const match2 = mNomeConjugeClean && mPrincipal.nome_completo.toLowerCase().includes(mNomeConjugeClean);
                 return match1 && match2;
             });
-            if (conjuge) {
+            if (conjuge && (conjuge as any).conjuge_serve_junto) {
                 membersList.push(conjuge);
                 type = 'casal';
                 processados.add(conjuge.id);
@@ -629,7 +629,7 @@ function getAdjustUnits(membros: MembroComHistorico[]): AdjustUnit[] {
         let membersList = [mPrincipal];
         let type: 'casal' | 'solteiro' = 'solteiro';
 
-        if (mPrincipal.nome_conjuge) {
+        if (mPrincipal.nome_conjuge && (mPrincipal as any).conjuge_serve_junto) {
             const nomeConjugeClean = mPrincipal.nome_conjuge.trim().toLowerCase();
             const conjuge = membros.find(m => {
                 if (m.id === mPrincipal.id) return false;
@@ -638,7 +638,7 @@ function getAdjustUnits(membros: MembroComHistorico[]): AdjustUnit[] {
                 const match2 = mNomeConjugeClean && mPrincipal.nome_completo.toLowerCase().includes(mNomeConjugeClean);
                 return match1 && match2;
             });
-            if (conjuge) {
+            if (conjuge && (conjuge as any).conjuge_serve_junto) {
                 membersList.push(conjuge);
                 type = 'casal';
                 processados.add(conjuge.id);
