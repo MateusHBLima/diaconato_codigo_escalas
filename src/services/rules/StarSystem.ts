@@ -41,6 +41,7 @@ export const STAR_MAX_LIMITS: Record<string, number> = {
     'Corrente 2': 2,
     'Corrente corredor da mídia': 2,
     'Corrente entre verde e laranja': 2,
+    'Salvas': 3,
 };
 
 type MinStarRule = {
@@ -104,6 +105,10 @@ export function podeExecutarFuncao(
     }
     // 4. Mesa Santa Ceia -> apenas mulheres
     if (nomeLower.includes('mesa') && membro.sexo !== 'MULHER') {
+        return false;
+    }
+    // 5. Salvas -> apenas homens
+    if (nomeLower.includes('salvas') && membro.sexo !== 'HOMEM') {
         return false;
     }
 
