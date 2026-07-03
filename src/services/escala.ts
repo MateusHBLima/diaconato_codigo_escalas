@@ -263,6 +263,17 @@ function encontrarCandidato(
         return membro;
     }
 
+    // REGRA DE PRIORIDADE DO USUÁRIO: José de Arimateia no Púlpito
+    if (funcao.nome.toLowerCase().includes('púlpito')) {
+        const joseArimateiaId = '3447aba4-0c2e-4ccc-9468-62fce2dac20f';
+        const joseArimateia = membros.find(m => m.id === joseArimateiaId && !membrosUsados.has(m.id));
+        if (joseArimateia) {
+            if (membroPodeExecutar(joseArimateia, funcao.setor_pai)) {
+                return joseArimateia;
+            }
+        }
+    }
+
     const ehFuncaoRepetivel = funcao.regras?.includes('REPETIR_PESSOA') ?? false;
 
     // Função auxiliar para filtrar candidatos
